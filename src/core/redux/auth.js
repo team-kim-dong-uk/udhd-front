@@ -2,10 +2,12 @@ import { produce } from 'immer';
 import { handleActions } from 'redux-actions';
 import { takeEvery } from 'redux-saga/effects';
 import createAsyncSaga, {
-  asynActionCreator,
+  asyncActionCreator,
   createAsyncAction,
 } from '../../util/redux';
-import { getCurrentUserApi, loginApi } from '../api/saga/auth';
+//import { getCurrentUserApi, loginApi } from '../reducer';
+const getCurrentUserApi = () => {};
+const loginApi = () => {};
 
 const dummyMyInfo = {
   name: 'lmu',

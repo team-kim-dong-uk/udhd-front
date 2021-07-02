@@ -18,8 +18,8 @@ export const createAsyncAction = (asyncAction) => {
   };
 };
 
-export default function* createAsyncSaga(asyncAction, asyncFunction) {
-  return function saga(action) {
+export default function createAsyncSaga(asyncAction, asyncFunction) {
+  return function* saga(action) {
     try {
       const result = yield call(asyncFunction, action?.payload);
       yield put(asyncAction.success(result));

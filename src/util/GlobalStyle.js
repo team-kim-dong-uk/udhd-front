@@ -1,5 +1,6 @@
 const GlobalStyle = () => (
   <>
+    <div> test </div>
   </>
 );
 

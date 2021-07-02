@@ -1,9 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Normalize } from 'styled-components';
+import { Normalize } from 'styled-normalize';
 import Head from 'next/head';
 import wrapper from '../core/config/redux';
-import { GlobalStyle } from '../util/GlobalStyle';
+import GlobalStyle from '../util/GlobalStyle';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 const App = ({ Component }) => (
   <>

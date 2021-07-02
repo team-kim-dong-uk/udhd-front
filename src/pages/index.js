@@ -19,26 +19,28 @@ const Home = () => {
 };
 
 export const getServerSideProps = wrapper.getServerSideProps(
-  async (context) => {
-    console.log('getServerSideProps start');
-    console.log(context.req.header);
-    console.log(context);
-    const cookie = context.req ? context.req.header.cookie : '';
-    axios.defaults.headers.Cookie = '';
+  (store) => {
+    async (context) => {
+      console.log('getServerSideProps start');
+      console.log(context.req.header);
+      console.log(context);
+      const cookie = context.req ? context.req.header.cookie : '';
+      axios.defaults.headers.Cookie = '';
 
-    if (context.req && cookie) {
-      axios.defaults.headers.Cookie = cookie;
+      if (context.req && cookie) {
+        axios.defaults.headers.Cookie = cookie;
+      }
+
+      /*
+      context.store.dispatch(
+        login.request({email : 'email', password: 'password'}),
+      );
+      */
+
+      store.dispatch(END);
+      console.log('getServerSideProps end');
+      await store.sagaTask.toPromise();
     }
-
-    /*
-    context.store.dispatch(
-      login.request({email : 'email', password: 'password'}),
-    );
-    */
-
-    context.store.dispatch(END);
-    console.log('getServerSideProps end');
-    await context.store.sagaTask.toPromise();
   }
 )
 
