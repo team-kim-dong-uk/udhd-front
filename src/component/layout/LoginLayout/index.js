@@ -7,7 +7,7 @@ export default function LoginLayout() {
       <Login>
         <Login.Title>Register / Log in</Login.Title>
         <Login.Text>
-          로그인 문구
+          로그인
           <br />
         </Login.Text>
         <Login.Button />
