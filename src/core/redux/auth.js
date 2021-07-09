@@ -1,32 +1,24 @@
-import { produce } from 'immer';
+import axios from 'axios';
 import { handleActions } from 'redux-actions';
 import { takeEvery } from 'redux-saga/effects';
+import { createAction } from 'redux-actions';
 import createAsyncSaga, {
   asyncActionCreator,
   createAsyncAction,
-} from '../../util/redux';
-//import { getCurrentUserApi, loginApi } from '../reducer';
-const getCurrentUserApi = () => {};
-const loginApi = () => {};
+} from '../../util/redux/index';
 
-const dummyMyInfo = {
-  name: 'lmu',
-  age: 24,
+const getPhotoApi = () => {
+  console.log('api call')
+  return axios.get('http://udhd.djbaek.com:8080/api/v1/photos/456');
 };
 
 const prefix = 'auth/';
 
-const LOG_IN = asyncActionCreator(`${prefix}LOG_IN`);
-const GET_CURRENT_USER = asyncActionCreator(`${prefix}GET_CURRENT_USER`);
+const LOGIN_SUCCESS = `${prefix}LOGIN_SUCCESS`;
+const LOGIN_FAILURE = `${prefix}LOGIN_FAILURE`;
 
-const LOG_OUT = `${prefix}LOG_OUT`;
-const UNLOAD_USER = `${prefix}UNLOAD_USER`;
-
-export const login = createAsyncAction(LOG_IN);
-export const getCurrentUser = createAsyncAction(GET_CURRENT_USER);
-
-const loginSaga = createAsyncSaga(login, loginApi);
-const getCurrentUserSaga = createAsyncSaga(getCurrentUser, getCurrentUserApi);
+export const loginSuccess = createAction(LOGIN_SUCCESS, ({userId, accessToken, refreshToken}) => ({userId, accessToken, refreshToken}));
+export const loginFailure = createAction(LOGIN_FAILURE);
 
 const initialState = {
   data: null,
@@ -34,32 +26,26 @@ const initialState = {
   error: null,
 };
 
-export default handleActions({
-  [LOG_IN.SUCCESS]: (state, action) => produce(state, (draft) => {
-    draft.data = action.payload;
-    draft.loading = false;
-  }),
-  [LOG_IN.FAILURE]: (state, action) => produce(state, (draft) => {
-    draft.error = null;
-    draft.loading = false;
-  }),
-  [LOG_OUT]: (state, action) => produce(state, (draft) => {
-    draft.data = null;
-    draft.loading = false;
-  }),
-  [GET_CURRENT_USER.SUCCESS]: (state, action) => produce(state, (draft) => {
-    draft.data = null;
-    draft.loading = false;
-  }),
-  [GET_CURRENT_USER.FAILURE]: (state, action) => produce(state, (draft) => {
-    draft.error = null;
-    draft.loading = false;
-    draft.data = dummyMyInfo;
-  }),
-  [UNLOAD_USER]: () => initialState,
-}, initialState);
+export default handleActions(
+  {
+    [LOGIN_SUCCESS]: (state, action) => {
+        console.log(action);
+        typeof window !== 'undefined' && window.localStorage.setItem('refreshToken', action.payload.refreshToken);
+        return {
+          ...state,
+          data: {
+            userId: action.payload.userId,
+            accessToken: action.payload.accessToken,
+          }
+        };
+    },
+    [LOGIN_FAILURE]: (state, action) =>
+      state,
+  },
+  initialState,
+);
 
-export function* authSaga() {
-  yield takeEvery(LOG_IN.REQUEST, loginSaga);
-  yield takeEvery(GET_CURRENT_USER.REQUEST, getCurrentUserSaga);
+// 7. `4`번에서 작성한 saga함수들에 대해 구독 요청에 대한 정의를 최하단에 해주도록 합니다.
+export function* photoSaga() {
+  yield takeEvery(GET_PHOTO.REQUEST, getPhotoSaga);
 }
