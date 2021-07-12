@@ -2,6 +2,7 @@ import { handleActions } from 'redux-actions';
 import { takeEvery } from 'redux-saga/effects';
 import { createAction } from 'redux-actions';
 import api from '../../api/client';
+import Router from 'next/router';
 
 const prefix = 'auth/';
 
@@ -48,7 +49,10 @@ export default handleActions(
   initialState,
 );
 
-// 7. `4`번에서 작성한 saga함수들에 대해 구독 요청에 대한 정의를 최하단에 해주도록 합니다.
-export function* photoSaga() {
-  yield takeEvery(GET_PHOTO.REQUEST, getPhotoSaga);
+function* redirectAfterLoginSaga() {
+  yield Router.push('/album');
+}
+
+export function* authSaga() {
+  yield takeEvery(LOGIN_SUCCESS, redirectAfterLoginSaga);
 }

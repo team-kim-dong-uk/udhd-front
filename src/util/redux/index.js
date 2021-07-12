@@ -1,7 +1,7 @@
+import Router from 'next/router';
 import { createAction } from 'redux-actions';
 import { call, put} from 'redux-saga/effects';
 import * as authAPI from '../../api/auth';
-import api from '../../api/client';
 import { setToken } from '../../core/redux/auth';
 
 export const asyncActionCreator = (actionName) => {
@@ -36,6 +36,10 @@ export default function createAsyncSaga(asyncAction, asyncFunction) {
           const result = yield call(asyncFunction, action?.payload);
           yield put(asyncAction.success(result));
         } catch (e) {
+          // refresh token도 잘못되어 401에러 발생시 login 페이지로 이동.
+          if (e?.response?.status === 401) {
+            Router.push('/login');
+          }
           yield put(asyncAction.failure({ error: e }));
         }
       } else {
