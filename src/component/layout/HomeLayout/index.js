@@ -1,13 +1,16 @@
 import Navbar from '../../common/Navbar';
 import Bottombar from '../../common/BottomBar';
-const HomeLayout = () => {
+import styled from 'styled-components';
+export default function HomeLayout({ children, ...props}) {
   return (
-    <>
-      <Navbar />
-      홈레이아웃
-      <Bottombar />
-    </>
+    <S.Container {...props}>
+      <Navbar/>
+      {children}
+      <Bottombar/>
+    </S.Container>
   );
-};
+}
 
-export default HomeLayout;
+const S = {};
+S.Container = styled.div`
+`;
