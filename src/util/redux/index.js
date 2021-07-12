@@ -1,5 +1,8 @@
 import { createAction } from 'redux-actions';
 import { call, put} from 'redux-saga/effects';
+import * as authAPI from '../../api/auth';
+import api from '../../api/client';
+import { setToken } from '../../core/redux/auth';
 
 export const asyncActionCreator = (actionName) => {
   const asyncTypeAction = ['_REQUEST', '_SUCCESS', '_FAILURE'];
@@ -23,8 +26,21 @@ export default function createAsyncSaga(asyncAction, asyncFunction) {
     try {
       const result = yield call(asyncFunction, action?.payload);
       yield put(asyncAction.success(result));
-    } catch (e) {
-      yield put(asyncAction.failure({ error: ''}));
+    } catch (error) {
+      if (error?.response?.status === 401) {
+        try {
+          // acessToken이 잘못되어 401응답을 받은경우, refreshToken으로 새 토큰을 요청한다.
+          const tokenResponse = yield authAPI.refreshToken();
+          yield put(setToken(tokenResponse.data));
+          // 새 토큰 정보를 가지고 다시 요청을 보낸다.
+          const result = yield call(asyncFunction, action?.payload);
+          yield put(asyncAction.success(result));
+        } catch (e) {
+          yield put(asyncAction.failure({ error: e }));
+        }
+      } else {
+        yield put(asyncAction.failure({ error }));
+      }
     }
   }
 }

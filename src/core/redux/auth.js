@@ -1,24 +1,17 @@
-import axios from 'axios';
 import { handleActions } from 'redux-actions';
 import { takeEvery } from 'redux-saga/effects';
 import { createAction } from 'redux-actions';
-import createAsyncSaga, {
-  asyncActionCreator,
-  createAsyncAction,
-} from '../../util/redux/index';
-
-const getPhotoApi = () => {
-  console.log('api call')
-  return axios.get('http://udhd.djbaek.com:8080/api/v1/photos/456');
-};
+import api from '../../api/client';
 
 const prefix = 'auth/';
 
 const LOGIN_SUCCESS = `${prefix}LOGIN_SUCCESS`;
 const LOGIN_FAILURE = `${prefix}LOGIN_FAILURE`;
+const SET_TOKEN = `${prefix}SET_TOKEN`;
 
 export const loginSuccess = createAction(LOGIN_SUCCESS, ({userId, accessToken, refreshToken}) => ({userId, accessToken, refreshToken}));
 export const loginFailure = createAction(LOGIN_FAILURE);
+export const setToken = createAction(SET_TOKEN, ({accessToken, refreshToken}) => ({accessToken, refreshToken}));
 
 const initialState = {
   data: null,
@@ -29,8 +22,8 @@ const initialState = {
 export default handleActions(
   {
     [LOGIN_SUCCESS]: (state, action) => {
-        console.log(action);
         typeof window !== 'undefined' && window.localStorage.setItem('refreshToken', action.payload.refreshToken);
+        api.defaults.headers.common['Authorization'] = `Bearer ${action.payload.accessToken}`;
         return {
           ...state,
           data: {
@@ -41,6 +34,16 @@ export default handleActions(
     },
     [LOGIN_FAILURE]: (state, action) =>
       state,
+    [SET_TOKEN]: (state, action) => {
+      typeof window !== 'undefined' && window.localStorage.setItem('refreshToken', action.payload.refreshToken);
+      api.defaults.headers.common['Authorization'] = `Bearer ${action.payload.accessToken}`;
+      return {
+        ...state,
+        data: {
+          accessToken: action.payload.accessToken,
+        }
+      };
+  }
   },
   initialState,
 );

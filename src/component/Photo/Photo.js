@@ -1,5 +1,4 @@
 import React, { useEffect, useMemo } from 'react';
-import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { useDispatch, useSelector } from 'react-redux';
 import { getPhoto } from '../../core/redux/photo';
@@ -7,13 +6,15 @@ import { getPhoto } from '../../core/redux/photo';
 export default function Photo({ children, ...props }) {
   const dispatch = useDispatch();
     useEffect(() => {
-      dispatch(getPhoto.request());
+      dispatch(getPhoto.request(props.photoId));
     }, [dispatch]);
     const photo = useSelector(state => state.photo);
-    console.log(photo);
   return (
       <S.Photo>
-        {photo.data ? photo.data.favouriteCount + 'ppl likes\n' : '로딩중'}
+        <div>사진정보</div>
+        <div>
+          {photo.data ? photo.data.favouriteCount + 'ppl likes\n' : '로딩중'}
+        </div>
         {photo.data ? photo.data.tags : '로딩중'}
         {children}
       </S.Photo>
@@ -27,7 +28,4 @@ Photo.propTypes = {
 const S = {};
 
 S.Photo = styled.div`
-  width: 36.25rem;
-  height: 23.625rem;
-  padding: 4.5rem 4rem;
 `;
