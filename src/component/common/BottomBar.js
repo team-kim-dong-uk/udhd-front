@@ -35,6 +35,7 @@ const Bottombar = () => {
 const S = {};
 S.Navbar = styled(Navbar)`
 box-shadow: 0px -3px rgba(100, 100, 100, 0.25);
+background-color: white;
 `;
 
 S.Nav = styled(Nav)`
