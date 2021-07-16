@@ -5,6 +5,7 @@ import Thumbnail from './Thumbnail.js';
 import { useDispatch, useSelector } from 'react-redux';
 import { getPhotos } from '../../core/redux/photos.js';
 import { ListGroup, ListGroupItem } from 'react-bootstrap';
+import { useInView } from 'react-intersection-observer';
 
 export default function PhotoGrid({ children, ...props }) {
   const dispatch = useDispatch();
@@ -15,15 +16,24 @@ export default function PhotoGrid({ children, ...props }) {
     }
   }, [dispatch, auth]);
   const photos = useSelector(state => state.photos);
+
+  const {ref, inView} = useInView();
+  useEffect(() => {
+    if (inView && auth.data) {
+      dispatch(getPhotos.request(auth.data?.userId));
+    }
+  }, [inView, dispatch, auth])
+
   return (
       <S.PhotoGrid>
-          {photos.data && photos.data.map(photo => (
+          {photos.data.map(photo => (
               <Thumbnail
-              key={photo.photoId}
+              // key={photo.photoId}
               photoId={photo.photoId}
               thumbnailLink={photo.thumbnailLink}
               />
           ))}
+          {photos.data.length && <div ref={ref}>a</div>}
       </S.PhotoGrid>
   );
 }

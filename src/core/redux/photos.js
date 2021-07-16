@@ -20,7 +20,7 @@ const getPhotosSaga = createAsyncSaga(getPhotos, photoAPI.getPhotos);
 
 // 5. 초기 상태 정의
 const initialState = {
-  data: null,
+  data: [],
   loading: false,
   error: null,
 };
@@ -31,12 +31,12 @@ export default handleActions(
     [GET_PHOTOS.SUCCESS]: (state, action) => {
         return {
           ...state,
-          data: action.payload.data
+          data: state.data.concat(action.payload.data)
         };
     },
     [GET_PHOTOS.FAILURE]: (state, action) => ({
       ...state,
-      error: action,
+      error: action.error,
     }),
   },
   initialState,
