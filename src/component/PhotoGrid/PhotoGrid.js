@@ -10,30 +10,32 @@ import { useInView } from 'react-intersection-observer';
 export default function PhotoGrid({ children, ...props }) {
   const dispatch = useDispatch();
   const auth = useSelector(state => state.auth);
-  useEffect(() => {
-    if (auth.data) {
-      dispatch(getPhotos.request(auth.data?.userId));
-    }
-  }, [dispatch, auth]);
   const photos = useSelector(state => state.photos);
 
   const {ref, inView} = useInView();
   useEffect(() => {
     if (inView && auth.data) {
-      dispatch(getPhotos.request(auth.data?.userId));
+      if (photos.data.length == 0) {
+        dispatch(getPhotos.request({userId: auth.data?.userId}));
+      } else {
+        dispatch(getPhotos.request({
+          userId: auth.data?.userId,
+          findAfter: photos.data[photos.data.length - 1].photoId,
+        }));
+      }
     }
-  }, [inView, dispatch, auth])
+  }, [inView, dispatch, auth, photos])
 
   return (
       <S.PhotoGrid>
           {photos.data.map(photo => (
               <Thumbnail
-              // key={photo.photoId}
+              key={photo.photoId}
               photoId={photo.photoId}
               thumbnailLink={photo.thumbnailLink}
               />
           ))}
-          {photos.data.length && <div ref={ref}>a</div>}
+          {!photos.isEnd && <div ref={ref}>로딩중...</div>}
       </S.PhotoGrid>
   );
 }
