@@ -15,4 +15,10 @@ const S = {};
 S.Container = styled.div`
 padding-top: 56px;
 padding-bottom: 80px;
+& .picker {
+  height: 100% !important;
+  width: 100% !important;
+  top: 0 !important;
+  color: red;
+}
 `;
