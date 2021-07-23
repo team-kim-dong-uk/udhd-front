@@ -10,21 +10,21 @@ export default function Login({ children, ...props }) {
       <S.Login>
         <Button
           variant="primary"
-          href="http://udhd.djbaek.com:8080/oauth2/authorization/google"
+          href={`${process.env.REACT_APP_BACKEND_PREFIX}/oauth2/authorization/google`}
           block
         >
           Google로 로그인하기
         </Button>
         <Button
           variant="dark"
-          href="http://udhd.djbaek.com:8080/oauth2/authorization/apple"
+          href={`${process.env.REACT_APP_BACKEND_PREFIX}/oauth2/authorization/apple`}
           block
         >
           Apple로 로그인하기
         </Button>
         <Button
           variant="warning"
-          href="http://udhd.djbaek.com:8080/oauth2/authorization/kakao"
+          href={`${process.env.REACT_APP_BACKEND_PREFIX}/oauth2/authorization/kakao`}
           block
         >
           Kakao로 로그인하기

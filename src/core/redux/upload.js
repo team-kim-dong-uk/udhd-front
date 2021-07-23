@@ -6,9 +6,11 @@ const prefix = 'upload/';
 
 // 2. 액션타입에 대해서 정의합니다.
 const APPEND_CANDIDATES = `${prefix}APPEND_CANDIDATES`;
+const SET_GOOGLE_DRIVE_TOKEN = `${prefix}SET_GOOGLE_DRIVE_TOKEN`
 
 // 3. 액션함수에 대해서 정의합니다.
 export const appendCandidates = createAction(APPEND_CANDIDATES, payload => payload);
+export const setGoogleDriveToken = createAction(SET_GOOGLE_DRIVE_TOKEN, payload => payload);
 
 // 4. saga 비동기 관련 함수가 필요할 경우 작성 합니다. (optional) saga함수들의 모음은 최하단에 나열합니다.
 
@@ -17,6 +19,7 @@ const initialState = {
   data: [],
   loading: false,
   error: null,
+  googleDriveToken: null,
 };
 
 // 6. 리듀서 정의
@@ -28,6 +31,12 @@ export default handleActions(
           data: [...action.payload, ...state.data]
         };
     },
+    [SET_GOOGLE_DRIVE_TOKEN]: (state, action) => {
+      return {
+        ...state,
+        googleDriveToken: action.payload
+      }
+    }
   },
   initialState,
 );

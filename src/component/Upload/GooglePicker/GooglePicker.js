@@ -76,7 +76,7 @@ export default function GooglePicker({ children, ...props }) {
 
   function createPicker(oauthToken) {
 
-    // props.onAuthenticate(oauthToken);
+    props.onAuthenticate(oauthToken);
 
     if(props.createPicker){
       return props.createPicker(google, oauthToken)

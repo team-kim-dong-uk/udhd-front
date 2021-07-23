@@ -3,9 +3,9 @@ import styled from 'styled-components';
 
 export default function TagPlane({ children, ...props }) {
   return (
-      <S.TagPlane>
-        태그들
-      </S.TagPlane>
+    <S.TagPlane>
+      태그들
+    </S.TagPlane>
   );
 }
 
@@ -18,7 +18,7 @@ const S = {};
 S.TagPlane = styled.div`
   border: 1px solid;
   height: 150px;
-  position: fixed;
   width: 100%;
-  bottom: 80px;
+  position: fixed;
+  bottom: 118px;
 `;
