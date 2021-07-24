@@ -2,17 +2,46 @@ import React, { useEffect, useMemo } from 'react';
 import styled from 'styled-components';
 import { useDispatch, useSelector } from 'react-redux';
 import GooglePicker from './GooglePicker';
-import { appendCandidates, setGoogleDriveToken } from '../../core/redux/upload';
+import { appendCandidates, setGoogleDriveToken, showMoreItems } from '../../core/redux/upload';
 import { Button, Image } from 'react-bootstrap';
 import axios from 'axios';
 import TagPlane from '../TagPlane';
 import GalleryPicker from './GalleryPicker';
 import * as uploadAPI from '../../api/upload';
 import CryptoJS from 'crypto-js';
+import { useInView } from 'react-intersection-observer';
 
 export default function Upload({ children, ...props }) {
   const dispatch = useDispatch();
   const upload = useSelector(state => state.upload);
+
+  const {ref, inView} = useInView();
+  useEffect(async () => {
+    if (inView && upload.data) {
+      const nextNumShowItems = Math.min(upload.data.length, upload.numShowItems + 9);
+      const newData = upload.data.slice(upload.numShowItems, nextNumShowItems)
+        .map(({id, mimeType}) => ({id, mimeType}));
+      for (let i = upload.numShowItems; i < nextNumShowItems; i++) {
+        if (upload.data[i].blob) {
+          newData[i - upload.numShowItems].blob = upload.data[i].blob;
+          newData[i - upload.numShowItems].url = upload.data[i].url;
+        } else {
+          const blobResponse = await axios.get(`https://www.googleapis.com/drive/v3/files/${upload.data[i].id}?alt=media`, {
+            headers: {
+              'Authorization': `Bearer ${upload.googleDriveToken}`
+            },
+            responseType: 'blob'
+          });
+          newData[i - upload.numShowItems].blob = blobResponse.data;
+          newData[i - upload.numShowItems].url = URL.createObjectURL(blobResponse.data);
+        }
+      }
+      dispatch(showMoreItems({
+        newData,
+        nextNumShowItems,
+      }));
+    }
+  }, [inView, dispatch])
 
   const onAuthenticate = (token) => {
     dispatch(setGoogleDriveToken(token));
@@ -38,7 +67,8 @@ export default function Upload({ children, ...props }) {
     // checksum 계산하기
     for (let i = 0; i < upload.data.length; i++) {
       if (upload.data[i].blob) {
-        checksums[i] = '';// TODO: 이미 로드한 적 있으면 그것 사용
+        data[i] = upload.data[i].blob;
+        checksums[i] = CryptoJS.MD5(data[i]).toString();
       } else {
         const blobResponse = await axios.get(`https://www.googleapis.com/drive/v3/files/${upload.data[i].id}?alt=media`, {
           headers: {
@@ -50,7 +80,6 @@ export default function Upload({ children, ...props }) {
         checksums[i] = CryptoJS.MD5(blobResponse.data).toString();
       }
     }
-    console.log(checksums);
 
     // presigned url 불러오기
     const response = await uploadAPI.getPresignedURLs(checksums);
@@ -87,12 +116,17 @@ export default function Upload({ children, ...props }) {
       <GalleryPicker></GalleryPicker>
       <S.UploadCandidates>
       {
-        upload.data.map(cand => 
+        upload.data.slice(0, upload.numShowItems).map(cand => 
           <S.Thumbnail key={cand.id}>
             <S.Image src={cand.url} thumbnail={true}/>
           </S.Thumbnail>)
       }
       </S.UploadCandidates>
+      {
+        !upload.data.length 
+        || upload.data.length === upload.numShowItems
+        || <div ref={ref}>로딩중...</div>
+      }
       <TagPlane />
       <S.UploadButton disabled={upload.data.length === 0} onClick={onUpload}>업로드하기</S.UploadButton>
     </S.Upload>
