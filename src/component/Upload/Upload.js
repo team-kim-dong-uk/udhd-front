@@ -8,6 +8,7 @@ import axios from 'axios';
 import TagPlane from '../TagPlane';
 import GalleryPicker from './GalleryPicker';
 import * as uploadAPI from '../../api/upload';
+import CryptoJS from 'crypto-js';
 
 export default function Upload({ children, ...props }) {
   const dispatch = useDispatch();
@@ -29,46 +30,44 @@ export default function Upload({ children, ...props }) {
       mimeType: doc.mimeType
     }));
     dispatch(appendCandidates(payload));
-    // const requests = e.docs.map(doc => axios.get(`https://www.googleapis.com/drive/v3/files/${doc.id}?alt=media`, {
-    //   headers: {
-    //     'Authorization': `Bearer ${accessToken}`
-    //   },
-    //   responseType: 'blob'
-    // }));
-    // const responses = await axios.all(requests);
-
-    // const payload = e.docs.map(doc => ({id: doc.id}));
-    // for (let i = 0; i < responses.length; i++) {
-    //   payload[i].url = URL.createObjectURL(responses[i].data);
-    // }
-
-    // axios.put('https://udhdbucket.s3.ap-northeast-2.amazonaws.com/123?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20210723T071039Z&X-Amz-SignedHeaders=host&X-Amz-Expires=119&X-Amz-Credential=AKIAU2ZARE36SVTBAB3X%2F20210723%2Fap-northeast-2%2Fs3%2Faws4_request&X-Amz-Signature=d1ee71929d47c6be3b26d83eadc1da59fcb54bff123df5fb6893f89d230ffa4e'
-    // , responses[0].data);
-
   }
 
   const onUpload = async () => {
-    console.log('hi');
-    const checksums = upload.data.map(data => data.id); // TODO: calculate md5 checksum
+    const data = [];
+    const checksums = [];
+    // checksum 계산하기
+    for (let i = 0; i < upload.data.length; i++) {
+      if (upload.data[i].blob) {
+        checksums[i] = '';// TODO: 이미 로드한 적 있으면 그것 사용
+      } else {
+        const blobResponse = await axios.get(`https://www.googleapis.com/drive/v3/files/${upload.data[i].id}?alt=media`, {
+          headers: {
+            'Authorization': `Bearer ${upload.googleDriveToken}`
+          },
+          responseType: 'blob'
+        });
+        data[i] = blobResponse.data;
+        checksums[i] = CryptoJS.MD5(blobResponse.data).toString();
+      }
+    }
+    console.log(checksums);
 
+    // presigned url 불러오기
     const response = await uploadAPI.getPresignedURLs(checksums);
     const presignedURLs = response.data;
-    console.log(presignedURLs);
+    
+    // s3에 저장요청하기
     for (let i = 0; i < upload.data.length; i++) {
+      // 이미 누군가 업로드한 사진은 다시 업로드 하지 않음.
       if (!presignedURLs[i]) {
         continue;
       }
-      const blobResponse = await axios.get(`https://www.googleapis.com/drive/v3/files/${upload.data[i].id}?alt=media`, {
-        headers: {
-          'Authorization': `Bearer ${upload.googleDriveToken}`
-        },
-        responseType: 'blob'
-      });
-      const res = await axios.put(presignedURLs[i], blobResponse.data, {
+      const res = await axios.put(presignedURLs[i], data[i], {
         headers: {
           'Content-Type': upload.data[i].mimeType
         }
       });
+      console.log(res);
     }
     alert('50% 업로드 완료');
   }
