@@ -21,4 +21,5 @@ S.TagPlane = styled.div`
   width: 100%;
   position: fixed;
   bottom: 118px;
+  background: white;
 `;
