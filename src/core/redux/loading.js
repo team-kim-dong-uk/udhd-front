@@ -10,18 +10,18 @@ export const startLoading = createAction(START_LOADING);
 export const finishLoading = createAction(FINISH_LOADING);
 
 const initialState = {
-  loading: false,
+  data: false,
 };
 
 export default handleActions(
   {
     [START_LOADING]: (state, action) => ({
       ...state,
-      loading: true,
+      data: true,
     }),
     [FINISH_LOADING]: (state, action) => ({
       ...state,
-      loading: false,
+      data: false,
     }),
   },
   initialState,

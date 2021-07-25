@@ -2,7 +2,7 @@ import React, { useEffect, useMemo } from 'react';
 import styled from 'styled-components';
 import { useDispatch, useSelector } from 'react-redux';
 import GooglePicker from './GooglePicker';
-import { appendCandidates, setGoogleDriveToken, showMoreItems } from '../../core/redux/upload';
+import { appendCandidates, fetchMoreItems, setGoogleDriveToken, showMoreItems } from '../../core/redux/upload';
 import { Button, Image } from 'react-bootstrap';
 import axios from 'axios';
 import TagPlane from '../TagPlane';
@@ -11,46 +11,25 @@ import * as uploadAPI from '../../api/upload';
 import CryptoJS from 'crypto-js';
 import { useInView } from 'react-intersection-observer';
 
+const FETCH_SIZE = 9;
+
 export default function Upload({ children, ...props }) {
   const dispatch = useDispatch();
-  const upload = useSelector(state => state.upload);
+  const { upload, loading } = useSelector(state => state);
 
   const {ref, inView} = useInView();
-  useEffect(async () => {
-    if (inView && upload.data) {
-      const nextNumShowItems = Math.min(upload.data.length, upload.numShowItems + 9);
-      const newData = upload.data.slice(upload.numShowItems, nextNumShowItems)
-                                  .map(({id, mimeType}) => ({id, mimeType}));
-      // 이전에 데이터 요청한 적이 있어 이미 데이터 있는 사진들은 제외하고 데이터 요청
-      const requests = newData.map((data, index) => data.blob ?
-        null :
-        { index,
-          request: axios.get(`https://www.googleapis.com/drive/v3/files/${data.id}?alt=media`, {
-            headers: {
-              'Authorization': `Bearer ${upload.googleDriveToken}`
-            },
-            responseType: 'blob'
-          })
-        }
-      ).filter(data => data !== null);
-      
-      const responses = await axios.all(requests.map(({request}) => request));
-      let i = 0;
-      for (let j =0; j < requests.length; j++) {
-        if (requests[j]) {
-          const index = requests[j].index;
-          newData[index].blob = responses[i].data;
-          newData[index].url = URL.createObjectURL(newData[index].blob);
-          i++;
-        }
-      }
-
-      dispatch(showMoreItems({
+  useEffect(() => {
+    // 무한스크롤용. 스크롤을 끝까지 내리면 다음 데이터를 fetch해온다.
+    if (inView && upload.data.length > 0 && !loading.data) {
+      const fetchUntil = Math.min(upload.data.length, upload.numShowItems + FETCH_SIZE);
+      const newData = upload.data.slice(upload.numShowItems, fetchUntil);
+      dispatch(fetchMoreItems({
         newData,
-        nextNumShowItems,
+        fetchUntil,
+        googleDriveToken: upload.googleDriveToken,
       }));
     }
-  }, [inView, dispatch])
+  }, [inView, dispatch, loading, upload])
 
   const onAuthenticate = (token) => {
     dispatch(setGoogleDriveToken(token));
