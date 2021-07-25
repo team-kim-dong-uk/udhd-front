@@ -1,14 +1,11 @@
-import React, { useEffect, useMemo } from 'react';
+import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import { useDispatch, useSelector } from 'react-redux';
 import GooglePicker from './GooglePicker';
-import { appendCandidates, fetchMoreItems, setGoogleDriveToken, showMoreItems } from '../../core/redux/upload';
+import { appendCandidates, fetchMoreItems, setGoogleDriveToken, showMoreItems, uploadPhotos } from '../../core/redux/upload';
 import { Button, Image } from 'react-bootstrap';
-import axios from 'axios';
 import TagPlane from '../TagPlane';
 import GalleryPicker from './GalleryPicker';
-import * as uploadAPI from '../../api/upload';
-import CryptoJS from 'crypto-js';
 import { useInView } from 'react-intersection-observer';
 
 const FETCH_SIZE = 9;
@@ -49,57 +46,9 @@ export default function Upload({ children, ...props }) {
   }
 
   const onUpload = async () => {
-    const data = [];
-    const checksums = [];
-    // checksum 계산하기
-    // 이전에 화면출력을 위해 로드한 적 있는 사진들은 checksum 바로 계산
-    for (let i = 0; i < upload.data.length; i++) {
-      if (upload.data[i].blob) {
-        data[i] = upload.data[i].blob;
-        checksums[i] = CryptoJS.MD5(data[i]).toString();
-      }
+    if (!loading.data) {
+      dispatch(uploadPhotos(upload));
     }
-    // 나머지 사진들은 axios.all 로 한번에 데이터 요청후 checksum 계산
-    const requests = upload.data.map((data, index) => data.blob ?
-      null :
-      { index,
-        request: axios.get(`https://www.googleapis.com/drive/v3/files/${data.id}?alt=media`, {
-          headers: {
-            'Authorization': `Bearer ${upload.googleDriveToken}`
-          },
-          responseType: 'blob'
-        })
-      }
-    ).filter(data => data !== null);
-      
-    const responses = await axios.all(requests.map(({request}) => request));
-    let i = 0;
-    for (let j =0; j < requests.length; j++) {
-      if (requests[j]) {
-        const index = requests[j].index;
-        data[index] = responses[i].data;
-        checksums[index] = CryptoJS.MD5(data[index]).toString();
-        i++;
-      }
-    }
-
-    // presigned url 불러오기
-    const response = await uploadAPI.getPresignedURLs(checksums);
-    const presignedURLs = response.data;
-    
-    // s3에 저장요청하기
-    for (let i = 0; i < upload.data.length; i++) {
-      // 이미 누군가 업로드한 사진은 다시 업로드 하지 않음.
-      if (!presignedURLs[i]) {
-        continue;
-      }
-      const res = await axios.put(presignedURLs[i], data[i], {
-        headers: {
-          'Content-Type': upload.data[i].mimeType
-        }
-      });
-    }
-    alert('50% 업로드 완료');
   }
 
   return (
@@ -112,7 +61,8 @@ export default function Upload({ children, ...props }) {
         onAuthenticate={onAuthenticate}
         onAuthFailed={data => console.log('on auth failed:', data)}
         mimeTypes={['application/vnd.google-apps.folder', 'image/png', 'image/jpg', 'image/jpeg']}
-        query={''}>
+        query={''}
+        buttonDisabled={loading.data}>
       </GooglePicker>
       <GalleryPicker></GalleryPicker>
       <S.UploadCandidates>
@@ -129,7 +79,7 @@ export default function Upload({ children, ...props }) {
         || <div ref={ref}>로딩중...</div>
       }
       <TagPlane />
-      <S.UploadButton disabled={upload.data.length === 0} onClick={onUpload}>업로드하기</S.UploadButton>
+      <S.UploadButton disabled={upload.data.length === 0 || loading.data} onClick={onUpload}>업로드하기</S.UploadButton>
     </S.Upload>
   );
 }

@@ -120,7 +120,7 @@ export default function GooglePicker({ children, ...props }) {
         { 
           props.children ?
             props.children :
-            <S.Button variant='outline-primary' size='sm'>Google Drive에서 사진 선택</S.Button>
+            <S.Button disabled={props.buttonDisabled} variant='outline-primary' size='sm'>Google Drive에서 사진 선택</S.Button>
         }
       </div>
     </S.GooglePicker>
@@ -134,6 +134,7 @@ GooglePicker.propTypes = {
   onAuthFailed: PropTypes.func.isRequired,
   mimeTypes: PropTypes.array.isRequired,
   query: PropTypes.string.isRequired,
+  buttonDisabled: PropTypes.bool
 };
 
 const S = {};
