@@ -37,8 +37,6 @@ export default handleActions(
     },
     [SHOW_MORE_ITEMS]: (state, action) => {
       const { newData, nextNumShowItems } = action.payload;
-      console.log(state.data);
-      console.log(state.numShowItems, newData.length, newData);
       let dataCopy = [...state.data];
       dataCopy.splice(state.numShowItems, newData.length, ...newData)
       return {

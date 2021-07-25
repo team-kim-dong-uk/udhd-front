@@ -20,22 +20,31 @@ export default function Upload({ children, ...props }) {
     if (inView && upload.data) {
       const nextNumShowItems = Math.min(upload.data.length, upload.numShowItems + 9);
       const newData = upload.data.slice(upload.numShowItems, nextNumShowItems)
-        .map(({id, mimeType}) => ({id, mimeType}));
-      for (let i = upload.numShowItems; i < nextNumShowItems; i++) {
-        if (upload.data[i].blob) {
-          newData[i - upload.numShowItems].blob = upload.data[i].blob;
-          newData[i - upload.numShowItems].url = upload.data[i].url;
-        } else {
-          const blobResponse = await axios.get(`https://www.googleapis.com/drive/v3/files/${upload.data[i].id}?alt=media`, {
+                                  .map(({id, mimeType}) => ({id, mimeType}));
+      // 이전에 데이터 요청한 적이 있어 이미 데이터 있는 사진들은 제외하고 데이터 요청
+      const requests = newData.map((data, index) => data.blob ?
+        null :
+        { index,
+          request: axios.get(`https://www.googleapis.com/drive/v3/files/${data.id}?alt=media`, {
             headers: {
               'Authorization': `Bearer ${upload.googleDriveToken}`
             },
             responseType: 'blob'
-          });
-          newData[i - upload.numShowItems].blob = blobResponse.data;
-          newData[i - upload.numShowItems].url = URL.createObjectURL(blobResponse.data);
+          })
+        }
+      ).filter(data => data !== null);
+      
+      const responses = await axios.all(requests.map(({request}) => request));
+      let i = 0;
+      for (let j =0; j < requests.length; j++) {
+        if (requests[j]) {
+          const index = requests[j].index;
+          newData[index].blob = responses[i].data;
+          newData[index].url = URL.createObjectURL(newData[index].blob);
+          i++;
         }
       }
+
       dispatch(showMoreItems({
         newData,
         nextNumShowItems,
@@ -53,7 +62,6 @@ export default function Upload({ children, ...props }) {
     }
     // only when pictures are selected.
     // todo: handle when folder selected.
-    console.log(e);
     const payload = e.docs.map(doc => ({
       id: doc.id,
       mimeType: doc.mimeType
@@ -65,19 +73,34 @@ export default function Upload({ children, ...props }) {
     const data = [];
     const checksums = [];
     // checksum 계산하기
+    // 이전에 화면출력을 위해 로드한 적 있는 사진들은 checksum 바로 계산
     for (let i = 0; i < upload.data.length; i++) {
       if (upload.data[i].blob) {
         data[i] = upload.data[i].blob;
         checksums[i] = CryptoJS.MD5(data[i]).toString();
-      } else {
-        const blobResponse = await axios.get(`https://www.googleapis.com/drive/v3/files/${upload.data[i].id}?alt=media`, {
+      }
+    }
+    // 나머지 사진들은 axios.all 로 한번에 데이터 요청후 checksum 계산
+    const requests = upload.data.map((data, index) => data.blob ?
+      null :
+      { index,
+        request: axios.get(`https://www.googleapis.com/drive/v3/files/${data.id}?alt=media`, {
           headers: {
             'Authorization': `Bearer ${upload.googleDriveToken}`
           },
           responseType: 'blob'
-        });
-        data[i] = blobResponse.data;
-        checksums[i] = CryptoJS.MD5(blobResponse.data).toString();
+        })
+      }
+    ).filter(data => data !== null);
+      
+    const responses = await axios.all(requests.map(({request}) => request));
+    let i = 0;
+    for (let j =0; j < requests.length; j++) {
+      if (requests[j]) {
+        const index = requests[j].index;
+        data[index] = responses[i].data;
+        checksums[index] = CryptoJS.MD5(data[index]).toString();
+        i++;
       }
     }
 
@@ -96,7 +119,6 @@ export default function Upload({ children, ...props }) {
           'Content-Type': upload.data[i].mimeType
         }
       });
-      console.log(res);
     }
     alert('50% 업로드 완료');
   }
