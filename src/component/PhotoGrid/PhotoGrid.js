@@ -9,8 +9,7 @@ import { useInView } from 'react-intersection-observer';
 
 export default function PhotoGrid({ children, ...props }) {
   const dispatch = useDispatch();
-  const auth = useSelector(state => state.auth);
-  const photos = useSelector(state => state.photos);
+  const { auth, photos, loading } = useSelector(state => state);
 
   const {ref, inView} = useInView();
   useEffect(() => {

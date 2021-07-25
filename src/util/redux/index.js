@@ -3,6 +3,7 @@ import { createAction } from 'redux-actions';
 import { call, put} from 'redux-saga/effects';
 import * as authAPI from '../../api/auth';
 import { loginSuccess } from '../../core/redux/auth';
+import { finishLoading, startLoading } from '../../core/redux/loading';
 
 export const asyncActionCreator = (actionName) => {
   const asyncTypeAction = ['_REQUEST', '_SUCCESS', '_FAILURE'];
@@ -24,6 +25,7 @@ export const createAsyncAction = (asyncAction) => {
 export default function createAsyncSaga(asyncAction, asyncFunction) {
   return function* saga(action) {
     try {
+      yield put(startLoading());
       const result = yield call(asyncFunction, action?.payload);
       yield put(asyncAction.success(result));
     } catch (error) {
@@ -47,5 +49,6 @@ export default function createAsyncSaga(asyncAction, asyncFunction) {
         yield put(asyncAction.failure({ error }));
       }
     }
+    yield put(finishLoading());
   }
 }
