@@ -5,6 +5,7 @@ import { put, takeEvery } from 'redux-saga/effects';
 import { finishLoading, startLoading } from './loading';
 import CryptoJS from 'crypto-js';
 import * as uploadAPI from '../../api/upload';
+import { createCalcMd5Promise } from '../../util/checksum';
 
 // 1. 각 모듈별 함수 구분을 위한 prefix 각 모듈 파일명 + '/' 의 조합으로 구성합니다.
 const prefix = 'upload/';
@@ -61,17 +62,15 @@ function* fetchMoreItemsSaga({payload: {newData, fetchUntil, googleDriveToken}})
 
 function* uploadPhotosSaga({payload: {data, googleDriveToken}}) {
   yield put(startLoading());
+  // 데이터 불러오기
   const blobs = [];
-  const checksums = [];
-  // checksum 계산하기
-  // 이전에 화면출력을 위해 로드한 적 있는 사진들은 checksum 바로 계산
+  // 이전에 불러온적 있는 데이터는 그 데이터 사용
   for (let i = 0; i < data.length; i++) {
     if (data[i].blob) {
       blobs[i] = data[i].blob;
-      checksums[i] = CryptoJS.MD5(blobs[i]).toString();
     }
   }
-  // 나머지 사진들은 axios.all 로 한번에 데이터 요청후 checksum 계산
+  // 나머지 사진들은 axios.all 로 한번에 데이터 요청
   const requests = data.map((data, index) => data.blob ?
     null :
     { index,
@@ -90,10 +89,12 @@ function* uploadPhotosSaga({payload: {data, googleDriveToken}}) {
     if (requests[j]) {
       const index = requests[j].index;
       blobs[index] = responses[i].data;
-      checksums[index] = CryptoJS.MD5(blobs[index]).toString();
       i++;
     }
   }
+
+  // blob 데이터로 checksum 한번에 계산
+  const checksums = yield Promise.all(blobs.map(blob => createCalcMd5Promise(blob)));
 
   // presigned url 불러오기
   const response = yield uploadAPI.getPresignedURLs(checksums);
