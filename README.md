@@ -17,7 +17,6 @@
 <br>
 
 ## 공통 부분
----
 ### Problem
 
 - 많은 사람들은 아이돌 짤방을 검색하고 저장하는데 문제를 겪고 있습니다.
@@ -31,21 +30,24 @@
 - 특정 사진과 유사한 사진도 함께 찾아볼 수 있습니다.
 <br/><br/>
 <img src="docs/architecture-front.png" />
-- [Front Server](https://git.swmgit.org/swm-12/12_swm44/udhd-front)
+[Front Server](https://git.swmgit.org/swm-12/12_swm44/udhd-front)
 - [API Server](https://git.swmgit.org/swm-12/12_swm44/api-server)
 - [Query Server](https://git.swmgit.org/swm-12/12_swm44/udhd-query-api)
 - [Tag Server](https://git.swmgit.org/swm-12/12_swm44/img-experiment-lab)
+
 ---
 <br/><br/>
+
 ## Key Features
----
+
 - 사용자가 저장한 사진들을 보거나 검색할 수 있는 갤러리 역할을 합니다.
 - API Server에 구글 드라이브에 있는 사진을 저장하도록 요청을 보냅니다.
 - API Server에서 받은 url을 사용해 AWS S3에서 사진 데이터를 받아봅니다.
 - 사진 검색, 태그 수정 등의 요청을 API Server에 보냅니다.
+
 <br/>
 
----
+
 
 ---
 
@@ -55,7 +57,6 @@
 
 
 ## What We Use
----
 <table style="margin-left:auto;margin-right:auto;">
 <tr>
 <td><img width=200 src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9Ii0xMS41IC0xMC4yMzE3NCAyMyAyMC40NjM0OCI+CiAgPHRpdGxlPlJlYWN0IExvZ288L3RpdGxlPgogIDxjaXJjbGUgY3g9IjAiIGN5PSIwIiByPSIyLjA1IiBmaWxsPSIjNjFkYWZiIi8+CiAgPGcgc3Ryb2tlPSIjNjFkYWZiIiBzdHJva2Utd2lkdGg9IjEiIGZpbGw9Im5vbmUiPgogICAgPGVsbGlwc2Ugcng9IjExIiByeT0iNC4yIi8+CiAgICA8ZWxsaXBzZSByeD0iMTEiIHJ5PSI0LjIiIHRyYW5zZm9ybT0icm90YXRlKDYwKSIvPgogICAgPGVsbGlwc2Ugcng9IjExIiByeT0iNC4yIiB0cmFuc2Zvcm09InJvdGF0ZSgxMjApIi8+CiAgPC9nPgo8L3N2Zz4K"></td>
