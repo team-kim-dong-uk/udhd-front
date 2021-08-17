@@ -45,6 +45,11 @@
 - API Server에서 받은 url을 사용해 AWS S3에서 사진 데이터를 받아봅니다.
 - 사진 검색, 태그 수정 등의 요청을 API Server에 보냅니다.
 
+### 구글 드라이브로 업로드
+프론트엔드에서 API Server로 요청을 보냅니다. 여기서 진행률 체크를 위한 pollingKey를 받아볼 수 있습니다.  
+<br/>
+<img height=400 src="docs/front-api-google-drive.png" />
+
 <br/>
 
 
