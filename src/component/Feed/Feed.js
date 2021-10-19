@@ -44,10 +44,12 @@ S.Header = styled.div`
 S.IconContainer = styled.div`
   overflow: auto;
   display: inline-flex;
+  padding:5px;
   
 `;
 S.Icon = styled.p`
   background-color: pink;
+    margin: 5px;
     width: 40px;
     height: 40px;
   
@@ -61,6 +63,7 @@ S.ImageBox = styled.div`
     }
 `;
 S.TagContainer = styled.div`
+    padding: 10px;
 `;
 
 
