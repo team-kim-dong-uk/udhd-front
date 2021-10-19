@@ -1,7 +1,6 @@
 import { handleActions } from 'redux-actions';
 import { takeEvery } from 'redux-saga/effects';
 import { createAction } from 'redux-actions';
-import api from '../../api/client';
 import Router from 'next/router';
 
 const prefix = 'auth/';
