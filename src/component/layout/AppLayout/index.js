@@ -24,7 +24,8 @@ export default function AppLayout({ children, ...props}) {
 
   useEffect(() => {
     if (!auth.data) {
-      setUser();
+      //TODO: 나중에 되돌리기
+      //setUser();
     }
   }, [auth]);
 
