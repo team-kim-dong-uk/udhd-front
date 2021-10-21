@@ -5,27 +5,31 @@ import {HeartIcon} from '../../../assets/heart-icon.svg';
 import {useDispatch, useSelector} from "react-redux";
 import {getPhotos} from "../../core/redux/photos";
 import {addToAlbum, removeFromAlbum} from "../../core/redux/album";
+import PropTypes from "prop-types";
 //import HeartIconFilled from '../../../assets/heart-icon-filled.svg';
+
 
 export default function Feed({ children, ...props }) {
     const {auth} = useSelector(state => state);
     const dispatch = useDispatch();
+
     const [inAlbum, setInAlbum] = useState(false);
 
-    // TODO: photo 받아오기 만들기
+    // TODO: not work, params가 온전하지 않음
     const updateAlbum = useCallback(() => {
         if (inAlbum){
             dispatch(removeFromAlbum.request({
-                userId: auth.data.userId,
-                //albumId: photoSimpleInfo?.albumId
+                userId: auth.data?.userId,
+                albumId: props.feed?.photo_id
             }))
         } else {
             dispatch(addToAlbum.request({
-                userId: auth.data.userId,
-                //photoId: photoSimpleInfo?.photoId
+                userId: auth.data?.userId,
+                photoId: props.feed?.photo_id
             }))
         }
         setInAlbum(prev => !prev);
+        console.log("now album is " + inAlbum)
     }, [inAlbum])
 
   return (
@@ -37,23 +41,20 @@ export default function Feed({ children, ...props }) {
           </S.ImageBox>
           </div>
         <S.IconContainer>
+
             <S.Icon>
-                {inAlbum && (
-                    <button>[꽓]</button>
-                )}
-                {!inAlbum && (
-                    <button onClick={}>[  ]</button>
-                )}
+                <div onClick={updateAlbum}>
+                    {inAlbum && ("[꽓]")}
+                    {!inAlbum && ("[ 빈칸 ]")}
+                </div>
+
                 {/*<HeartIcon width='25' height='25' viewBox='0 0 25 25'/>*/}
                 {/*<img src={HeartIcon} />*/}
-            </S.Icon>
-            <S.Icon>
-                다운?
             </S.Icon>
         </S.IconContainer>
         <S.TagContainer>
             {props.feed?.tags.map(tag => {
-                return <Tag>{tag}</Tag>
+                return <Tag key={tag}>{tag}</Tag>
             })}
 
         </S.TagContainer>
@@ -81,7 +82,7 @@ S.IconContainer = styled.div`
 S.Icon = styled.p`
   //background-color: pink;
     margin: 5px;
-    width: 40px;
+    min-width: 40px;
     height: 40px;
   
 `;
