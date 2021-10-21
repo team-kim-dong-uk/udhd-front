@@ -1,12 +1,12 @@
 import React, {useCallback, useEffect, useState} from 'react';
 import styled from 'styled-components';
 import Tag from "../Tag";
-import {HeartIcon} from '../../../assets/heart-icon.svg';
+import HeartIcon from '../../../assets/heart-icon.svg';
+import HeartIconFilled from '../../../assets/heart-icon-filled.svg';
 import {useDispatch, useSelector} from "react-redux";
 import {getPhotos} from "../../core/redux/photos";
 import {addToAlbum, removeFromAlbum} from "../../core/redux/album";
-import PropTypes from "prop-types";
-//import HeartIconFilled from '../../../assets/heart-icon-filled.svg';
+
 
 
 export default function Feed({ children, ...props }) {
@@ -29,27 +29,21 @@ export default function Feed({ children, ...props }) {
             }))
         }
         setInAlbum(prev => !prev);
-        console.log("now album is " + inAlbum)
     }, [inAlbum])
 
   return (
       <S.Feed>
-          <S.Header/>
           <div style={{background: 'orange'}}>
-          <S.ImageBox>
-              <img src={props.feed?.img_url}/>
-          </S.ImageBox>
+              <S.ImageBox>
+                  <img src={props.feed?.img_url}/>
+              </S.ImageBox>
           </div>
         <S.IconContainer>
-
             <S.Icon>
                 <div onClick={updateAlbum}>
-                    {inAlbum && ("[꽓]")}
-                    {!inAlbum && ("[ 빈칸 ]")}
+                    {inAlbum && (<HeartIconFilled/>)}
+                    {!inAlbum && (<HeartIcon filled="none"/>)}
                 </div>
-
-                {/*<HeartIcon width='25' height='25' viewBox='0 0 25 25'/>*/}
-                {/*<img src={HeartIcon} />*/}
             </S.Icon>
         </S.IconContainer>
         <S.TagContainer>
@@ -58,6 +52,7 @@ export default function Feed({ children, ...props }) {
             })}
 
         </S.TagContainer>
+        <S.Footer/>
       </S.Feed>
   );
 }
@@ -69,9 +64,9 @@ Feed.propTypes = {
 const S = {};
 S.Feed = styled.div`
 `;
-S.Header = styled.div`
+S.Footer = styled.div`
     height: 30px;
-  background-color: aliceblue;
+  background-color: whitesmoke;
 `;
 S.IconContainer = styled.div`
   overflow: auto;
@@ -88,6 +83,7 @@ S.Icon = styled.p`
 `;
 S.ImageBox = styled.div`
   overflow: auto;
+  
     img{
       width: 100%;
       height: auto;

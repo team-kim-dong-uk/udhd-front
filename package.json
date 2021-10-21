@@ -32,5 +32,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint"
+  },
+  "devDependencies": {
+    "babel-plugin-inline-react-svg": "^2.0.1"
   }
 }
