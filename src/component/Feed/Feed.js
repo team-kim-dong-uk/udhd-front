@@ -8,7 +8,14 @@ import {getPhotos} from "../../core/redux/photos";
 import {addToAlbum, removeFromAlbum} from "../../core/redux/album";
 
 
-
+/*
+* Props
+* feed : {
+*   photo_id : "",
+*   img_url : "",
+*   tags : []
+* }
+* */
 export default function Feed({ children, ...props }) {
     const {auth} = useSelector(state => state);
     const dispatch = useDispatch();
