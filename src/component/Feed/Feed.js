@@ -4,8 +4,6 @@ import Tag from "../Tag";
 import HeartIcon from '../../../assets/heart-icon.svg';
 import HeartIconFilled from '../../../assets/heart-icon-filled.svg';
 import {useDispatch, useSelector} from "react-redux";
-import {getPhotos} from "../../core/redux/photos";
-import {addToAlbum, removeFromAlbum} from "../../core/redux/album";
 
 
 /*

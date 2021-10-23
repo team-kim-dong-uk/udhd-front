@@ -2,9 +2,7 @@ import React, {useEffect, useLayoutEffect} from 'react';
 import AppLayout from '../../component/layout/AppLayout';
 import HomeLayout from '../../component/layout/HomeLayout';
 import Feed from "../../component/Feed";
-import {getPhotos} from "../../core/redux/photos";
 import {useDispatch, useSelector} from "react-redux";
-import {useInView} from "react-intersection-observer";
 
 export default function AlbumPage() {
     const {auth, photos} = useSelector(state => state);
