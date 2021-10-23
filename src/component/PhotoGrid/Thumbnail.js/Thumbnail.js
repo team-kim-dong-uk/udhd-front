@@ -3,10 +3,12 @@ import styled from 'styled-components';
 import PropTypes from 'prop-types';
 import { Image } from 'react-bootstrap';
 
-export default function Thumbnail({ children, ...props }) {
+export default function Thumbnail({ photoId, thumbnailLink }) {
   return (
     <S.Thumbnail>
-      <S.Image src={props.thumbnailLink} thumbnail={true} />
+      <a href={`feed/${photoId}`}>
+      <S.Image src={thumbnailLink} thumbnail={true} />
+      </a>
     </S.Thumbnail>
   );
 }
