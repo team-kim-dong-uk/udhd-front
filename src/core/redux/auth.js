@@ -50,7 +50,7 @@ export default handleActions(
 );
 
 function* redirectAfterLoginSaga() {
-  yield Router.push('/album');
+  yield Router.push('/feed');
 }
 
 export function* authSaga() {
