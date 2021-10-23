@@ -2,6 +2,10 @@ import Router from 'next/router';
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
+import * as authAPI from '../../../api/auth';
+import { loginSuccess } from '../../../core/redux/auth';
+import { BrowserView, MobileView, isBrowser, isMobile } from 'react-device-detect';
+import DesktopLayout from "../DesktopLayout";
 
 export default function AppLayout({ children, ...props}) {
   // const dispatch = useDispatch();
@@ -28,7 +32,16 @@ export default function AppLayout({ children, ...props}) {
   // }, [auth]);
 
 
-  return <S.Container {...props}>{children}</S.Container>;
+  return (
+      <S.Container {...props}>
+        <BrowserView>
+          <DesktopLayout>{children}</DesktopLayout>
+        </BrowserView>
+        <MobileView>
+          {children}
+        </MobileView>
+      </S.Container>
+  );
 }
 
 const S = {};
