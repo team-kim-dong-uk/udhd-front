@@ -1,12 +1,14 @@
 import React from 'react';
 import styled from 'styled-components';
+import TagIcon from '../../../assets/tag-icon-no-border.svg';
 
 export default function Tag({ children, ...props }) {
 
   return (
-      <S.Button>
-          {children}
-      </S.Button>
+      <S.Tag>
+          <TagIcon/>
+          <span>text</span>
+      </S.Tag>
   );
 }
 
@@ -15,7 +17,7 @@ Tag.propTypes = {
 };
 
 const S = {};
-S.Button = styled.button`
+S.Tag = styled.div`
     margin-right: 5px;
     padding-left: 8px;
     padding-right: 8px;

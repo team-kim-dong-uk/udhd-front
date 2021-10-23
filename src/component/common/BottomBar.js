@@ -9,10 +9,10 @@ const Bottombar = () => {
   return (
     <S.Navbar fixed="bottom">
       <S.Nav justify="true" activeKey={router.pathname}>
-        <Link href="/album" passHref>
+        <Link href="/feed" passHref>
           <Nav.Link>
             <BsImages />
-            <div>내 앨범</div>
+            <div>피드</div>
           </Nav.Link>
         </Link>
         <Link href="/search" passHref>
