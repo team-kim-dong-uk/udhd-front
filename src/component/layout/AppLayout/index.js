@@ -4,8 +4,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
 import * as authAPI from '../../../api/auth';
 import { loginSuccess } from '../../../core/redux/auth';
-import { BrowserView, MobileView, isBrowser, isMobile } from 'react-device-detect';
 import DesktopLayout from "../DesktopLayout";
+import Device from "../../../util/Device";
 
 export default function AppLayout({ children, ...props}) {
   // const dispatch = useDispatch();
@@ -34,12 +34,12 @@ export default function AppLayout({ children, ...props}) {
 
   return (
       <S.Container {...props}>
-        <BrowserView>
-          <DesktopLayout>{children}</DesktopLayout>
-        </BrowserView>
-        <MobileView>
-          {children}
-        </MobileView>
+        <Device>
+          {({ isMobile }) => {
+            if (isMobile) return <div>{children}</div>
+            return <DesktopLayout>{children}</DesktopLayout>
+          }}
+        </Device>
       </S.Container>
   );
 }
