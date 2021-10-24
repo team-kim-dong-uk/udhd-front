@@ -26,12 +26,17 @@ export default function Info({data}) {
   }, [inAlbum])
   return (
     <S.Info>
-      <S.Uploader>Nickname</S.Uploader>
       <S.IconContainer>
           <S.Icon onClick={updateAlbum}>
               {!inAlbum && <HeartIcon/>}
               {inAlbum && <HeartIconFilled/>}
           </S.Icon>
+          <S.LikeCount>
+              {data?.likeCount ? data?.likeCount : 0}
+               &nbsp;명이 좋아합니다.
+          </S.LikeCount>
+      </S.IconContainer>
+      <S.IconContainer>
           <S.Icon>
             <SaveIcon/>
           </S.Icon>
@@ -51,7 +56,7 @@ S.Info = styled.div`
   justify-content: space-between;
   width: 100%;
 `;
-S.Uploader = styled.span`
+S.LikeCount = styled.span`
   font-weight: bold;
 `;
 S.Footer = styled.div`
