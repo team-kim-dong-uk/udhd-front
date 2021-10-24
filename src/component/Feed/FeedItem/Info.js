@@ -57,6 +57,7 @@ S.Info = styled.div`
   width: 100%;
 `;
 S.LikeCount = styled.span`
+  font-size: 14px;
   font-weight: bold;
 `;
 S.Footer = styled.div`
