@@ -24,7 +24,7 @@ export default function FeedItem({item}) {
       <S.ImageBox>
           <S.Image src={item.photo.originalLink}/>
       </S.ImageBox>
-      <Info data={item.photo}/>
+      <Info data={item}/>
       <Tags data={item.photo}/>
       <CommentBox comments={item.comments}/>
     </S.FeedItem>
