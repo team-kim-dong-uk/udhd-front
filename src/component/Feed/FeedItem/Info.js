@@ -1,8 +1,10 @@
-import React, {useCallback, useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import styled from 'styled-components';
 import HeartIcon from '../../../../assets/heart-icon.svg';
 import HeartIconFilled from '../../../../assets/heart-icon-filled.svg';
 import SaveIcon from '../../../../assets/save-icon.svg';
+import {useDispatch, useSelector} from "react-redux";
+import {addFeedLike, deleteFeedLike} from "../../../core/redux/feed";
 
 
 /*
@@ -13,17 +15,23 @@ import SaveIcon from '../../../../assets/save-icon.svg';
 *   tags : []
 * }
 * */
-export default function Info({data}) {
+export default function Info({feedData}) {
+  const {feed} = useSelector(state => state);
   const [inAlbum, setInAlbum] = useState(false);
+  const dispatch = useDispatch();
+
+  /*좋아요 추가 삭제 실패했으니 되돌리기*/
+  useEffect(()=>{
+    if (feed.error?.addLike != null) setInAlbum(false);
+    else if (feed.error?.deleteLike != null) setInAlbum(true);
+  }, [feed.error])
 
   const updateAlbum = useCallback(() => {
-      if (inAlbum) {
-        // TODO: remove from album
-      } else {
-
-      }
+      inAlbum ? dispatch(deleteFeedLike.request({feedId: feedData?.id}))
+          : dispatch(addFeedLike.request({feedId: feedData?.id}));
       setInAlbum(prev => !prev);
   }, [inAlbum])
+
   return (
     <S.Info>
       <S.IconContainer>
@@ -32,7 +40,7 @@ export default function Info({data}) {
               {inAlbum && <HeartIconFilled/>}
           </S.Icon>
           <S.LikeCount>
-              {data?.likeCount ? data?.likeCount : 0}
+              {feedData?.likeCount ? feedData?.likeCount : 0}
                &nbsp;명이 좋아합니다.
           </S.LikeCount>
       </S.IconContainer>
