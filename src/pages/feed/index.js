@@ -54,8 +54,7 @@ export default function FeedPage() {
     <>
       <AppLayout>
         <HomeLayout>
-            <Feed data={feeds}/>
-           
+            <Feed data={feed.data}/>
         </HomeLayout>
       </AppLayout>
     </>
