@@ -33,7 +33,7 @@ export default handleActions(
       [GET_FEEDS.SUCCESS]: (state, action) => {
           return {
               ...state,
-              data: 1,
+              data: action.payload.data.feeds,
           };
       },
       [GET_FEEDS.FAILURE]: (state, action) => {
