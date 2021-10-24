@@ -1,6 +1,7 @@
-import React from 'react';
+import React, {useCallback, useState} from 'react';
 import styled from 'styled-components';
-import HeartIcon from '../../../../assets/heart.svg';
+import HeartIcon from '../../../../assets/heart-icon.svg';
+import HeartIconFilled from '../../../../assets/heart-icon-filled.svg';
 import SaveIcon from '../../../../assets/save-icon.svg';
 
 
@@ -13,14 +14,23 @@ import SaveIcon from '../../../../assets/save-icon.svg';
 * }
 * */
 export default function Info({data}) {
-  let inAlbum = true;
+  const [inAlbum, setInAlbum] = useState(false);
 
+  const updateAlbum = useCallback(() => {
+      if (inAlbum) {
+        // TODO: remove from album
+      } else {
+
+      }
+      setInAlbum(prev => !prev);
+  }, [inAlbum])
   return (
     <S.Info>
       <S.Uploader>Nickname</S.Uploader>
       <S.IconContainer>
-          <S.Icon>
-            <HeartIcon/>
+          <S.Icon onClick={updateAlbum}>
+              {!inAlbum && <HeartIcon/>}
+              {inAlbum && <HeartIconFilled/>}
           </S.Icon>
           <S.Icon>
             <SaveIcon/>
@@ -56,11 +66,12 @@ S.IconContainer = styled.div`
   
 `;
 S.Icon = styled.p`
-  //background-color: pink;
-    margin: 5px;
-    min-width: 40px;
-    height: 40px;
-  
+  margin: 5px;
+  min-width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 `;
 
 
