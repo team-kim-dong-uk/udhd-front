@@ -1,9 +1,5 @@
 import React, {useCallback, useEffect, useState} from 'react';
 import styled from 'styled-components';
-import Tag from "../Tag";
-import HeartIcon from '../../../assets/heart-icon.svg';
-import HeartIconFilled from '../../../assets/heart-icon-filled.svg';
-import {useDispatch, useSelector} from "react-redux";
 import FeedItem from './FeedItem';
 import { colors } from '../../util/style';
 

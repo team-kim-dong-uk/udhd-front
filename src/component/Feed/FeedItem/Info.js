@@ -1,9 +1,7 @@
-import React, {useCallback, useEffect, useState} from 'react';
+import React from 'react';
 import styled from 'styled-components';
-import Tag from "../../Tag";
 import HeartIcon from '../../../../assets/heart.svg';
 import SaveIcon from '../../../../assets/save-icon.svg';
-import {useDispatch, useSelector} from "react-redux";
 
 
 /*
