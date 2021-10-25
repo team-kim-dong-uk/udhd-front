@@ -23,40 +23,14 @@ const photos = {
 * }
 * */
 export default function PhotoGrid({ children, ...props }) {
-  const dispatch = useDispatch();
-  const { auth, feed } = useSelector(state => state);
-
-   useEffect(() => {
-     if (auth.data) {
-       switch (props.type){
-         case 'like':
-          if(feed.feedsLike?.data?.length === 0)
-              dispatch(getFeedsLike.request({
-                  type: props.type,
-                  userId: auth.data?.userId
-              }))
-           break;
-         case 'save':
-             if(feed.feedsSave?.data?.length === 0)
-                 dispatch(getFeedsSave.request({
-                     type: props.type,
-                     userId: auth.data?.userId
-                 }))
-           break;
-         default:
-             if(feed.feeds.data.length === 0)
-                dispatch(getFeeds.request());
-       }
-    }
-  }, [dispatch, auth, props.type])
-
   return (
       <S.PhotoGrid>
-          {photos.data.map(photo => (
+          {props.feeds?.map(feed => (
               <Thumbnail
-              key={photo.photoId}
-              photoId={photo.photoId}
-              thumbnailLink={photo.thumbnailLink}
+              key={feed?.id}
+              photoId={feed?.id}
+              thumbnailLink={feed?.photo?.thumbnailLink}
+              onClick={props?.onClick}
               />
           ))}
           {/* {!photos.isEnd && <div ref={ref}>로딩중...</div>} */}

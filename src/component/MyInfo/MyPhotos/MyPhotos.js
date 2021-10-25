@@ -1,11 +1,11 @@
-import React, {useCallback, useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import styled from 'styled-components';
 import PhotoGrid from "../../PhotoGrid";
 import HeartIcon from '../../../../assets/heart-icon.svg';
 import HeartIconFilled from '../../../../assets/heart-icon-filled.svg';
 import SaveIcon from '../../../../assets/save-icon.svg';
 import SaveIconFilled from '../../../../assets/save-icon-filled.svg';
-import {getFeedsLike, getFeedsSave} from "../../../core/redux/feed";
+import {getFeeds, getFeedsLike, getFeedsSave} from "../../../core/redux/feed";
 import {useDispatch, useSelector} from "react-redux";
 
 
@@ -19,7 +19,7 @@ import {useDispatch, useSelector} from "react-redux";
 * }
 * */
 export default function MyPhotos({item}) {
-    const {auth} = useSelector(state => state);
+    const {auth, feed} = useSelector(state => state);
     const dispatch = useDispatch();
     const [photoType, setPhotoType] = useState('like');
 
@@ -40,7 +40,25 @@ export default function MyPhotos({item}) {
         setPhotoType('save');
     }, [])
 
-  return (
+    useEffect(() => {
+        if (auth.data) {
+            if (photoType === 'like') {
+                if (feed.feedsLike?.data?.length === 0)
+                    dispatch(getFeedsLike.request({
+                        type: photoType,
+                        userId: auth.data?.userId
+                    }))
+            } else if (photoType === 'save') {
+                if(feed.feedsSave?.data?.length === 0)
+                    dispatch(getFeedsSave.request({
+                        type: photoType,
+                        userId: auth.data?.userId
+                    }))
+            }
+        }
+    }, [dispatch, auth, photoType])
+
+    return (
     <S.MyPhotos>
         <S.IconContainer>
             <S.Icon onClick={showLike}>
@@ -50,7 +68,13 @@ export default function MyPhotos({item}) {
                 {photoType === 'save' ? <SaveIconFilled/> : <SaveIcon/>}
             </S.Icon>
         </S.IconContainer>
-        <PhotoGrid type={photoType}/>
+        {photoType === 'like' && (
+            <PhotoGrid feeds={feed.feedsLike.data}/>
+        )}
+        {photoType === 'save' && (
+            <PhotoGrid feeds={feed.feedsSave.data}/>
+        )}
+
     </S.MyPhotos>
   );
 }
