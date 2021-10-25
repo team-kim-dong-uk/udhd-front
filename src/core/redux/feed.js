@@ -1,5 +1,5 @@
 import { handleActions } from 'redux-actions';
-import { takeEvery } from 'redux-saga/effects';
+import { takeEvery, takeLatest, takeLeading } from 'redux-saga/effects';
 import createAsyncSaga, {
   asyncActionCreator,
   createAsyncAction,
@@ -16,10 +16,14 @@ const DEL_FEED_LIKE = asyncActionCreator(`${prefix}DEL_FEED_LIKE`);
 
 const SAVE_FEED = asyncActionCreator(`${prefix}SAVE_FEED`);
 const UNSAVE_FEED = asyncActionCreator(`${prefix}UNSAVE_FEED`);
+const ADD_FEED_COMMENT = asyncActionCreator(`${prefix}ADD_FEED_COMMENT`);
+const DELETE_FEED_COMMENT = asyncActionCreator(`${prefix}DELETE_FEED_COMMENT`);
 
 // 3. 액션함수에 대해서 정의합니다.
 //photoId: optional
 export const getFeeds = createAsyncAction(GET_FEEDS, ({photoId}) => ({photoId}));
+export const addFeedComment = createAsyncAction(ADD_FEED_COMMENT, ({ feedId, content }) => ({ feedId, content }));
+export const deleteFeedComment = createAsyncAction(DELETE_FEED_COMMENT, ({ feedId, commentId }) => ({ feedId, commentId }));
 
 export const addFeedLike = createAsyncAction(ADD_FEED_LIKE, ({feedId}) => ({feedId}));
 export const deleteFeedLike = createAsyncAction(DEL_FEED_LIKE, ({feedId}) => ({feedId}));
@@ -33,6 +37,8 @@ const addFeedLikeSaga = createAsyncSaga(addFeedLike, feedAPI.addFeedLike);
 const deleteFeedLikeSaga = createAsyncSaga(deleteFeedLike, feedAPI.deleteFeedLike);
 const saveFeedSaga = createAsyncSaga(saveFeed, feedAPI.saveFeed);
 const unsaveFeedSaga = createAsyncSaga(unsaveFeed, feedAPI.unsaveFeed);
+const addFeedCommentSaga = createAsyncSaga(addFeedComment, feedAPI.addComment);
+const deleteFeedCommentSaga = createAsyncSaga(deleteFeedComment, feedAPI.deleteComment);
 
 // 5. 초기 상태 정의
 const initialState = {
@@ -44,7 +50,9 @@ const initialState = {
       addLike: null,
       deleteLike: null,
       saveFeed: null,
-      unsaveFeed: null
+      unsaveFeed: null,
+      addComment: null,
+      deleteComment: null,
   }
 };
 
@@ -54,7 +62,7 @@ export default handleActions(
       [GET_FEEDS.SUCCESS]: (state, action) => {
           return {
               ...state,
-              data: 1,
+              data: action.payload.data.feeds,
           };
       },
       [GET_FEEDS.FAILURE]: (state, action) => {
@@ -101,6 +109,38 @@ export default handleActions(
                   unsaveFeed: action.payload.error,
               },
           }
+        },
+      [ADD_FEED_COMMENT.SUCCESS]: (state, action) => {
+        const modifiedFeed = action.payload.data;
+        return {
+            ...state,
+            data: state.data.map(item => item.id === modifiedFeed.id ? modifiedFeed : item),
+        };
+      },
+      [DELETE_FEED_COMMENT.SUCCESS]: (state, action) => {
+        const modifiedFeed = action.payload.data;
+        return {
+            ...state,
+            data: state.data.map(item => item.id === modifiedFeed.id ? modifiedFeed : item),
+        };
+      },
+      [ADD_FEED_COMMENT.FAILURE]: (state, action) => {
+        return {
+            ...state,
+            error: {
+                ...state.error,
+                addComment: action.payload.error,
+            },
+        };
+      },
+      [DELETE_FEED_COMMENT.FAILURE]: (state, action) => {
+        return {
+            ...state,
+            error: {
+                ...state.error,
+                deleteComment: action.payload.error,
+            },
+        };
       },
   },
   initialState,
@@ -113,4 +153,6 @@ export function* feedSaga() {
     yield takeEvery(DEL_FEED_LIKE.REQUEST, deleteFeedLikeSaga);
     yield takeEvery(SAVE_FEED.REQUEST, saveFeedSaga);
     yield takeEvery(UNSAVE_FEED.REQUEST, unsaveFeedSaga);
+    yield takeLatest(ADD_FEED_COMMENT.REQUEST, addFeedCommentSaga);
+    yield takeLeading(DELETE_FEED_COMMENT.REQUEST, deleteFeedCommentSaga);
 }

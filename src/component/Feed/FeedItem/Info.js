@@ -7,15 +7,6 @@ import SaveIconFilled from '../../../../assets/save-icon-filled.svg';
 import {useDispatch, useSelector} from "react-redux";
 import {addFeedLike, deleteFeedLike, saveFeed, unsaveFeed} from "../../../core/redux/feed";
 
-
-/*
-* Props
-* feed : {
-*   photo_id : "",
-*   img_url : "",
-*   tags : []
-* }
-* */
 export default function Info({feedData}) {
   const {feed} = useSelector(state => state);
   const [inLike, setInLike] = useState(false);

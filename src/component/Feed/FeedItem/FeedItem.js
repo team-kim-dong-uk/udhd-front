@@ -5,18 +5,7 @@ import CommentBox from './CommentBox';
 import { colors } from '../../../util/style';
 import Tags from './Tags';
 
-
-/*
-* Props
-* feed : {
-*   photo_id : "",
-*   img_url : "",
-*   tags : [],
-*   comments: [],
-* }
-* */
 export default function FeedItem({item}) {
-  let inAlbum = true;
 
   return (
     <S.FeedItem>
@@ -26,7 +15,7 @@ export default function FeedItem({item}) {
       </S.ImageBox>
       <Info data={item}/>
       <Tags data={item.photo}/>
-      <CommentBox comments={item.comments}/>
+      <CommentBox data={item}/>
     </S.FeedItem>
   );
 }
@@ -43,11 +32,16 @@ S.FeedItem = styled.div`
   border: 1px solid ${colors.black};
   width: 100%;
   margin-bottom: 10px;
-  padding: 15px;
-  padding-bottom: 30px;
 `;
 S.Title = styled.div`
 
+`;
+
+S.InfoContainer = styled.div`
+  padding-left: 20px;
+  padding-right: 20px;
+  padding-bottom: 10px;
+  width: 100%;
 `;
 S.IconContainer = styled.div`
   overflow: auto;
@@ -63,15 +57,12 @@ S.Icon = styled.p`
 `;
 S.ImageBox = styled.div`
   overflow: auto;
-  display: flex;
-  justify-content: center;
-  width: 90%;
 `;
 S.Image = styled.img`
-  height: auto
+  width: 100%;
+  height: auto;
 `;
 S.TagContainer = styled.div`
-    padding: 20px;
 `;
 
 

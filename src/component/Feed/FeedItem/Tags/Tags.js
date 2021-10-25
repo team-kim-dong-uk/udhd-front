@@ -16,7 +16,7 @@ export default function Tags({data}) {
 
   return (
       <S.Tags>
-        {data?.tags.map(tag => {
+        {data?.tags?.map(tag => {
               return <Tag key={tag} text={tag}></Tag>
           })}
       </S.Tags>

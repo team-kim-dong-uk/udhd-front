@@ -17,3 +17,10 @@ export const saveFeed = ({feedId}) => {
 export const unsaveFeed = ({feedId}) => {
     return client.delete(`feeds/${feedId}/save`)
 }
+export const addComment = ({ feedId, content }) => {
+  return client.put(`feeds/${feedId}/comment`, { content });
+}
+
+export const deleteComment = ({ feedId, commentId }) => {
+  return client.delete(`feeds/${feedId}/comment/${commentId}`);
+}
