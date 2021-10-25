@@ -1,20 +1,40 @@
 import React, {useCallback, useEffect, useMemo, useState} from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
+import { addFeedComment, deleteFeedComment } from '../../../core/redux/feed';
 import { colors } from '../../../util/style';
 
-export default function CommentBox({comments}) {
+export default function CommentBox({data}) {
+  const dispatch = useDispatch();
+  const { auth } = useSelector(state => state);
   const [comment, setComment] = useState('');
 
   const onCommentChange = useCallback((e) => {
     setComment(e.target.value);
   }, [setComment]);
+
+  const onAddComment = (feedId) => {
+    dispatch(addFeedComment.request({ feedId: feedId, content: comment}));
+    setComment('');
+  }
   
+  const onDeleteComment = (feedId, commentId) => {
+    dispatch(deleteFeedComment.request({ feedId, commentId }));
+  }
+
   return (
       <S.CommentBox>
-        {comments?.map(comment => (
-          <S.Comment>
-            <S.Writer>{comment.userName}</S.Writer>
-            <S.Content>{comment.content}</S.Content>
+        {data.comments?.map(comment => (
+          <S.Comment key={comment.id}>
+            <div>
+              <S.Writer>{comment.userName}</S.Writer>
+              <S.Content>{comment.content}</S.Content>
+            </div>
+            {
+              auth?.data?.userId === comment.userId
+              ? <S.DeleteBtn onClick={()=>onDeleteComment(data.id, comment.id)}>x</S.DeleteBtn>
+              : null
+            }
           </S.Comment>
         ))}
         <S.NewComment>
@@ -23,7 +43,7 @@ export default function CommentBox({comments}) {
             value={comment}
             onChange={onCommentChange}
           />
-          <S.SubmitComment>등록</S.SubmitComment>
+          <S.SubmitComment onClick={() => onAddComment(data.id)}>등록</S.SubmitComment>
         </S.NewComment>
       </S.CommentBox>
   );
@@ -40,8 +60,9 @@ S.CommentBox = styled.div`
 `;
 S.Comment = styled.div`
   width: 100%;
-  display: flex;
   margin-bottom: 5px;
+  display: flex;
+  justify-content: space-between;
 `;
 S.Writer = styled.span`
   font-weight: bold;
@@ -67,8 +88,14 @@ S.SubmitComment = styled.button`
   border-bottom-right-radius: 5px;
   height: 2rem;
   color: ${colors.white};
+  border-color: ${colors.orange};
   background-color: ${colors.orange};
   padding: 0.5rem;
+`;
+S.DeleteBtn = styled.button`
+  border: 1px solid;
+  border-radius: 5px;
+  background-color: ${colors.white};
 `;
 
 

@@ -16,7 +16,7 @@ export default function FeedItem({item}) {
       <S.InfoContainer>
         <Info data={item.photo}/>
         <Tags data={item.photo}/>
-        <CommentBox comments={item.comments}/>
+        <CommentBox data={item}/>
       </S.InfoContainer>
     </S.FeedItem>
   );

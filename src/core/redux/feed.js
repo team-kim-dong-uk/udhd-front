@@ -1,5 +1,5 @@
 import { handleActions } from 'redux-actions';
-import { takeEvery } from 'redux-saga/effects';
+import { takeEvery, takeLatest, takeLeading } from 'redux-saga/effects';
 import createAsyncSaga, {
   asyncActionCreator,
   createAsyncAction,
@@ -18,7 +18,7 @@ const DELETE_FEED_COMMENT = asyncActionCreator(`${prefix}DELETE_FEED_COMMENT`);
 //photoId: optional
 export const getFeeds = createAsyncAction(GET_FEEDS, ({photoId}) => ({photoId}));
 export const addFeedComment = createAsyncAction(ADD_FEED_COMMENT, ({ feedId, content }) => ({ feedId, content }));
-export const deleteFeedComment = createAsyncAction(DELETE_FEED_COMMENT, ({ feedId }) => ({ feedId }));
+export const deleteFeedComment = createAsyncAction(DELETE_FEED_COMMENT, ({ feedId, commentId }) => ({ feedId, commentId }));
 
 // 4. saga 비동기 관련 함수가 필요할 경우 작성 합니다. (optional) saga함수들의 모음은 최하단에 나열합니다.
 const getFeedsSaga = createAsyncSaga(getFeeds, feedAPI.getFeeds);
@@ -49,15 +49,17 @@ export default handleActions(
         };
       },
       [ADD_FEED_COMMENT.SUCCESS]: (state, action) => {
+        const modifiedFeed = action.payload.data;
         return {
             ...state,
-            data: action.payload.data.feeds,
+            data: state.data.map(item => item.id === modifiedFeed.id ? modifiedFeed : item),
         };
       },
       [DELETE_FEED_COMMENT.SUCCESS]: (state, action) => {
+        const modifiedFeed = action.payload.data;
         return {
             ...state,
-            data: action.payload.data.feeds,
+            data: state.data.map(item => item.id === modifiedFeed.id ? modifiedFeed : item),
         };
       },
   },
@@ -67,4 +69,6 @@ export default handleActions(
 // 7. `4`번에서 작성한 saga함수들에 대해 구독 요청에 대한 정의를 최하단에 해주도록 합니다.
 export function* feedSaga() {
     yield takeEvery(GET_FEEDS.REQUEST, getFeedsSaga);
+    yield takeLatest(ADD_FEED_COMMENT.REQUEST, addFeedCommentSaga);
+    yield takeLeading(DELETE_FEED_COMMENT.REQUEST, deleteFeedCommentSaga);
 }
