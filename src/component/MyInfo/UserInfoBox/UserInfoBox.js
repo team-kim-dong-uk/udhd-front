@@ -66,6 +66,7 @@ S.ImageBox = styled.div`
   display: flex;
   justify-content: flex-start;
   overflow: hidden;
+  padding-right: 30px;
 `;
 S.Image = styled.img`
   width: 80px;
