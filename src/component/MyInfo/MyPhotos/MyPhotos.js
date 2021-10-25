@@ -30,7 +30,7 @@ export default function MyPhotos({item}) {
                 userId: auth.data?.userId
             }))
         setPhotoType('like');
-    }, []);
+    }, [photoType]);
     const showSave = useCallback(() => {
         if (photoType === 'save')
             dispatch(getFeedsSave.request({
@@ -38,7 +38,7 @@ export default function MyPhotos({item}) {
                 userId: auth.data?.userId
             }))
         setPhotoType('save');
-    }, [])
+    }, [photoType])
 
     useEffect(() => {
         if (auth.data) {
