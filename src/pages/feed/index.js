@@ -17,7 +17,7 @@ export default function FeedPage() {
           refreshToken: `test`,
           nickname: `Udhd-test`,
         }));
-      } else if (!loading.data && feed.data.length === 0 && !feed.error) {
+      } else if (!loading.data && feed.feeds.data.length === 0 && !feed.feeds.error) {
         dispatch(getFeeds.request());
       }
     }, [feed, loading, auth])
@@ -55,7 +55,7 @@ export default function FeedPage() {
       <AppLayout>
         <HomeLayout>
             <Feed data={feeds}/>
-           
+
         </HomeLayout>
       </AppLayout>
     </>
