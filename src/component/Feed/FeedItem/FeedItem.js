@@ -13,9 +13,11 @@ export default function FeedItem({item}) {
       <S.ImageBox>
           <S.Image src={item.photo.originalLink}/>
       </S.ImageBox>
-      <Info data={item}/>
-      <Tags data={item.photo}/>
-      <CommentBox data={item}/>
+      <S.InfoContainer>
+        <Info data={item}/>
+        <Tags data={item.photo}/>
+        <CommentBox data={item}/>
+      </S.InfoContainer>
     </S.FeedItem>
   );
 }
