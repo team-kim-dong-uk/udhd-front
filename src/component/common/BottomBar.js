@@ -15,30 +15,36 @@ const Bottombar = () => {
     <S.Navbar fixed="bottom">
       <S.Nav justify="true" activeKey={router.pathname}>
         <Link href="/feed" passHref>
-          <Nav.Link>
+          <Nav.Link style={{padding: 0}}>
+            <S.Icon>
             {
               router.pathname === '/feed'
               ? <FeedIconActive/>
               : <FeedIcon/>
             }
+            </S.Icon>
           </Nav.Link>
         </Link>
         <Link href="/search" passHref>
-          <Nav.Link>
+          <Nav.Link style={{padding: 0}}>
+            <S.Icon>
             {
               router.pathname === '/search'
               ? <SearchIconActive/>
               : <SearchIcon/>
             }
+            </S.Icon>
           </Nav.Link>
         </Link>
         <Link href="/mypage" passHref>
-          <Nav.Link>
+          <Nav.Link style={{padding: 0}}>
+          <S.Icon>
             {
               router.pathname === '/mypage'
               ? <MypageIconActive/>
               : <MypageIcon/>
             }
+          </S.Icon>
           </Nav.Link>
         </Link>
       </S.Nav>
@@ -54,6 +60,13 @@ background-color: white;
 
 S.Nav = styled(Nav)`
 width: 100%;
+  height: 30px;
+`;
+S.Icon = styled.p`
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 `;
 
 export default Bottombar;
