@@ -55,4 +55,5 @@ PhotoGrid.propTypes = {
 const S = {};
 
 S.PhotoGrid = styled.div`
+  width: 100%;
 `;

@@ -43,6 +43,7 @@ S.MyPhotos = styled.div`
   flex-direction: column;
   align-items: center;
   width: 100%;
+  height: auto;
 `;
 
 S.IconContainer = styled.div`
@@ -50,6 +51,7 @@ S.IconContainer = styled.div`
   display: flex;
   align-content: space-between;
   justify-content: space-between;
+  padding: 10px;
 `;
 
 S.Icon = styled.span`
