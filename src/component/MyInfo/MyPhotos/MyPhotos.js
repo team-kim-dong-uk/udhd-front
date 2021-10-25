@@ -1,10 +1,12 @@
-import React, {useState} from 'react';
+import React, {useCallback, useState} from 'react';
 import styled from 'styled-components';
 import PhotoGrid from "../../PhotoGrid";
 import HeartIcon from '../../../../assets/heart-icon.svg';
 import HeartIconFilled from '../../../../assets/heart-icon-filled.svg';
 import SaveIcon from '../../../../assets/save-icon.svg';
 import SaveIconFilled from '../../../../assets/save-icon-filled.svg';
+import {getFeedsLike, getFeedsSave} from "../../../core/redux/feed";
+import {useDispatch, useSelector} from "react-redux";
 
 
 /*
@@ -17,18 +19,38 @@ import SaveIconFilled from '../../../../assets/save-icon-filled.svg';
 * }
 * */
 export default function MyPhotos({item}) {
+    const {auth} = useSelector(state => state);
+    const dispatch = useDispatch();
     const [photoType, setPhotoType] = useState('like');
+
+    const showLike = useCallback(() => {
+        if (photoType === 'like')
+            dispatch(getFeedsLike.request({
+                type: photoType,
+                userId: auth.data?.userId
+            }))
+        setPhotoType('like');
+    }, []);
+    const showSave = useCallback(() => {
+        if (photoType === 'save')
+            dispatch(getFeedsSave.request({
+                type: photoType,
+                userId: auth.data?.userId
+            }))
+        setPhotoType('save');
+    }, [])
+
   return (
     <S.MyPhotos>
         <S.IconContainer>
-            <S.Icon onClick={() => setPhotoType('like')}>
+            <S.Icon onClick={showLike}>
                 {photoType === 'like' ? <HeartIconFilled/> : <HeartIcon/>}
             </S.Icon>
-            <S.Icon onClick={() => setPhotoType('save')}>
+            <S.Icon onClick={showSave}>
                 {photoType === 'save' ? <SaveIconFilled/> : <SaveIcon/>}
             </S.Icon>
         </S.IconContainer>
-        <PhotoGrid/>
+        <PhotoGrid type={photoType}/>
     </S.MyPhotos>
   );
 }
