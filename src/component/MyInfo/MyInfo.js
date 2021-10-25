@@ -3,13 +3,14 @@ import styled from 'styled-components';
 import {colors} from '../../util/style';
 import UserInfoBox from "./UserInfoBox";
 import PhotoGrid from "../PhotoGrid";
+import MyPhotos from "./MyPhotos";
 
 
 export default function MyInfo({ data }) {
   return (
     <S.Mypage>
       <UserInfoBox/>
-      <PhotoGrid/>
+      <MyPhotos/>
     </S.Mypage>
   );
 }
