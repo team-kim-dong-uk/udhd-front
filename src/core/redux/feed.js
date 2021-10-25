@@ -73,7 +73,7 @@ export default handleActions(
           return {
               ...state,
               feeds: {
-                  data: 1,
+                  data: action.payload.data.feeds,
                   error: null,
               },
           };
@@ -82,6 +82,7 @@ export default handleActions(
         return {
             ...state,
             feeds: {
+                data: state.feeds.data,
                 error: action.payload.error,
             },
         };
@@ -90,7 +91,7 @@ export default handleActions(
           return {
               ...state,
               feedsLike: {
-                  data: 1,
+                  data: action.payload.data.feeds,
                   error: null,
               },
           };
@@ -108,7 +109,7 @@ export default handleActions(
           return {
               ...state,
               feedsSave: {
-                  data: 1,
+                  data: action.payload.data.feeds,
                   error: null,
               },
           };
