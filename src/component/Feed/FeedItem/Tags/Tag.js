@@ -29,10 +29,6 @@ S.Tag = styled.div`
   margin-bottom: 10px;
 `;
 S.TagIcon = styled(TagIcon)`
-  svg {
-    width: 5px;
-    height: 5px;
-  }
   border: 1px solid black;
   margin-right: 5px;
 `;

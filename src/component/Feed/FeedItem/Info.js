@@ -7,15 +7,6 @@ import SaveIconFilled from '../../../../assets/save-icon-filled.svg';
 import {useDispatch, useSelector} from "react-redux";
 import {addFeedLike, deleteFeedLike, saveFeed, unsaveFeed} from "../../../core/redux/feed";
 
-
-/*
-* Props
-* feed : {
-*   photo_id : "",
-*   img_url : "",
-*   tags : []
-* }
-* */
 export default function Info({feedData}) {
   const {feed} = useSelector(state => state);
   const [inLike, setInLike] = useState(false);
@@ -78,6 +69,7 @@ S.Info = styled.div`
 S.LikeCount = styled.span`
   font-size: 14px;
   font-weight: bold;
+  margin-left: 5px;
 `;
 S.Footer = styled.div`
     height: 30px;
@@ -87,11 +79,11 @@ S.IconContainer = styled.div`
   overflow: auto;
   display: inline-flex;
   align-items: center;
-  padding:5px;
-  
+  padding-top: 5px;
 `;
 S.Icon = styled.p`
-  margin: 5px;
+  margin-top: 5px;
+  margin-bottom: 5px;
   min-width: 40px;
   height: 40px;
   display: flex;
