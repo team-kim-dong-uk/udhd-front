@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import styled from 'styled-components';
 import PhotoGrid from "../../PhotoGrid";
 import HeartIcon from '../../../../assets/heart-icon.svg';
@@ -17,15 +17,15 @@ import SaveIconFilled from '../../../../assets/save-icon-filled.svg';
 * }
 * */
 export default function MyPhotos({item}) {
-
+    const [photoType, setPhotoType] = useState('like');
   return (
     <S.MyPhotos>
         <S.IconContainer>
-            <S.Icon>
-                <HeartIcon/>
+            <S.Icon onClick={() => setPhotoType('like')}>
+                {photoType === 'like' ? <HeartIconFilled/> : <HeartIcon/>}
             </S.Icon>
-            <S.Icon>
-                <SaveIcon/>
+            <S.Icon onClick={() => setPhotoType('save')}>
+                {photoType === 'save' ? <SaveIconFilled/> : <SaveIcon/>}
             </S.Icon>
         </S.IconContainer>
         <PhotoGrid/>
@@ -54,8 +54,16 @@ S.IconContainer = styled.div`
 
 S.Icon = styled.span`
   display: flex;
+  flex-direction: column;
   flex-grow: 1;
   align-items: center;
   justify-content: center;
   padding-top: 20px;
+`;
+S.LineContainer = styled.div`
+  width: 100%;
+  height: 1px;
+  margin-top: 20px;
+  background-color: black;
+  display: flex;
 `;
