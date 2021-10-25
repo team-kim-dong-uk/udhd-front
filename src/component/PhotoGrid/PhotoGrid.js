@@ -44,7 +44,8 @@ export default function PhotoGrid({ children, ...props }) {
                  }))
            break;
          default:
-             dispatch(getFeeds.request());
+             if(feed.feeds.data.length === 0)
+                dispatch(getFeeds.request());
        }
     }
   }, [dispatch, auth, props.type])
