@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import {useSelector} from "react-redux";
 
 
 /*
@@ -12,10 +13,11 @@ import styled from 'styled-components';
 * }
 * */
 export default function UserInfoBox({item}) {
+    const {auth} = useSelector(state => state);
 
   return (
     <S.UserInfoBox>
-      <S.Nickname>닉네임</S.Nickname>
+      <S.Nickname>{auth.data?.nickname}</S.Nickname>
       <S.Profile>
         <S.ImageBox>
             <S.Image src="https://upload.wikimedia.org/wikipedia/commons/f/f8/190611_%EC%9D%B4%EB%82%98%EA%B2%BD.jpg"/>
