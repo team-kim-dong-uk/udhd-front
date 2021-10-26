@@ -69,10 +69,10 @@ export default function MyPhotos({item}) {
             </S.Icon>
         </S.IconContainer>
         {photoType === 'like' && (
-            <PhotoGrid feeds={feed.feedsLike.data}/>
+            <PhotoGrid feeds={feed.feedsLike.data} moveTo="mypage/like"/>
         )}
         {photoType === 'save' && (
-            <PhotoGrid feeds={feed.feedsSave.data}/>
+            <PhotoGrid feeds={feed.feedsSave.data} moveTo="mypage/save"/>
         )}
 
     </S.MyPhotos>

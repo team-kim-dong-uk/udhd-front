@@ -30,7 +30,7 @@ export default function PhotoGrid({ children, ...props }) {
               key={feed?.id}
               photoId={feed?.id}
               thumbnailLink={feed?.photo?.thumbnailLink}
-              onClick={props?.onClick}
+              moveTo={props?.moveTo}
               />
           ))}
           {/* {!photos.isEnd && <div ref={ref}>로딩중...</div>} */}

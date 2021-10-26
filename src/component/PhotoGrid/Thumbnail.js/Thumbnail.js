@@ -2,13 +2,14 @@ import React from 'react';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
 import { Image } from 'react-bootstrap';
+import Link from 'next/link'
 
-export default function Thumbnail({ photoId, thumbnailLink }) {
+export default function Thumbnail({ photoId, thumbnailLink, moveTo}) {
   return (
     <S.Thumbnail>
-      <a href={`feed/${photoId}`}>
-      <S.Image src={thumbnailLink} thumbnail={true} />
-      </a>
+      <Link href={moveTo}>
+        <S.Image src={thumbnailLink} thumbnail={true} />
+      </Link>
     </S.Thumbnail>
   );
 }
