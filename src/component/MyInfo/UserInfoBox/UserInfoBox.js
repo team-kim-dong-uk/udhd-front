@@ -13,7 +13,7 @@ import {useSelector} from "react-redux";
 * }
 * */
 export default function UserInfoBox({item}) {
-    const {auth} = useSelector(state => state);
+    const {auth, feed} = useSelector(state => state);
 
   return (
     <S.UserInfoBox>
@@ -24,11 +24,11 @@ export default function UserInfoBox({item}) {
         </S.ImageBox>
           <S.TextContainer>
               <S.CountText>
-                  12 <br/>
+                  {feed.feedsLike.data?.length}<br/>
                   like
               </S.CountText>
               <S.CountText>
-                  10 <br/>
+                  {feed.feedsSave.data?.length}<br/>
                   save
               </S.CountText>
           </S.TextContainer>
