@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import {useSelector} from "react-redux";
+import Setting from '../../../../assets/setting.svg';
 
 
 /*
@@ -14,10 +15,15 @@ import {useSelector} from "react-redux";
 * */
 export default function UserInfoBox({item}) {
     const {auth, feed} = useSelector(state => state);
-
+    // TODO: 설정 - 모달 만들기
   return (
     <S.UserInfoBox>
-      <S.Nickname>{auth.data?.nickname}</S.Nickname>
+      <S.Top>
+        <S.Nickname>{auth.data?.nickname}</S.Nickname>
+          <S.Icon>
+              <Setting/>
+          </S.Icon>
+      </S.Top>
       <S.Profile>
         <S.ImageBox>
             <S.Image src="https://upload.wikimedia.org/wikipedia/commons/f/f8/190611_%EC%9D%B4%EB%82%98%EA%B2%BD.jpg"/>
@@ -48,9 +54,18 @@ S.UserInfoBox = styled.div`
   align-items: center;
   width: 100%;
 `;
+S.Top = styled.div`
+  display: flex;
+  justify-content: center;
+    width: 100%;
+    height: 40px;
+  padding-right: 15px;
+`;
+
 S.Nickname = styled.div`
-  width: 100%;
+  flex-grow: 1;
   text-align: left;
+  align-items: center;
   font-weight: bold;
   font-size: 1.5rem;
   padding-top: 5px;
@@ -87,5 +102,11 @@ S.CountText = styled.span`
   font-size: 1rem;
   display: flex;
   align-items: center;
+  justify-content: center;
+`;
+S.Icon = styled.p`
+  height: 100%;
+  display: flex;
+  flex-direction: column;
   justify-content: center;
 `;
