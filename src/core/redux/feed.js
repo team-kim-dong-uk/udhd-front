@@ -20,6 +20,9 @@ const DEL_FEED_LIKE = asyncActionCreator(`${prefix}DEL_FEED_LIKE`);
 const SAVE_FEED = asyncActionCreator(`${prefix}SAVE_FEED`);
 const UNSAVE_FEED = asyncActionCreator(`${prefix}UNSAVE_FEED`);
 
+const ADD_FEED_COMMENT = asyncActionCreator(`${prefix}ADD_FEED_COMMENT`);
+const DELETE_FEED_COMMENT = asyncActionCreator(`${prefix}DELETE_FEED_COMMENT`);
+
 // 3. 액션함수에 대해서 정의합니다.
 //photoId: optional
 export const getFeeds = createAsyncAction(GET_FEEDS);
@@ -32,6 +35,9 @@ export const deleteFeedLike = createAsyncAction(DEL_FEED_LIKE, ({feedId}) => ({f
 export const saveFeed = createAsyncAction(SAVE_FEED, ({feedId}) => ({feedId}));
 export const unsaveFeed = createAsyncAction(UNSAVE_FEED, ({feedId}) => ({feedId}));
 
+export const addFeedComment = createAsyncAction(ADD_FEED_COMMENT, ({ feedId, content }) => ({ feedId, content }));
+export const deleteFeedComment = createAsyncAction(DELETE_FEED_COMMENT, ({ feedId, commentId }) => ({ feedId, commentId }));
+
 // 4. saga 비동기 관련 함수가 필요할 경우 작성 합니다. (optional) saga함수들의 모음은 최하단에 나열합니다.
 const getFeedsSaga = createAsyncSaga(getFeeds, feedAPI.getFeeds);
 const getFeedsLikeSaga = createAsyncSaga(getFeedsLike, feedAPI.getFeedsByType);
@@ -41,6 +47,9 @@ const addFeedLikeSaga = createAsyncSaga(addFeedLike, feedAPI.addFeedLike);
 const deleteFeedLikeSaga = createAsyncSaga(deleteFeedLike, feedAPI.deleteFeedLike);
 const saveFeedSaga = createAsyncSaga(saveFeed, feedAPI.saveFeed);
 const unsaveFeedSaga = createAsyncSaga(unsaveFeed, feedAPI.unsaveFeed);
+
+const addFeedCommentSaga = createAsyncSaga(addFeedComment, feedAPI.addComment);
+const deleteFeedCommentSaga = createAsyncSaga(deleteFeedComment, feedAPI.deleteComment);
 
 // 5. 초기 상태 정의
 const initialState = {
@@ -159,6 +168,40 @@ export default handleActions(
               },
           }
       },
+      [ADD_FEED_COMMENT.SUCCESS]: (state, action) => {
+        const modifiedFeed = action.payload.data;
+        return {
+            ...state,
+            data: state.data.map(item => item.id === modifiedFeed.id ? modifiedFeed : item),
+        };
+      },
+      [DELETE_FEED_COMMENT.SUCCESS]: (state, action) => {
+        const modifiedFeed = action.payload.data;
+        return {
+            ...state,
+            data: state.data.map(item => item.id === modifiedFeed.id ? modifiedFeed : item),
+        };
+      },
+      [ADD_FEED_COMMENT.FAILURE]: (state, action) => {
+        console.log(action.payload);
+        return {
+            ...state,
+            error: {
+                ...state.error,
+                addComment: action.payload,
+            },
+        };
+      },
+      [DELETE_FEED_COMMENT.FAILURE]: (state, action) => {
+        return {
+            ...state,
+            error: {
+                ...state.error,
+                deleteComment: action.payload.error,
+            },
+        };
+      },
+
   },
   initialState,
 );
@@ -172,4 +215,6 @@ export function* feedSaga() {
     yield takeEvery(DEL_FEED_LIKE.REQUEST, deleteFeedLikeSaga);
     yield takeEvery(SAVE_FEED.REQUEST, saveFeedSaga);
     yield takeEvery(UNSAVE_FEED.REQUEST, unsaveFeedSaga);
+    yield takeEvery(ADD_FEED_COMMENT.REQUEST, addFeedCommentSaga);
+    yield takeEvery(DELETE_FEED_COMMENT.REQUEST, deleteFeedCommentSaga);
 }
