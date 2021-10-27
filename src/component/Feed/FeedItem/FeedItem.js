@@ -6,7 +6,7 @@ import { colors } from '../../../util/style';
 import Tags from './Tags';
 
 export default function FeedItem({item}) {
-
+    console.log(JSON.stringify(item,null,2))
   return (
     <S.FeedItem>
       <S.Title>1. title bar</S.Title>
@@ -14,7 +14,7 @@ export default function FeedItem({item}) {
           <S.Image src={item.photo.originalLink}/>
       </S.ImageBox>
       <S.InfoContainer>
-        <Info data={item}/>
+        <Info feedData={item}/>
         <Tags data={item.photo}/>
         <CommentBox data={item}/>
       </S.InfoContainer>
