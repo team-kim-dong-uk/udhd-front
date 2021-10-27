@@ -32,7 +32,7 @@ export default handleActions(
       [GET_RANDOM_PHOTOS.SUCCESS]: (state, action) => {
           return {
               ...state,
-              data: action.payload.data.feeds,
+              data: action.payload.data,
               error: null,
           };
       },
