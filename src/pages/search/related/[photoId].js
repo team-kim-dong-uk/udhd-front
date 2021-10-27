@@ -1,7 +1,7 @@
 import React, {useEffect, useLayoutEffect} from 'react';
-import AppLayout from '../../component/layout/AppLayout';
-import HomeLayout from '../../component/layout/HomeLayout';
-import Feed from "../../component/Feed";
+import AppLayout from '../../../component/layout/AppLayout';
+import HomeLayout from '../../../component/layout/HomeLayout';
+import Feed from "../../../component/Feed";
 import {useDispatch, useSelector} from "react-redux";
 import { useRouter } from 'next/router';
 
