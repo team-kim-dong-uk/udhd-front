@@ -17,9 +17,8 @@ export default function FeedPage() {
           refreshToken: `test`,
           nickname: `Udhd-test`,
         }));
-      } else if (feed.feeds.data.length === 0 && !feed.feeds.error) {
+      } else if (!loading.data && feed.feeds.data.length === 0 && !feed.feeds.error) {
         dispatch(getFeeds.request());
-
       }
     }, [feed, loading, auth])
   return (
