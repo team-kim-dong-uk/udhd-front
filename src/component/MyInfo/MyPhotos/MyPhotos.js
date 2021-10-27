@@ -1,10 +1,12 @@
-import React, {useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import styled from 'styled-components';
 import PhotoGrid from "../../PhotoGrid";
 import HeartIcon from '../../../../assets/heart-icon.svg';
 import HeartIconFilled from '../../../../assets/heart-icon-filled.svg';
 import SaveIcon from '../../../../assets/save-icon.svg';
 import SaveIconFilled from '../../../../assets/save-icon-filled.svg';
+import {getFeeds, getFeedsLike, getFeedsSave} from "../../../core/redux/feed";
+import {useDispatch, useSelector} from "react-redux";
 
 
 /*
@@ -17,18 +19,62 @@ import SaveIconFilled from '../../../../assets/save-icon-filled.svg';
 * }
 * */
 export default function MyPhotos({item}) {
+    const {auth, feed} = useSelector(state => state);
+    const dispatch = useDispatch();
     const [photoType, setPhotoType] = useState('like');
-  return (
+
+    const showLike = useCallback(() => {
+        if (photoType === 'like')
+            dispatch(getFeedsLike.request({
+                type: photoType,
+                userId: auth.data?.userId
+            }))
+        setPhotoType('like');
+    }, [photoType]);
+    const showSave = useCallback(() => {
+        if (photoType === 'save')
+            dispatch(getFeedsSave.request({
+                type: photoType,
+                userId: auth.data?.userId
+            }))
+        setPhotoType('save');
+    }, [photoType])
+
+    useEffect(() => {
+        if (auth.data) {
+            if (photoType === 'like') {
+                if (feed.feedsLike?.data?.length === 0)
+                    dispatch(getFeedsLike.request({
+                        type: photoType,
+                        userId: auth.data?.userId
+                    }))
+            } else if (photoType === 'save') {
+                if(feed.feedsSave?.data?.length === 0)
+                    dispatch(getFeedsSave.request({
+                        type: photoType,
+                        userId: auth.data?.userId
+                    }))
+            }
+        }
+    }, [dispatch, auth, photoType])
+
+    return (
     <S.MyPhotos>
         <S.IconContainer>
-            <S.Icon onClick={() => setPhotoType('like')}>
+            <S.Icon onClick={showLike}>
                 {photoType === 'like' ? <HeartIconFilled/> : <HeartIcon/>}
             </S.Icon>
-            <S.Icon onClick={() => setPhotoType('save')}>
+            <S.Icon onClick={showSave}>
                 {photoType === 'save' ? <SaveIconFilled/> : <SaveIcon/>}
             </S.Icon>
         </S.IconContainer>
-        <PhotoGrid/>
+        {photoType === 'like' && (
+            <PhotoGrid feeds={feed.feedsLike.data} moveTo="mypage/like"/>
+        )}
+        {photoType === 'save' && (
+            <PhotoGrid feeds={feed.feedsSave.data} moveTo="mypage/save"/>
+        )}
+
     </S.MyPhotos>
   );
 }
@@ -43,6 +89,7 @@ S.MyPhotos = styled.div`
   flex-direction: column;
   align-items: center;
   width: 100%;
+  height: auto;
 `;
 
 S.IconContainer = styled.div`
@@ -50,6 +97,7 @@ S.IconContainer = styled.div`
   display: flex;
   align-content: space-between;
   justify-content: space-between;
+  padding: 10px;
 `;
 
 S.Icon = styled.span`
