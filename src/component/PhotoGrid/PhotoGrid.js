@@ -34,6 +34,7 @@ export default function PhotoGrid({ children, ...props }) {
               />
           ))}
           {/* {!photos.isEnd && <div ref={ref}>로딩중...</div>} */}
+        <S.CheckForScroll ref={props.ref}>InView REF</S.CheckForScroll>
       </S.PhotoGrid>
   );
 }
@@ -45,4 +46,8 @@ const S = {};
 
 S.PhotoGrid = styled.div`
   width: 100%;
+`;
+S.CheckForScroll = styled.div`
+  width: 100%;
+  margin-top:20px;
 `;

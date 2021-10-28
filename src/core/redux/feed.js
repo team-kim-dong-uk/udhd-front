@@ -59,11 +59,13 @@ const initialState = {
   },
   feedsLike: {
     data: [],
-    error: null
+    error: null,
+    page: 0,
   },
   feedsSave: {
     data: [],
-    error: null
+    error: null,
+    page: 0,
   },
   isEnd: false,
   loading: false,
@@ -97,13 +99,25 @@ export default handleActions(
         };
       },
       [GET_FEEDS_LIKE.SUCCESS]: (state, action) => {
-          return {
-              ...state,
-              feedsLike: {
-                  data: action.payload.data.feeds,
-                  error: null,
-              },
-          };
+          if (state.feedsLike.data.length === 0){
+              return {
+                  ...state,
+                  feedsLike: {
+                      data: action.payload.data.feeds,
+                      error: null,
+                      page: state.feedsLike.page+1,
+                  },
+              };
+          } else {
+              return {
+                  ...state,
+                  feedsLike: {
+                      data: state.feedsLike.data.concat(action.payload.data.feeds),
+                      error: null,
+                      page: state.feedsLike.page+1,
+                  },
+              };
+          }
       },
       [GET_FEEDS_LIKE.FAILURE]: (state, action) => {
           return {
@@ -111,17 +125,30 @@ export default handleActions(
               feedsLike: {
                   data: state.feedsLike.data,
                   error: action.payload.error,
+                  page: state.feedsLike.page,
               },
           };
       },
       [GET_FEEDS_SAVE.SUCCESS]: (state, action) => {
-          return {
-              ...state,
-              feedsSave: {
-                  data: action.payload.data.feeds,
-                  error: null,
-              },
-          };
+          if (state.feedsSave.data.length === 0){
+              return {
+                  ...state,
+                  feedsSave: {
+                      data: action.payload.data.feeds,
+                      error: null,
+                      page: state.feedsSave.page+1,
+                  },
+              };
+          } else {
+              return {
+                  ...state,
+                  feedsSave: {
+                      data: state.feedsSave.data.concat(action.payload.data.feeds),
+                      error: null,
+                      page: state.feedsSave.page+1,
+                  },
+              };
+          }
       },
       [GET_FEEDS_SAVE.FAILURE]: (state, action) => {
           return {
@@ -129,6 +156,7 @@ export default handleActions(
               feedsSave: {
                   data: state.feedsSave.data,
                   error: action.payload.error,
+                  page: state.feedsSave.page,
               },
           };
       },
