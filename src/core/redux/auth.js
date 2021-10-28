@@ -14,7 +14,7 @@ const LOGOUT = `${prefix}LOGOUT`;
 const SET_NICKNAME = asyncActionCreator(`${prefix}SET_NICKNAME`);
 
 export const loginSuccess = createAction(LOGIN_SUCCESS, 
-  ({userId, accessToken, refreshToken, nickname, isNewUser}) => ({userId, accessToken, refreshToken, nickname, isNewUser}));
+  ({userId, accessToken, refreshToken, nickname, isNewUser, email}) => ({userId, accessToken, refreshToken, nickname, isNewUser, email}));
 export const loginFailure = createAction(LOGIN_FAILURE);
 export const logout = createAction(LOGOUT);
 export const setNickname = createAsyncAction(SET_NICKNAME);
@@ -38,6 +38,7 @@ export default handleActions(
             userId: action.payload.userId,
             accessToken: action.payload.accessToken,
             nickname: action.payload.nickname,
+            email: action.payload.email,
           }
         };
     },
