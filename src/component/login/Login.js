@@ -1,8 +1,8 @@
 import React, { useEffect, useMemo } from 'react';
 import styled from 'styled-components';
 import { Button, Modal } from 'react-bootstrap'; 
-import logo from '../../../assets/drawable-xxxhdpi/symbol_black.webp';
-import brandText from '../../../assets/drawable-xxxhdpi/brand_text.webp';
+import logo from '../../../assets/drawable-hdpi/symbol_black.webp';
+import brandText from '../../../assets/drawable-hdpi/brand_text.webp';
 import Image from 'next/image';
 
 export default function Login({ children, ...props }) {

@@ -5,12 +5,12 @@ import { useEffect } from "react";
 
 export default function LoginSuccessPage() {
   const router = useRouter();
-  const { query: { userId, accessToken, refreshToken, nickname } } = router
+  const { query: { userId, accessToken, refreshToken, nickname, isNewUser, email } } = router
   const dispatch = useDispatch();
   
   useEffect(()=>{
     if(!router.isReady) return;
-    dispatch(loginSuccess({userId, accessToken, refreshToken, nickname}));
+    dispatch(loginSuccess({userId, accessToken, refreshToken, nickname, isNewUser, email}));
 }, [router.isReady, dispatch]);
 
   return (
