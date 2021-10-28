@@ -16,14 +16,13 @@ const TopBar = () => {
         <S.Image src={logo} width={30} height={30}/>
       </Navbar.Brand>
       <Nav>
-        {auth.data ? 
+        {auth.data ?
         <S.Logout onClick={()=>dispatch(logout())}>로그아웃</S.Logout>
         : <Link href="/login" passHref>
           <Nav.Link>
             <S.Login>로그인</S.Login>
           </Nav.Link>
         </Link>
-        
         }
       </Nav>
     </S.Navbar>
@@ -33,6 +32,7 @@ const TopBar = () => {
 const S = {};
 S.Navbar = styled(Navbar)`
   background-color: ${colors.white} !important;
+  height:56px;
 `;
 S.Logout = styled.div`
   color: ${colors.grey};
