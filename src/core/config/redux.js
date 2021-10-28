@@ -4,6 +4,8 @@ import { createWrapper } from 'next-redux-wrapper';
 import { composeWithDevTools } from 'redux-devtools-extension';
 import reducer from '../reducer';
 import rootSaga from '../saga';
+import storageSession from 'redux-persist/lib/storage/session';
+import {persistReducer, persistStore} from "redux-persist";
 
 const configureStore = () => {
   const sagaMiddleware = createSagaMiddleware();
@@ -13,10 +15,28 @@ const configureStore = () => {
     : composeWithDevTools(
       applyMiddleware(...middlewares),
     );
-  const store = createStore(reducer, enhancer);
+
+  const persistConfig = {
+    key: "root",
+    // localStorage에 저장합니다.
+    storage: storageSession,
+    //
+    //whitelist: ["auth"]
+    // or blacklist
+  };
+
+  //const store = createStore(reducer, enhancer);
+  const persistedReducer = persistReducer(persistConfig, reducer);
+  const store = makeConfiguredStore(persistedReducer,  enhancer);
+
+  store.__persistor = persistStore(store);
   store.sagaTask = sagaMiddleware.run(rootSaga);
+
   return store;
 };
+
+const makeConfiguredStore = (reducer, enhancer) =>
+    createStore(reducer, enhancer);
 
 const wrapper = createWrapper(configureStore, { debug: process.env.NODE_ENV === 'development' });
 
