@@ -11,3 +11,7 @@ export const refreshToken = () => {
     }
     return client.post('/auth/refresh-token', {refreshToken: token});
 }
+
+export const setNickname = async ({userId, nickname}) => {
+  return client.put(`/users/${userId}/nickname`, {nickname});
+}

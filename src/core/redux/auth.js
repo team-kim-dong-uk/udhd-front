@@ -3,17 +3,23 @@ import { takeEvery } from 'redux-saga/effects';
 import { createAction } from 'redux-actions';
 import Router from 'next/router';
 import api from '../../api/client';
+import * as authAPI from '../../api/auth';
+import createAsyncSaga, { asyncActionCreator, createAsyncAction } from '../../util/redux';
 
 const prefix = 'auth/';
 
 const LOGIN_SUCCESS = `${prefix}LOGIN_SUCCESS`;
 const LOGIN_FAILURE = `${prefix}LOGIN_FAILURE`;
 const LOGOUT = `${prefix}LOGOUT`;
+const SET_NICKNAME = asyncActionCreator(`${prefix}SET_NICKNAME`);
 
 export const loginSuccess = createAction(LOGIN_SUCCESS, 
-  ({userId, accessToken, refreshToken, nickname}) => ({userId, accessToken, refreshToken, nickname}));
+  ({userId, accessToken, refreshToken, nickname, isNewUser}) => ({userId, accessToken, refreshToken, nickname, isNewUser}));
 export const loginFailure = createAction(LOGIN_FAILURE);
 export const logout = createAction(LOGOUT);
+export const setNickname = createAsyncAction(SET_NICKNAME);
+
+const setNicknameSaga = createAsyncSaga(setNickname, authAPI.setNickname);
 
 const initialState = {
   data: null,
@@ -44,15 +50,46 @@ export default handleActions(
         ...state,
         data: null,
       }
-    }
+    },
+    [SET_NICKNAME.SUCCESS]: (state, action) => {
+      return {
+        ...state,
+        data: {
+          ...state.data,
+          nickname: action.payload.data.nickname,
+        },
+        error: null
+      }
+    },[SET_NICKNAME.FAILURE]: (state, action) => {
+      if (action.payload.status === 409) {
+        return {
+          ...state,
+          error: "중복된 닉네임이 이미 존재합니다."
+        }
+      }
+      return {
+        ...state,
+        error: "에러가 발생했습니다."
+      };
+    },
   },
   initialState,
 );
 
-function* redirectAfterLoginSaga() {
+function* redirectAfterLoginSaga({payload: {isNewUser}}) {
+  if (isNewUser === 'true') {
+    yield Router.push('/login/nickname');
+  } else {
+    yield Router.push('/feed');
+  }
+}
+
+function* redirectAfterNicknameSetting({nickname}) {
   yield Router.push('/feed');
 }
 
 export function* authSaga() {
   yield takeEvery(LOGIN_SUCCESS, redirectAfterLoginSaga);
+  yield takeEvery(SET_NICKNAME.REQUEST, setNicknameSaga);
+  yield takeEvery(SET_NICKNAME.SUCCESS, redirectAfterNicknameSetting);
 }
