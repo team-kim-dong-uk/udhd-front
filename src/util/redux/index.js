@@ -40,7 +40,9 @@ export default function createAsyncSaga(asyncAction, asyncFunction) {
         } catch (e) {
           // refresh token도 잘못되어 401에러 발생시 login 페이지로 이동.
           if (e?.response?.status === 401) {
-            Router.push('/login');
+            if (confirm('로그인이 필요한 메뉴입니다. 로그인 페이지로 이동하시겠습니까?')) {
+              Router.push('/login');
+            }
           }
           yield put(asyncAction.failure({ error: e }));
         }
