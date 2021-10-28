@@ -1,33 +1,28 @@
 import React, { useEffect, useMemo } from 'react';
 import styled from 'styled-components';
 import { Button, Modal } from 'react-bootstrap'; 
+import logo from '../../../assets/drawable-xxxhdpi/symbol_black.webp';
+import brandText from '../../../assets/drawable-xxxhdpi/brand_text.webp';
+import Image from 'next/image';
 
 export default function Login({ children, ...props }) {
   return (
       <S.Login>
-        {/* <S.Modal show={true} fullscreen={true}>
-          <div>hi</div>
-        </S.Modal> */}
-        <Button
-          variant="primary"
-          href={`${process.env.REACT_APP_BACKEND_PREFIX}/oauth2/authorization/google`}
-          block
-        >
-          Google로 로그인하기
-        </Button>
-        <Button
-          variant="dark"
-          href={`${process.env.REACT_APP_BACKEND_PREFIX}/oauth2/authorization/apple`}
-          block
-        >
-          Apple로 로그인하기
-        </Button>
+        <Image src={logo}/>
+        <Image src={brandText}/>
         <Button
           variant="warning"
           href={`${process.env.REACT_APP_BACKEND_PREFIX}/oauth2/authorization/kakao`}
           block
         >
           Kakao로 로그인하기
+        </Button>
+        <Button
+          variant="primary"
+          href={`${process.env.REACT_APP_BACKEND_PREFIX}/oauth2/authorization/google`}
+          block
+        >
+          Google로 로그인하기
         </Button>
       </S.Login>
   );
