@@ -2,17 +2,18 @@ import React, {useEffect} from 'react';
 import styled from 'styled-components';
 import Thumbnail from './Thumbnail.js/index.js';
 import {useInView} from "react-intersection-observer";
-import {useDispatch} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {getRandomPhotos} from "../../core/redux/photos";
 
 export default function SearchPhotoGrid({ data }) {
+    const {loading} = useSelector(state => state);
     const dispatch = useDispatch();
     const [ref, inView] = useInView();
     useEffect(() => {
-        if (inView){
+        if (inView && !loading.data){
             dispatch(getRandomPhotos.request())
         }
-    },[inView])
+    },[inView, loading])
   return (
       <S.SearchPhotoGrid>
           {data?.map(photo => (
@@ -36,6 +37,7 @@ const S = {};
 
 S.SearchPhotoGrid = styled.div`
   width: 100%;
+  line-height: 0 !important;
 `;
 S.CheckForScroll = styled.div`
   width: 100%;
