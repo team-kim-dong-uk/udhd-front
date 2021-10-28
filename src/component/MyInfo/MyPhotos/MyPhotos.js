@@ -7,6 +7,7 @@ import SaveIcon from '../../../../assets/save-icon.svg';
 import SaveIconFilled from '../../../../assets/save-icon-filled.svg';
 import {getFeeds, getFeedsLike, getFeedsSave} from "../../../core/redux/feed";
 import {useDispatch, useSelector} from "react-redux";
+import {useInView} from "react-intersection-observer";
 
 
 /*
@@ -22,6 +23,26 @@ export default function MyPhotos({item}) {
     const {auth, feed} = useSelector(state => state);
     const dispatch = useDispatch();
     const [photoType, setPhotoType] = useState('like');
+    const [ref, inView] = useInView();
+
+    useEffect(() => {
+        console.log("inView :" + inView)
+        if (inView){
+            if (photoType === 'like'){
+                dispatch(getFeedsLike.request({
+                    type: 'like',
+                    userId: auth.data?.userId,
+                    page: feed.feedsLike.page+1
+                }))
+            } else if (photoType === 'save'){
+                dispatch(getFeedsSave.request({
+                    type: 'save',
+                    userId: auth.data?.userId,
+                    page: feed.feedsSave.page+1
+                }))
+            }
+        }
+    },[inView])
 
     const showLike = useCallback(() => {
         if (photoType === 'like')
@@ -69,10 +90,10 @@ export default function MyPhotos({item}) {
             </S.Icon>
         </S.IconContainer>
         {photoType === 'like' && (
-            <PhotoGrid feeds={feed.feedsLike.data} moveTo="mypage/like"/>
+            <PhotoGrid feeds={feed.feedsLike.data} moveTo="mypage/like" ref={ref} inView={inView}/>
         )}
         {photoType === 'save' && (
-            <PhotoGrid feeds={feed.feedsSave.data} moveTo="mypage/save"/>
+            <PhotoGrid feeds={feed.feedsSave.data} moveTo="mypage/save" ref={ref} inView={inView}/>
         )}
 
     </S.MyPhotos>

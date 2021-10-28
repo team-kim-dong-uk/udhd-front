@@ -30,11 +30,19 @@ const initialState = {
 export default handleActions(
   {
       [GET_RANDOM_PHOTOS.SUCCESS]: (state, action) => {
-          return {
-              ...state,
-              data: action.payload.data,
-              error: null,
-          };
+          if (state.data.length === 0){
+              return {
+                  ...state,
+                  data: action.payload.data,
+                  error: null,
+              };
+          } else {
+              return {
+                  ...state,
+                  data: state.data.concat(action.payload.data),
+                  error: null,
+              };
+          }
       },
       [GET_RANDOM_PHOTOS.FAILURE]: (state, action) => {
         return {

@@ -8,8 +8,8 @@ import {useDispatch, useSelector} from "react-redux";
 import {addFeedLike, deleteFeedLike, saveFeed, unsaveFeed} from "../../../core/redux/feed";
 
 export default function Info({feedData}) {
-  const {feed} = useSelector(state => state);
-  const [inLike, setInLike] = useState(false);
+  const {auth, feed} = useSelector(state => state);
+  const [inLike, setInLike] = useState(feedData.likes.find(like => like?.userId == auth.data?.userId));
   const [inAlbum, setInAlbum] = useState(false);
   const dispatch = useDispatch();
 
