@@ -200,14 +200,18 @@ export default handleActions(
         const modifiedFeed = action.payload.data;
         return {
             ...state,
-            data: state.data.map(item => item.id === modifiedFeed.id ? modifiedFeed : item),
+            feeds: {
+                data: state.feeds.data.map(item => item.id === modifiedFeed.id ? modifiedFeed : item),
+            },
         };
       },
       [DELETE_FEED_COMMENT.SUCCESS]: (state, action) => {
         const modifiedFeed = action.payload.data;
         return {
             ...state,
-            data: state.data.map(item => item.id === modifiedFeed.id ? modifiedFeed : item),
+            feeds: {
+                data: state.feeds.data.map(item => item.id === modifiedFeed.id ? modifiedFeed : item),
+            },
         };
       },
       [ADD_FEED_COMMENT.FAILURE]: (state, action) => {
