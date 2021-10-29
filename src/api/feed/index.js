@@ -1,7 +1,7 @@
 import client from '../client';
 
 export const getFeeds = () => {
-    return client.get(`feeds`);
+    return client.get(`feeds/list`);
 }
 export const getFeedsByType = ({type, userId, count, page}) => {
     let query = `users/${userId}/${type}?`
