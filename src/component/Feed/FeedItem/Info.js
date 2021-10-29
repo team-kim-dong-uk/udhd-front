@@ -10,7 +10,7 @@ import {addFeedLike, deleteFeedLike, saveFeed, unsaveFeed} from "../../../core/r
 export default function Info({feedData}) {
   const {auth, feed} = useSelector(state => state);
   const [inLike, setInLike] = useState(feedData.likes.find(like => like?.userId == auth.data?.userId));
-  const [inAlbum, setInAlbum] = useState(false);
+  const [inAlbum, setInAlbum] = useState(feedData.saved);
   const dispatch = useDispatch();
 
   /*좋아요, 저장 추가 삭제 실패했으니 되돌리기*/
