@@ -29,8 +29,8 @@ export const getFeeds = createAsyncAction(GET_FEEDS);
 export const getFeedsLike = createAsyncAction(GET_FEEDS_LIKE, ({type, userId, count, page}) => ({type, userId, count, page}));
 export const getFeedsSave = createAsyncAction(GET_FEEDS_SAVE, ({type, userId, count, page}) => ({type, userId, count, page}));
 
-export const addFeedLike = createAsyncAction(ADD_FEED_LIKE, ({feedId}) => ({feedId}));
-export const deleteFeedLike = createAsyncAction(DEL_FEED_LIKE, ({feedId}) => ({feedId}));
+export const addFeedLike = createAsyncAction(ADD_FEED_LIKE, ({feedId, authData}) => ({feedId, authData}));
+export const deleteFeedLike = createAsyncAction(DEL_FEED_LIKE, ({feedId, authData}) => ({feedId, authData}));
 
 export const saveFeed = createAsyncAction(SAVE_FEED, ({feedId}) => ({feedId}));
 export const unsaveFeed = createAsyncAction(UNSAVE_FEED, ({feedId}) => ({feedId}));
@@ -161,6 +161,7 @@ export default handleActions(
           };
       },
       [ADD_FEED_LIKE.FAILURE]: (state, action) => {
+          console.log(action.payload.error);
           return {
               ...state,
               error: {
