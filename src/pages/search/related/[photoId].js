@@ -23,7 +23,14 @@ export default function FeedPage() {
             userId: '123',
             userName: '백동진',
             content: '너무 조아영'
-          }]
+          }],
+          likes: [
+            {
+                "id": "615425cbf83812399805ea84",
+                "userId": "615425cbf83812399805ea84",
+                "userName": "Udhd-test"
+            }
+          ]
         },
         {
           id: "123123123123124",
@@ -36,7 +43,14 @@ export default function FeedPage() {
             userId: '123',
             userName: '백동진',
             content: '너무 조아영22'
-          }]
+          }],
+          likes: [
+            {
+                "id": "615425cbf83812399805ea84",
+                "userId": "615425cbf83812399805ea84",
+                "userName": "Udhd-test"
+            }
+          ]
         },
     ]
   return (
