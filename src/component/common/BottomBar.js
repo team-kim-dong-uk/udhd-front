@@ -18,7 +18,7 @@ const Bottombar = () => {
           <Nav.Link style={{padding: 0}}>
             <S.Icon>
             {
-              router.pathname === '/feed'
+              router.pathname.startsWith('/feed')
               ? <FeedIconActive/>
               : <FeedIcon/>
             }
@@ -29,7 +29,7 @@ const Bottombar = () => {
           <Nav.Link style={{padding: 0}}>
             <S.Icon>
             {
-              router.pathname === '/search'
+              router.pathname.startsWith('/search')
               ? <SearchIconActive/>
               : <SearchIcon/>
             }
@@ -40,7 +40,7 @@ const Bottombar = () => {
           <Nav.Link style={{padding: 0}}>
           <S.Icon>
             {
-              router.pathname === '/mypage'
+              router.pathname.startsWith('/mypage')
               ? <MypageIconActive/>
               : <MypageIcon/>
             }
