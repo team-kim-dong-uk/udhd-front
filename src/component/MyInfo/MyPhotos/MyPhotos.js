@@ -26,7 +26,6 @@ export default function MyPhotos({item}) {
     const [ref, inView] = useInView();
 
     useEffect(() => {
-        console.log("inView :" + inView)
         if (inView){
             if (photoType === 'like'){
                 dispatch(getFeedsLike.request({
@@ -48,7 +47,8 @@ export default function MyPhotos({item}) {
         if (photoType === 'like')
             dispatch(getFeedsLike.request({
                 type: photoType,
-                userId: auth.data?.userId
+                userId: auth.data?.userId,
+                page: 0,
             }))
         setPhotoType('like');
     }, [photoType]);
@@ -56,7 +56,8 @@ export default function MyPhotos({item}) {
         if (photoType === 'save')
             dispatch(getFeedsSave.request({
                 type: photoType,
-                userId: auth.data?.userId
+                userId: auth.data?.userId,
+                page: 0,
             }))
         setPhotoType('save');
     }, [photoType])

@@ -99,13 +99,13 @@ export default handleActions(
         };
       },
       [GET_FEEDS_LIKE.SUCCESS]: (state, action) => {
-          if (state.feedsLike.data.length === 0){
+          if (!action.payload.config.url.includes("page")){
               return {
                   ...state,
                   feedsLike: {
                       data: action.payload.data.feeds,
                       error: null,
-                      page: state.feedsLike.page+1,
+                      page: 0,
                   },
               };
           } else {
@@ -114,7 +114,7 @@ export default handleActions(
                   feedsLike: {
                       data: state.feedsLike.data.concat(action.payload.data.feeds),
                       error: null,
-                      page: state.feedsLike.page+1,
+                      page: action.payload.page,
                   },
               };
           }
@@ -130,13 +130,13 @@ export default handleActions(
           };
       },
       [GET_FEEDS_SAVE.SUCCESS]: (state, action) => {
-          if (state.feedsSave.data.length === 0){
+          if (!action.payload.config.url.includes("page")){
               return {
                   ...state,
                   feedsSave: {
                       data: action.payload.data.feeds,
                       error: null,
-                      page: state.feedsSave.page+1,
+                      page: 0,
                   },
               };
           } else {

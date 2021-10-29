@@ -6,7 +6,6 @@ import { colors } from '../../../util/style';
 import Tags from './Tags';
 
 export default function FeedItem({item}) {
-    console.log(JSON.stringify(item,null,2))
   return (
     <S.FeedItem>
       <S.Title>1. title bar</S.Title>
