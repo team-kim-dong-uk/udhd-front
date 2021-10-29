@@ -9,9 +9,13 @@ import {addFeedLike, deleteFeedLike, saveFeed, unsaveFeed} from "../../../core/r
 
 export default function Info({feedData}) {
   const {auth, feed} = useSelector(state => state);
-  const [inLike, setInLike] = useState(feedData.likes.find(like => like?.userId == auth.data?.userId));
+  const [inLike, setInLike] = useState(feedData.likes.find(like => like?.userId == auth.data?.userId) !== undefined);
   const [inAlbum, setInAlbum] = useState(feedData.saved);
   const dispatch = useDispatch();
+
+  useEffect(() => {
+      setInLike(feedData.likes.find(like => like?.userId == auth.data?.userId) !== undefined);
+  }, [auth, feedData])
 
   /*좋아요, 저장 추가 삭제 실패했으니 되돌리기*/
   useEffect(()=>{
@@ -22,9 +26,16 @@ export default function Info({feedData}) {
   }, [feed.error])
 
   const updateLike = useCallback(() => {
-      inLike ? dispatch(deleteFeedLike.request({feedId: feedData?.id}))
-          : dispatch(addFeedLike.request({feedId: feedData?.id}));
+      inLike ? dispatch(deleteFeedLike.request({
+                            feedId: feedData?.id,
+                            authData: auth?.data
+                }))
+          : dispatch(addFeedLike.request({
+                            feedId: feedData?.id,
+                            authData: auth?.data
+                }));
       setInLike(prev => !prev);
+      console.log("update Like");
   }, [inLike])
 
   const updateAlbum = useCallback(() => {
@@ -41,7 +52,7 @@ export default function Info({feedData}) {
               {inLike && <HeartIconFilled/>}
           </S.Icon>
           <S.LikeCount>
-              {feedData?.likeCount ? feedData?.likeCount : 0}
+              {feedData?.likes.length}
                &nbsp;명이 좋아합니다.
           </S.LikeCount>
       </S.IconContainer>

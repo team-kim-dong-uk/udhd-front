@@ -29,8 +29,8 @@ export const getFeeds = createAsyncAction(GET_FEEDS);
 export const getFeedsLike = createAsyncAction(GET_FEEDS_LIKE, ({type, userId, count, page}) => ({type, userId, count, page}));
 export const getFeedsSave = createAsyncAction(GET_FEEDS_SAVE, ({type, userId, count, page}) => ({type, userId, count, page}));
 
-export const addFeedLike = createAsyncAction(ADD_FEED_LIKE, ({feedId}) => ({feedId}));
-export const deleteFeedLike = createAsyncAction(DEL_FEED_LIKE, ({feedId}) => ({feedId}));
+export const addFeedLike = createAsyncAction(ADD_FEED_LIKE, ({feedId, authData}) => ({feedId, authData}));
+export const deleteFeedLike = createAsyncAction(DEL_FEED_LIKE, ({feedId, authData}) => ({feedId, authData}));
 
 export const saveFeed = createAsyncAction(SAVE_FEED, ({feedId}) => ({feedId}));
 export const unsaveFeed = createAsyncAction(UNSAVE_FEED, ({feedId}) => ({feedId}));
@@ -160,7 +160,32 @@ export default handleActions(
               },
           };
       },
+      [ADD_FEED_LIKE.SUCCESS]: (state, action) => {
+          /*console.log("before state is :" + JSON.stringify(
+              state.feeds.data.find(feed => {
+                  return feed.likes.find(like => like.userId === action.payload.authData.userId)
+              })
+              , null, 2))
+          state.feeds.data.map(feed => {
+              if (feed.id === action.payload.feedId){
+                  feed?.likes.append({
+                      id: action.payload.authData.userId,
+                      userId: action.payload.authData.userId,
+                      userName: action.payload.authData.nickname,
+                  })
+              }
+          })
+          console.log("after state is :" + JSON.stringify(
+              state.feeds.data.find(feed => {
+                  return feed.likes.find(like => like.userId === action.payload.authData.userId)
+              })
+              , null, 2))*/
+          return {
+              ...state,
+          }
+      },
       [ADD_FEED_LIKE.FAILURE]: (state, action) => {
+          console.log(action.payload.error);
           return {
               ...state,
               error: {
