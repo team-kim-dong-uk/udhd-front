@@ -44,6 +44,7 @@ S.Title = styled.div`
   font-weight: bold;
   font-size: 1.5rem;
   padding-left: 5%;
+  height: 3rem;
   //margin-bottom: 5px;
 `;
 
