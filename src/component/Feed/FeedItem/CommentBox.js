@@ -11,19 +11,12 @@ export default function CommentBox({data}) {
   const [comment, onCommentChange, setComment] = useInput('');
   const [commentDisabled, setCommentDisabled] = useState(true);
 
-  /*const onCommentChange = useCallback((e) => {
-    setComment(e.target.value);
-  }, [setComment]);*/
-
   useEffect(() => {
     let clearComment = comment.replace(/\s/g, "");
-    console.log(`comment is " ${clearComment}`)
-    if (clearComment != '' && clearComment != null){
-      setCommentDisabled(false);
-    } else {
-      setCommentDisabled(true);
-    }
+    let isDisable = !(clearComment != '' && clearComment != null)
+    setCommentDisabled(isDisable);
   }, [comment, commentDisabled])
+
   const onAddComment = (feedId) => {
     dispatch(addFeedComment.request({ feedId: feedId, content: comment}));
     setComment('');
@@ -118,9 +111,11 @@ S.DisabledComment = styled.button`
   padding: 0.5rem;
 `;
 S.DeleteBtn = styled.button`
-  border: 1px solid;
+  border: none;
+  //border: 1px solid;
   border-radius: 5px;
   background-color: ${colors.white};
+  color: ${colors.grey};
 `;
 
 
