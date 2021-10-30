@@ -3,16 +3,27 @@ import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
 import { addFeedComment, deleteFeedComment } from '../../../core/redux/feed';
 import { colors } from '../../../util/style';
+import useInput from "../../../hooks/useInput";
 
 export default function CommentBox({data}) {
   const dispatch = useDispatch();
   const { auth } = useSelector(state => state);
-  const [comment, setComment] = useState('');
+  const [comment, onCommentChange, setComment] = useInput('');
+  const [commentDisabled, setCommentDisabled] = useState(true);
 
-  const onCommentChange = useCallback((e) => {
+  /*const onCommentChange = useCallback((e) => {
     setComment(e.target.value);
-  }, [setComment]);
+  }, [setComment]);*/
 
+  useEffect(() => {
+    let clearComment = comment.replace(/\s/g, "");
+    console.log(`comment is " ${clearComment}`)
+    if (clearComment != '' && clearComment != null){
+      setCommentDisabled(false);
+    } else {
+      setCommentDisabled(true);
+    }
+  }, [comment, commentDisabled])
   const onAddComment = (feedId) => {
     dispatch(addFeedComment.request({ feedId: feedId, content: comment}));
     setComment('');
@@ -43,7 +54,8 @@ export default function CommentBox({data}) {
             value={comment}
             onChange={onCommentChange}
           />
-          <S.SubmitComment onClick={() => onAddComment(data.id)}>등록</S.SubmitComment>
+          {commentDisabled && <S.DisabledComment disabled={true}>등록</S.DisabledComment>}
+          {!commentDisabled && <S.SubmitComment onClick={() => onAddComment(data.id)} disabled={commentDisabled}>등록</S.SubmitComment>}
         </S.NewComment>
       </S.CommentBox>
   );
@@ -97,6 +109,13 @@ S.SubmitComment = styled.button`
   background-color: ${colors.white};
   padding: 0.5rem;
   
+`;
+S.DisabledComment = styled.button`
+  border: none;
+  height: 2rem;
+  color: ${colors.grey};
+  background-color: ${colors.white};
+  padding: 0.5rem;
 `;
 S.DeleteBtn = styled.button`
   border: 1px solid;
