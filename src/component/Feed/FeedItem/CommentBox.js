@@ -41,6 +41,7 @@ export default function CommentBox({data}) {
             }
           </S.Comment>
         ))}
+        <S.Line/>
         <S.NewComment>
           <S.CommentInput
             placeholder='댓글 달기...'
@@ -117,5 +118,7 @@ S.DeleteBtn = styled.button`
   background-color: ${colors.white};
   color: ${colors.grey};
 `;
-
-
+S.Line = styled.div`
+  width: 100%;
+  border-top: 1px solid #d0d0d0;
+`;
