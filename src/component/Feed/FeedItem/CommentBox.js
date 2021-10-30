@@ -17,7 +17,7 @@ export default function CommentBox({data}) {
     dispatch(addFeedComment.request({ feedId: feedId, content: comment}));
     setComment('');
   }
-  
+
   const onDeleteComment = (feedId, commentId) => {
     dispatch(deleteFeedComment.request({ feedId, commentId }));
   }
@@ -82,15 +82,21 @@ S.CommentInput = styled.input`
   border-bottom-left-radius: 5px;
   border-color: ${colors.grey};
   border-width: 0;
+  &:focus {
+    outline: none;
+  }
 `;
 S.SubmitComment = styled.button`
-  border-top-right-radius: 5px;
-  border-bottom-right-radius: 5px;
+  //border-top-right-radius: 5px;
+  //border-bottom-right-radius: 5px;
+  border: none;
   height: 2rem;
-  color: ${colors.white};
-  border-color: ${colors.orange};
-  background-color: ${colors.orange};
+  color: ${colors.orange};
+  //border-color: ${colors.orange};
+  //background-color: ${colors.orange};
+  background-color: ${colors.white};
   padding: 0.5rem;
+  
 `;
 S.DeleteBtn = styled.button`
   border: 1px solid;

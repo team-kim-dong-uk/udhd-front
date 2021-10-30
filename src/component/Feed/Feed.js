@@ -28,10 +28,11 @@ Feed.propTypes = {
 
 const S = {};
 S.Feed = styled.div`
-  display: 'flex' !important;
-  flex-direction: 'column';
-  align-items: 'center';
-  border: 1px solid ${colors.orange}
+  display: flex !important;
+  flex-direction: column;
+  align-items: center;
+  background-color: #FAFAFA;
+  //border: 1px solid ${colors.orange}
 `;
 
 

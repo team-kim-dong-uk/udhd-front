@@ -30,9 +30,10 @@ S.FeedItem = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  border: 1px solid ${colors.black};
+  //border: 1px solid ${colors.black};
   width: 100%;
-  margin-bottom: 10px;
+  margin-top: 20px;
+  background-color: white;
 `;
 S.Title = styled.div`
   display: flex;
