@@ -10,6 +10,7 @@ export default function CommentBox({data}) {
   const { auth } = useSelector(state => state);
   const [comment, onCommentChange, setComment] = useInput('');
   const [commentDisabled, setCommentDisabled] = useState(true);
+  const [showAllComments, setShowAllComments] = useState(data.comments?.length <= 2);
 
   useEffect(() => {
     let clearComment = comment.replace(/\s/g, "");
@@ -28,19 +29,43 @@ export default function CommentBox({data}) {
 
   return (
       <S.CommentBox>
-        {data.comments?.map(comment => (
-          <S.Comment key={comment.id}>
-            <div>
-              <S.Writer>{comment.userName}</S.Writer>
-              <S.Content>{comment.content}</S.Content>
-            </div>
-            {
-              auth?.data?.userId === comment.userId
-              ? <S.DeleteBtn onClick={()=>onDeleteComment(data.id, comment.id)}>x</S.DeleteBtn>
-              : null
-            }
-          </S.Comment>
-        ))}
+        {!showAllComments && (
+            data.comments?.slice(0,2).map(comment => (
+                <S.Comment key={comment.id}>
+                  <div>
+                    <S.Writer>{comment.userName}</S.Writer>
+                    <S.Content>{comment.content}</S.Content>
+                  </div>
+                  {
+                    auth?.data?.userId === comment.userId
+                        ? <S.DeleteBtn onClick={()=>onDeleteComment(data.id, comment.id)}>x</S.DeleteBtn>
+                        : null
+                  }
+                </S.Comment>
+            ))
+        )}
+        {showAllComments && (
+            data.comments?.map(comment => (
+                  <S.Comment key={comment.id}>
+                    <div>
+                      <S.Writer>{comment.userName}</S.Writer>
+                      <S.Content>{comment.content}</S.Content>
+                    </div>
+                    {
+                      auth?.data?.userId === comment.userId
+                          ? <S.DeleteBtn onClick={()=>onDeleteComment(data.id, comment.id)}>x</S.DeleteBtn>
+                          : null
+                    }
+                  </S.Comment>
+            ))
+        )}
+
+        {!showAllComments && data.comments?.length !== 0 &&
+          <S.SmallTextButton onClick={() => setShowAllComments(true)}>{data.comments?.length}개의 댓글 모두 보기</S.SmallTextButton>
+        }
+        {showAllComments && data.comments?.length > 2 &&
+          <S.SmallTextButton onClick={() => setShowAllComments(false)}>댓글 접기</S.SmallTextButton>
+        }
         <S.Line/>
         <S.NewComment>
           <S.CommentInput
@@ -102,7 +127,6 @@ S.SubmitComment = styled.button`
   //background-color: ${colors.orange};
   background-color: ${colors.white};
   padding: 0.5rem;
-  
 `;
 S.DisabledComment = styled.button`
   border: none;
@@ -120,5 +144,14 @@ S.DeleteBtn = styled.button`
 `;
 S.Line = styled.div`
   width: 100%;
-  border-top: 1px solid #d0d0d0;
+  height: 1rem;
+  border-bottom: 1px solid #d0d0d0;
+`;
+S.SmallTextButton = styled.button`
+  border: none;
+  border-radius: 5px;
+  background-color: ${colors.white};
+  color: ${colors.grey};
+  padding-left: 0px;
+  font-size: 0.9rem;
 `;
