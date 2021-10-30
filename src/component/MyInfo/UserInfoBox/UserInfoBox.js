@@ -2,6 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import {useSelector} from "react-redux";
 import Setting from '../../../../assets/setting.svg';
+import Link from 'next/link'
 
 
 /*
@@ -15,29 +16,34 @@ import Setting from '../../../../assets/setting.svg';
 * */
 export default function UserInfoBox({item}) {
     const {auth, feed} = useSelector(state => state);
+    const updateProfile = () => {
+
+    }
     // TODO: 설정 - 모달 만들기
   return (
     <S.UserInfoBox>
       <S.Top>
         <S.Nickname>{auth.data?.nickname}</S.Nickname>
-          <S.Icon>
-              <Setting/>
-          </S.Icon>
+          <Link href="/mypage/edit">
+              <S.Icon>
+                  <Setting onClick={updateProfile}/>
+              </S.Icon>
+          </Link>
       </S.Top>
       <S.Profile>
         <S.ImageBox>
             <S.Image src="https://upload.wikimedia.org/wikipedia/commons/f/f8/190611_%EC%9D%B4%EB%82%98%EA%B2%BD.jpg"/>
         </S.ImageBox>
-          <S.TextContainer>
-              <S.CountText>
-                  {feed.feedsLike.data?.length}<br/>
-                  like
-              </S.CountText>
-              <S.CountText>
-                  {feed.feedsSave.data?.length}<br/>
-                  save
-              </S.CountText>
-          </S.TextContainer>
+        <S.TextContainer>
+          <S.CountText>
+              {feed.feedsLike.data?.length}<br/>
+              like
+          </S.CountText>
+          <S.CountText>
+              {feed.feedsSave.data?.length}<br/>
+              save
+          </S.CountText>
+        </S.TextContainer>
       </S.Profile>
     </S.UserInfoBox>
   );
