@@ -1,9 +1,10 @@
 import React, {useCallback, useEffect} from 'react';
 import styled from 'styled-components';
-import {useSelector} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import Setting from '../../../../assets/setting.svg';
 import Link from 'next/link'
 import useInput from "../../../hooks/useInput";
+import {updateUser} from "../../../core/redux/auth";
 
 
 /*
@@ -16,9 +17,15 @@ import useInput from "../../../hooks/useInput";
 * }
 * */
 export default function Edit({data}) {
+    const dispatch = useDispatch();
     const [nickname, onChangeNickname, setNickname] = useInput('');
     const onSubmit = useCallback(() => {
         alert(`${nickname} 을 전송한다!`)
+        dispatch(updateUser.request({
+            userId: data?.userId,
+            nickname: nickname,
+            group: "테스트"
+        }))
     }, [nickname])
 
     useEffect(() => {

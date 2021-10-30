@@ -12,14 +12,17 @@ const LOGIN_SUCCESS = `${prefix}LOGIN_SUCCESS`;
 const LOGIN_FAILURE = `${prefix}LOGIN_FAILURE`;
 const LOGOUT = `${prefix}LOGOUT`;
 const SET_NICKNAME = asyncActionCreator(`${prefix}SET_NICKNAME`);
+const UPDATE_USER = asyncActionCreator(`${prefix}UPDATE_USER`);
 
-export const loginSuccess = createAction(LOGIN_SUCCESS, 
+export const loginSuccess = createAction(LOGIN_SUCCESS,
   ({userId, accessToken, refreshToken, nickname, isNewUser, email}) => ({userId, accessToken, refreshToken, nickname, isNewUser, email}));
 export const loginFailure = createAction(LOGIN_FAILURE);
 export const logout = createAction(LOGOUT);
 export const setNickname = createAsyncAction(SET_NICKNAME);
+export const updateUser = createAsyncAction(UPDATE_USER, ({userId, nickname, group}) => ({userId, nickname, group}));
 
 const setNicknameSaga = createAsyncSaga(setNickname, authAPI.setNickname);
+const updateUserSaga = createAsyncSaga(updateUser, authAPI.updateUser);
 
 const initialState = {
   data: null,
@@ -73,6 +76,19 @@ export default handleActions(
         error: "에러가 발생했습니다."
       };
     },
+      [UPDATE_USER.SUCCESS]: (state, action) => {
+        console.log(JSON.stringify(action, null, 2))
+          return {
+              ...state,
+              data: action.payload.data,
+              error: null
+          }
+      },[UPDATE_USER.FAILURE]: (state, action) => {
+          return {
+              ...state,
+              error: "에러가 발생했습니다."
+          };
+      },
   },
   initialState,
 );
@@ -88,9 +104,14 @@ function* redirectAfterLoginSaga({payload: {isNewUser}}) {
 function* redirectAfterNicknameSetting({nickname}) {
   yield Router.push('/feed');
 }
-
+function* redirectAfterUpdateUser({nickname}) {
+    yield Router.push('/mypage');
+}
 export function* authSaga() {
   yield takeEvery(LOGIN_SUCCESS, redirectAfterLoginSaga);
   yield takeEvery(SET_NICKNAME.REQUEST, setNicknameSaga);
-  yield takeEvery(SET_NICKNAME.SUCCESS, redirectAfterNicknameSetting);
+  //yield takeEvery(SET_NICKNAME.SUCCESS, redirectAfterNicknameSetting);
+  yield takeEvery(UPDATE_USER.REQUEST, updateUserSaga);
+  yield takeEvery(UPDATE_USER.SUCCESS, redirectAfterUpdateUser);
+
 }
