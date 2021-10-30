@@ -15,8 +15,8 @@ import { colors } from '../../util/style';
 export default function Feed({ data }) {
   return (
     <S.Feed>
-      {data.map((feedItem) => {
-          return <FeedItem item={feedItem} key={feedItem.id}/>
+      {data.map((feedItem, index) => {
+          return <FeedItem item={feedItem} rank={index+1} key={feedItem.id}/>
       })}
     </S.Feed>
   );

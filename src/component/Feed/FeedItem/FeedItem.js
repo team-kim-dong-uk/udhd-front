@@ -5,10 +5,10 @@ import CommentBox from './CommentBox';
 import { colors } from '../../../util/style';
 import Tags from './Tags';
 
-export default function FeedItem({item}) {
+export default function FeedItem({item, rank}) {
   return (
     <S.FeedItem>
-      <S.Title>1. title bar</S.Title>
+      <S.Title>#{rank}. title bar</S.Title>
       <S.ImageBox>
           <S.Image src={item.photo.originalLink}/>
       </S.ImageBox>
@@ -35,7 +35,15 @@ S.FeedItem = styled.div`
   margin-bottom: 10px;
 `;
 S.Title = styled.div`
-
+  display: flex;
+  flex-grow: 1;
+  text-align: left;
+  align-items: center;
+  width: 100%;
+  font-weight: bold;
+  font-size: 1.5rem;
+  padding-left: 5%;
+  //margin-bottom: 5px;
 `;
 
 S.InfoContainer = styled.div`
