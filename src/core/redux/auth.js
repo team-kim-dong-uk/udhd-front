@@ -96,7 +96,7 @@ export default handleActions(
 function* redirectAfterLoginSaga({payload: {isNewUser}}) {
   if (isNewUser === 'true') {
     yield Router.push('/login/nickname');
-  } else {
+  } else if (Router.pathname.startsWith("/login-redirect")) {
     yield Router.push('/feed');
   }
 }
@@ -110,7 +110,7 @@ function* redirectAfterUpdateUser({nickname}) {
 export function* authSaga() {
   yield takeEvery(LOGIN_SUCCESS, redirectAfterLoginSaga);
   yield takeEvery(SET_NICKNAME.REQUEST, setNicknameSaga);
-  //yield takeEvery(SET_NICKNAME.SUCCESS, redirectAfterNicknameSetting);
+  yield takeEvery(SET_NICKNAME.SUCCESS, redirectAfterNicknameSetting);
   yield takeEvery(UPDATE_USER.REQUEST, updateUserSaga);
   yield takeEvery(UPDATE_USER.SUCCESS, redirectAfterUpdateUser);
 
