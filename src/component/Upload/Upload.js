@@ -4,7 +4,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import GooglePicker from './GooglePicker';
 import { appendCandidates, fetchMoreItems, setGoogleDriveToken, showMoreItems, uploadPhotos } from '../../core/redux/upload';
 import { Button, Image } from 'react-bootstrap';
-import TagPlane from '../TagPlane';
 import GalleryPicker from './GalleryPicker';
 import { useInView } from 'react-intersection-observer';
 
@@ -67,18 +66,17 @@ export default function Upload({ children, ...props }) {
       <GalleryPicker></GalleryPicker>
       <S.UploadCandidates>
       {
-        upload.data.slice(0, upload.numShowItems).map(cand => 
+        upload.data.slice(0, upload.numShowItems).map(cand =>
           <S.Thumbnail key={cand.id}>
             <S.Image src={cand.url} thumbnail={true}/>
           </S.Thumbnail>)
       }
       </S.UploadCandidates>
       {
-        !upload.data.length 
+        !upload.data.length
         || upload.data.length === upload.numShowItems
         || <div ref={ref}>로딩중...</div>
       }
-      <TagPlane />
       <S.UploadButton disabled={upload.data.length === 0 || loading.data} onClick={onUpload}>업로드하기</S.UploadButton>
     </S.Upload>
   );
