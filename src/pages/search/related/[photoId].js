@@ -4,60 +4,22 @@ import HomeLayout from '../../../component/layout/HomeLayout';
 import Feed from "../../../component/Feed";
 import {useDispatch, useSelector} from "react-redux";
 import { useRouter } from 'next/router';
+import { getNewFeedsRelated } from '../../../core/redux/feed';
 
 export default function FeedPage() {
-    const {auth, photos} = useSelector(state => state);
+  const { feed, loading } = useSelector(state => state);
     const dispatch = useDispatch();
-    const router = useRouter();
-  const {query: {photoId}} = router;
+    useEffect(() => {
+      if (!loading.data && feed.feedsRelated.data.length === 0 && !feed.feedsRelated.error) {
+        dispatch(getNewFeedsRelated.request());
+      }
+    }, [feed, loading]);
 
-    const feeds = [
-        {
-          id: "123123123123123",
-          photo: {
-            originalLink: "https://upload.wikimedia.org/wikipedia/commons/f/f8/190611_%EC%9D%B4%EB%82%98%EA%B2%BD.jpg",
-            id: "123123123123123",
-            tags: ['이런', '데이터' , '들이?','있겠조?','이나경!'],
-          },
-          comments: [{
-            userId: '123',
-            userName: '백동진',
-            content: '너무 조아영'
-          }],
-          likes: [
-            {
-                "id": "615425cbf83812399805ea84",
-                "userId": "615425cbf83812399805ea84",
-                "userName": "Udhd-test"
-            }
-          ]
-        },
-        {
-          id: "123123123123124",
-          photo: {
-            originalLink: "https://png.pngtree.com/thumb_back/fh260/background/20190222/ourmid/pngtree-ink-landscape-advertising-ad-background-backgroundfreshhand-paintedlandscape-paintingmountain-image_61834.jpg",
-            id: "123123123123124",
-            tags: ['이런22', '데이터' , '들이?','있겠조?','이나경!22'],
-          },
-          comments: [{
-            userId: '123',
-            userName: '백동진',
-            content: '너무 조아영22'
-          }],
-          likes: [
-            {
-                "id": "615425cbf83812399805ea84",
-                "userId": "615425cbf83812399805ea84",
-                "userName": "Udhd-test"
-            }
-          ]
-        },
-    ]
   return (
     <>
       <AppLayout>
         <HomeLayout>
-            <Feed data={feeds}/>
+            <Feed data={feed.feedsRelated.data}/>
         </HomeLayout>
       </AppLayout>
     </>
