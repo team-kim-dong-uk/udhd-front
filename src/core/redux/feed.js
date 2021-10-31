@@ -188,6 +188,20 @@ export default handleActions(
               },
           };
       },
+      [ADD_FEED_LIKE.SUCCESS]: (state, action) => {
+          const feedId = action.payload.config.url.split('/')[1]
+          return {
+              ...state,
+              feeds: {
+                  data: state.feeds.data.map(item => {
+                      if (item.id === feedId)
+                          item.liked = true
+                      item.likes.push({})
+                      return item
+                  }),
+              },
+          };
+      },
       [ADD_FEED_LIKE.FAILURE]: (state, action) => {
           console.log(action.payload.error);
           return {
@@ -198,14 +212,49 @@ export default handleActions(
               },
           }
       },
-      [DEL_FEED_LIKE.FAILURE]: (state, action) => {
+      [DEL_FEED_LIKE.SUCCESS]: (state, action) => {
+          const feedId = action.payload.config.url.split('/')[1]
           return {
               ...state,
-              error: {
-                  ...state.error,
-                  deleteLike: action.payload.error,
+              feeds: {
+                  data: state.feeds.data.map(item => {
+                      if (item.id === feedId)
+                          item.liked = false
+                      item.likes.pop();
+                      return item
+                  }),
               },
-          }
+          };
+      },
+      [DEL_FEED_LIKE.FAILURE]: (state, action) => {
+          const feedId = action.payload.config.url.split('/')[1]
+          console.log(action.payload)
+          return {
+              ...state,
+              feeds: {
+                  data: state.feeds.data.map(item => {
+                      if (item.id === feedId)
+                          item.liked = false
+                      return item
+                  }),
+              },
+          };
+      },
+      [SAVE_FEED.SUCCESS]: (state, action) => {
+          const feedId = action.payload.config.url.split('/')[1]
+          //const newFeed = { ...state.feeds }
+          //console.log('save feed', newFeed.filter(e => e.id === action.payload.feedId));
+          //console.log('save feed', newFeed);
+          return {
+              ...state,
+              feeds: {
+                  data: state.feeds.data.map(item => {
+                      if (item.id === feedId)
+                          item.saved = true
+                      return item
+                  }),
+              },
+          };
       },
       [SAVE_FEED.FAILURE]: (state, action) => {
           return {
@@ -215,6 +264,19 @@ export default handleActions(
                   saveFeed: action.payload.error,
               },
           }
+      },
+      [UNSAVE_FEED.SUCCESS]: (state, action) => {
+          const feedId = action.payload.config.url.split('/')[1]
+          return {
+              ...state,
+              feeds: {
+                  data: state.feeds.data.map(item => {
+                      if (item.id === feedId)
+                          item.saved = false
+                      return item
+                  }),
+              },
+          };
       },
       [UNSAVE_FEED.FAILURE]: (state, action) => {
           return {
