@@ -9,7 +9,7 @@ import {addFeedLike, deleteFeedLike, saveFeed, unsaveFeed} from "../../../core/r
 
 export default function Info({feedData}) {
   const {auth, feed} = useSelector(state => state);
-  const [inLike, setInLike] = useState(feedData.likes.find(like => like?.userId == auth.data?.userId) !== undefined);
+  const [inLike, setInLike] = useState(feedData.liked);
   const [inAlbum, setInAlbum] = useState(feedData.saved);
   const dispatch = useDispatch();
 
