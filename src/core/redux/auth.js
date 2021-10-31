@@ -97,6 +97,7 @@ function* redirectAfterLoginSaga({payload: {isNewUser}}) {
   if (isNewUser === 'true') {
     yield Router.push('/login/nickname');
   } else if (Router.pathname.startsWith("/login-redirect")) {
+      //
     yield Router.push('/feed');
   }
 }
