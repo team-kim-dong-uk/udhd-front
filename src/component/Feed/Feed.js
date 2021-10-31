@@ -2,6 +2,8 @@ import React, {useCallback, useEffect, useState} from 'react';
 import styled from 'styled-components';
 import FeedItem from './FeedItem';
 import { colors } from '../../util/style';
+import { useSelector } from 'react-redux';
+import { useInView } from 'react-intersection-observer';
 
 
 /*
@@ -12,12 +14,20 @@ import { colors } from '../../util/style';
 *   tags : []
 * }
 * */
-export default function Feed({ data }) {
+export default function Feed({ data, loadMorePhotos }) {
+  const { loading } = useSelector(state => state);
+  const [ref, inView] = useInView();
+  // useEffect(() => {
+  //     if (inView && !loading.data && loadMorePhotos){
+  //         loadMorePhotos();
+  //     }
+  // },[inView, loading, loadMorePhotos]);
   return (
     <S.Feed>
       {data.map((feedItem, index) => {
           return <FeedItem item={feedItem} rank={index+1} key={feedItem.id}/>
       })}
+      <S.CheckForScroll ref={ref}/>
     </S.Feed>
   );
 }
@@ -33,6 +43,10 @@ S.Feed = styled.div`
   align-items: center;
   background-color: #FAFAFA;
   //border: 1px solid ${colors.orange}
+`;
+S.CheckForScroll = styled.div`
+  width: 100%;
+  margin-top:20px;
 `;
 
 

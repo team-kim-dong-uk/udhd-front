@@ -8,18 +8,19 @@ import { getNewFeedsRelated } from '../../../core/redux/feed';
 
 export default function FeedPage() {
   const { feed, loading } = useSelector(state => state);
-    const dispatch = useDispatch();
-    useEffect(() => {
-      if (!loading.data && feed.feedsRelated.data.length === 0 && !feed.feedsRelated.error) {
-        dispatch(getNewFeedsRelated.request());
-      }
-    }, [feed, loading]);
+  const dispatch = useDispatch();
+  const router = useRouter();
+  const {query: {photoId}} = router;
+
+  useEffect(() => {
+      dispatch(getNewFeedsRelated.request({photoId}));
+  }, [photoId]);
 
   return (
     <>
       <AppLayout>
         <HomeLayout>
-            <Feed data={feed.feedsRelated.data}/>
+            <Feed data={feed.feeds.data}/>
         </HomeLayout>
       </AppLayout>
     </>
