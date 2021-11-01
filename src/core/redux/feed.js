@@ -13,6 +13,8 @@ const prefix = 'feed/';
 const GET_FEEDS = asyncActionCreator(`${prefix}GET_FEEDS`);
 const GET_FEEDS_LIKE = asyncActionCreator(`${prefix}GET_FEEDS_LIKE`);
 const GET_FEEDS_SAVE = asyncActionCreator(`${prefix}GET_FEEDS_SAVE`);
+const GET_NEW_FEEDS_RELATED = asyncActionCreator(`${prefix}GET_NEW_FEEDS_RELATED`);
+const GET_MORE_FEEDS_RELATED = asyncActionCreator(`${prefix}GET_MORE_FEEDS_RELATED`);
 
 const ADD_FEED_LIKE = asyncActionCreator(`${prefix}ADD_FEED_LIKE`);
 const DEL_FEED_LIKE = asyncActionCreator(`${prefix}DEL_FEED_LIKE`);
@@ -28,6 +30,8 @@ const DELETE_FEED_COMMENT = asyncActionCreator(`${prefix}DELETE_FEED_COMMENT`);
 export const getFeeds = createAsyncAction(GET_FEEDS);
 export const getFeedsLike = createAsyncAction(GET_FEEDS_LIKE, ({type, userId, count, page}) => ({type, userId, count, page}));
 export const getFeedsSave = createAsyncAction(GET_FEEDS_SAVE, ({type, userId, count, page}) => ({type, userId, count, page}));
+export const getNewFeedsRelated = createAsyncAction(GET_NEW_FEEDS_RELATED, ({photoId}) => ({photoId}));
+export const getMoreFeedsRelated = createAsyncAction(GET_MORE_FEEDS_RELATED, ({photoId}) => ({photoId}));
 
 export const addFeedLike = createAsyncAction(ADD_FEED_LIKE, ({feedId, authData}) => ({feedId, authData}));
 export const deleteFeedLike = createAsyncAction(DEL_FEED_LIKE, ({feedId, authData}) => ({feedId, authData}));
@@ -42,6 +46,8 @@ export const deleteFeedComment = createAsyncAction(DELETE_FEED_COMMENT, ({ feedI
 const getFeedsSaga = createAsyncSaga(getFeeds, feedAPI.getFeeds);
 const getFeedsLikeSaga = createAsyncSaga(getFeedsLike, feedAPI.getFeedsByType);
 const getFeedsSaveSaga = createAsyncSaga(getFeedsSave, feedAPI.getFeedsByType);
+const getNewFeedsRelatedSaga = createAsyncSaga(getNewFeedsRelated, feedAPI.getFeedsRelated);
+const getMoreFeedsRelatedSaga = createAsyncSaga(getMoreFeedsRelated, feedAPI.getFeedsRelated);
 
 const addFeedLikeSaga = createAsyncSaga(addFeedLike, feedAPI.addFeedLike);
 const deleteFeedLikeSaga = createAsyncSaga(deleteFeedLike, feedAPI.deleteFeedLike);
@@ -66,6 +72,10 @@ const initialState = {
     data: [],
     error: null,
     page: 0,
+  },
+  feedsRelated: {
+    data: [],
+    error: null,
   },
   isEnd: false,
   loading: false,
@@ -97,6 +107,24 @@ export default handleActions(
                 error: action.payload.error,
             },
         };
+      },
+      [GET_NEW_FEEDS_RELATED]: (state, action) => {
+        return {
+          ...state,
+          feedsRelated: {
+            data: action.payload.data.feeds,
+            error: null,
+          },
+        }
+      },
+      [GET_MORE_FEEDS_RELATED]: (state, action) => {
+        return {
+          ...state,
+          feedsRelated: {
+            data: [...state.feedsRelated.data, ...action.payload.data.feeds],
+            error: null,
+          },
+        }
       },
       [GET_FEEDS_LIKE.SUCCESS]: (state, action) => {
           if (!action.payload.config.url.includes("page")){
@@ -160,6 +188,20 @@ export default handleActions(
               },
           };
       },
+      [ADD_FEED_LIKE.SUCCESS]: (state, action) => {
+          const feedId = action.payload.config.url.split('/')[1]
+          return {
+              ...state,
+              feeds: {
+                  data: state.feeds.data.map(item => {
+                      if (item.id === feedId)
+                          item.liked = true
+                      item.likes.push({})
+                      return item
+                  }),
+              },
+          };
+      },
       [ADD_FEED_LIKE.FAILURE]: (state, action) => {
           console.log(action.payload.error);
           return {
@@ -170,14 +212,49 @@ export default handleActions(
               },
           }
       },
-      [DEL_FEED_LIKE.FAILURE]: (state, action) => {
+      [DEL_FEED_LIKE.SUCCESS]: (state, action) => {
+          const feedId = action.payload.config.url.split('/')[1]
           return {
               ...state,
-              error: {
-                  ...state.error,
-                  deleteLike: action.payload.error,
+              feeds: {
+                  data: state.feeds.data.map(item => {
+                      if (item.id === feedId)
+                          item.liked = false
+                      item.likes.pop();
+                      return item
+                  }),
               },
-          }
+          };
+      },
+      [DEL_FEED_LIKE.FAILURE]: (state, action) => {
+          const feedId = action.payload.config.url.split('/')[1]
+          console.log(action.payload)
+          return {
+              ...state,
+              feeds: {
+                  data: state.feeds.data.map(item => {
+                      if (item.id === feedId)
+                          item.liked = false
+                      return item
+                  }),
+              },
+          };
+      },
+      [SAVE_FEED.SUCCESS]: (state, action) => {
+          const feedId = action.payload.config.url.split('/')[1]
+          //const newFeed = { ...state.feeds }
+          //console.log('save feed', newFeed.filter(e => e.id === action.payload.feedId));
+          //console.log('save feed', newFeed);
+          return {
+              ...state,
+              feeds: {
+                  data: state.feeds.data.map(item => {
+                      if (item.id === feedId)
+                          item.saved = true
+                      return item
+                  }),
+              },
+          };
       },
       [SAVE_FEED.FAILURE]: (state, action) => {
           return {
@@ -187,6 +264,19 @@ export default handleActions(
                   saveFeed: action.payload.error,
               },
           }
+      },
+      [UNSAVE_FEED.SUCCESS]: (state, action) => {
+          const feedId = action.payload.config.url.split('/')[1]
+          return {
+              ...state,
+              feeds: {
+                  data: state.feeds.data.map(item => {
+                      if (item.id === feedId)
+                          item.saved = false
+                      return item
+                  }),
+              },
+          };
       },
       [UNSAVE_FEED.FAILURE]: (state, action) => {
           return {
@@ -244,6 +334,8 @@ export function* feedSaga() {
     yield takeEvery(GET_FEEDS.REQUEST, getFeedsSaga);
     yield takeEvery(GET_FEEDS_LIKE.REQUEST, getFeedsLikeSaga);
     yield takeEvery(GET_FEEDS_SAVE.REQUEST, getFeedsSaveSaga);
+    yield takeEvery(GET_NEW_FEEDS_RELATED.REQUEST, getNewFeedsRelated);
+    yield takeEvery(GET_MORE_FEEDS_RELATED.REQUEST, getMoreFeedsRelated);
     yield takeEvery(ADD_FEED_LIKE.REQUEST, addFeedLikeSaga);
     yield takeEvery(DEL_FEED_LIKE.REQUEST, deleteFeedLikeSaga);
     yield takeEvery(SAVE_FEED.REQUEST, saveFeedSaga);

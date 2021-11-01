@@ -10,15 +10,13 @@ export default function FeedPage() {
     const { feed, loading } = useSelector(state => state);
     const dispatch = useDispatch();
     useEffect(() => {
-      if (!loading.data && feed.feeds.data.length === 0 && !feed.feeds.error) {
         dispatch(getFeeds.request());
-      }
-    }, [feed, loading])
+    }, [])
   return (
     <>
       <AppLayout>
         <HomeLayout>
-            <Feed data={feed.feeds.data}/>
+            <Feed data={feed?.feeds?.data ? feed.feeds.data : []}/>
         </HomeLayout>
       </AppLayout>
     </>

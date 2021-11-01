@@ -9,21 +9,9 @@ import {addFeedLike, deleteFeedLike, saveFeed, unsaveFeed} from "../../../core/r
 
 export default function Info({feedData}) {
   const {auth, feed} = useSelector(state => state);
-  const [inLike, setInLike] = useState(feedData.likes.find(like => like?.userId == auth.data?.userId) !== undefined);
-  const [inAlbum, setInAlbum] = useState(feedData.saved);
+  const inLike = feedData.liked;
+  const inAlbum = feedData.saved;
   const dispatch = useDispatch();
-
-  useEffect(() => {
-      setInLike(feedData.likes.find(like => like?.userId == auth.data?.userId) !== undefined);
-  }, [auth, feedData])
-
-  /*좋아요, 저장 추가 삭제 실패했으니 되돌리기*/
-  useEffect(()=>{
-    if (feed.error?.addLike != null) setInLike(false);
-    else if (feed.error?.deleteLike != null) setInLike(true);
-    else if (feed.error?.saveFeed != null) setInAlbum(false);
-    else if (feed.error?.unsaveFeed != null) setInAlbum(true);
-  }, [feed.error])
 
   const updateLike = useCallback(() => {
       inLike ? dispatch(deleteFeedLike.request({
@@ -34,14 +22,12 @@ export default function Info({feedData}) {
                             feedId: feedData?.id,
                             authData: auth?.data
                 }));
-      setInLike(prev => !prev);
       console.log("update Like");
   }, [inLike])
 
   const updateAlbum = useCallback(() => {
       inAlbum ? dispatch(unsaveFeed.request({feedId: feedData?.id}))
           : dispatch(saveFeed.request({feedId: feedData?.id}));
-      setInAlbum(prev => !prev);
   }, [inAlbum])
 
   return (

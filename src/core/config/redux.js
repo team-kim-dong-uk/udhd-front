@@ -6,6 +6,7 @@ import reducer from '../reducer';
 import rootSaga from '../saga';
 import storageSession from 'redux-persist/lib/storage/session';
 import {persistReducer, persistStore} from "redux-persist";
+import SetTransform from "../../util/SetTransform";
 
 const configureStore = () => {
   const sagaMiddleware = createSagaMiddleware();
@@ -20,6 +21,7 @@ const configureStore = () => {
     key: "root",
     // localStorage에 저장합니다.
     storage: storageSession,
+    transforms: [SetTransform]
     //
     //whitelist: ["auth"]
     // or blacklist
