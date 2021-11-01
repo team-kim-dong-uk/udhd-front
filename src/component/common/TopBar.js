@@ -15,6 +15,7 @@ const TopBar = () => {
       <Navbar.Brand>
         <S.Image src={logo} width={30} height={30}/>
       </Navbar.Brand>
+        <S.Text>Beta</S.Text>
       <Nav>
         {auth.data ?
         <S.Logout onClick={()=>dispatch(logout())}>로그아웃</S.Logout>
@@ -41,6 +42,14 @@ S.Login = styled.div`
   color: ${colors.orange};
 `;
 S.Image = styled(Image)`
+`;
+S.Text = styled.div`
+  flex-grow: 1;
+  text-align: left;
+  align-items: center;
+  font-weight: bold;
+  font-size: 1.3rem;
+  margin-bottom: 7px;
 `;
 
 export default TopBar;
