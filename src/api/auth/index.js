@@ -17,7 +17,6 @@ export const setNickname = async ({userId, nickname}) => {
 }
 
 export const updateUser = async ({userId, nickname, group}) => {
-    console.log(`nickname is : ${nickname}`)
     const data = {
         nickname: nickname,
         group: group
