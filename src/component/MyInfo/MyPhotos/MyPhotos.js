@@ -8,7 +8,7 @@ import SaveIconFilled from '../../../../assets/save-icon-filled.svg';
 import {getFeeds, getFeedsLike, getFeedsSave} from "../../../core/redux/feed";
 import {useDispatch, useSelector} from "react-redux";
 import {useInView} from "react-intersection-observer";
-
+import NoImageIcon from '../../../../assets/no-image-icon.svg';
 
 /*
 * Props
@@ -90,12 +90,20 @@ export default function MyPhotos({item}) {
                 {photoType === 'save' ? <SaveIconFilled/> : <SaveIcon/>}
             </S.Icon>
         </S.IconContainer>
-        {photoType === 'like' && (
+        {photoType === 'like' && feed.feedsLike.data.length !== 0 && (
             <PhotoGrid feeds={feed.feedsLike.data} moveTo="mypage/like" ref={ref} inView={inView}/>
         )}
         {photoType === 'save' && (
             <PhotoGrid feeds={feed.feedsSave.data} moveTo="mypage/save" ref={ref} inView={inView}/>
         )}
+        {
+            ((photoType === 'like' && feed.feedsLike.data.length === 0) ||
+                (photoType === 'save' && feed.feedsSave.data.length === 0)) &&  (
+                <div>
+                    <NoImageIcon width='100%'  viewBox='0 0 200 200'/>
+                    <S.Text>보여줄 사진이 없어요!</S.Text>
+                </div>
+            )}
 
     </S.MyPhotos>
   );
@@ -120,6 +128,7 @@ S.IconContainer = styled.div`
   align-content: space-between;
   justify-content: space-between;
   padding: 10px;
+  padding-bottom: 10%;
 `;
 
 S.Icon = styled.span`
@@ -136,4 +145,8 @@ S.LineContainer = styled.div`
   margin-top: 20px;
   background-color: black;
   display: flex;
+`;
+S.Text = styled.div`
+    text-align: center;
+    margin: 10% 0 30% 0;
 `;

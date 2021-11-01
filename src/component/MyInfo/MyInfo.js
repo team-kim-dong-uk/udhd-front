@@ -1,8 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import {colors} from '../../util/style';
 import UserInfoBox from "./UserInfoBox";
-import PhotoGrid from "../PhotoGrid";
 import MyPhotos from "./MyPhotos";
 
 
