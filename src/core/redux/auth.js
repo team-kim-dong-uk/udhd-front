@@ -13,6 +13,7 @@ const LOGIN_FAILURE = `${prefix}LOGIN_FAILURE`;
 const LOGOUT = `${prefix}LOGOUT`;
 const SET_NICKNAME = asyncActionCreator(`${prefix}SET_NICKNAME`);
 const UPDATE_USER = asyncActionCreator(`${prefix}UPDATE_USER`);
+const GET_USER = asyncActionCreator(`${prefix}GET_USER`);
 
 export const loginSuccess = createAction(LOGIN_SUCCESS,
   ({userId, accessToken, refreshToken, nickname, isNewUser, email}) => ({userId, accessToken, refreshToken, nickname, isNewUser, email}));
@@ -20,9 +21,13 @@ export const loginFailure = createAction(LOGIN_FAILURE);
 export const logout = createAction(LOGOUT);
 export const setNickname = createAsyncAction(SET_NICKNAME);
 export const updateUser = createAsyncAction(UPDATE_USER, ({userId, nickname, group}) => ({userId, nickname, group}));
+export const getUser = createAsyncAction(GET_USER, ({userId}) => ({userId}));
+
+
 
 const setNicknameSaga = createAsyncSaga(setNickname, authAPI.setNickname);
 const updateUserSaga = createAsyncSaga(updateUser, authAPI.updateUser);
+const getUserSaga = createAsyncSaga(getUser, authAPI.getUser);
 
 const initialState = {
   data: null,
@@ -77,13 +82,31 @@ export default handleActions(
       };
     },
       [UPDATE_USER.SUCCESS]: (state, action) => {
-        console.log(JSON.stringify(action, null, 2))
           return {
               ...state,
               data: action.payload.data,
               error: null
           }
       },[UPDATE_USER.FAILURE]: (state, action) => {
+          return {
+              ...state,
+              error: "에러가 발생했습니다."
+          };
+      },
+      [GET_USER.SUCCESS]: (state, action) => {
+        console.log("USER DATA : "+JSON.stringify(action.payload, null, 2))
+          return {
+              ...state,
+              data: {
+                  ...state.data,
+                  nickname: action.payload.data.nickname,
+                  email: action.payload.data.email,
+                  numLikePhotos: action.payload.data.numLikePhotos,
+                  numSavePhotos: action.payload.data.numSavePhotos,
+              },
+              error: null
+          }
+      },[GET_USER.FAILURE]: (state, action) => {
           return {
               ...state,
               error: "에러가 발생했습니다."
@@ -114,5 +137,6 @@ export function* authSaga() {
   yield takeEvery(SET_NICKNAME.SUCCESS, redirectAfterNicknameSetting);
   yield takeEvery(UPDATE_USER.REQUEST, updateUserSaga);
   yield takeEvery(UPDATE_USER.SUCCESS, redirectAfterUpdateUser);
+  yield takeEvery(GET_USER.REQUEST, getUserSaga);
 
 }

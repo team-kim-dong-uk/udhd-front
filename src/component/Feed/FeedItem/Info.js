@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect, useState} from 'react';
+import React, {useCallback} from 'react';
 import styled from 'styled-components';
 import HeartIcon from '../../../../assets/heart-icon.svg';
 import HeartIconFilled from '../../../../assets/heart-icon-filled.svg';
@@ -22,7 +22,6 @@ export default function Info({feedData}) {
                             feedId: feedData?.id,
                             authData: auth?.data
                 }));
-      console.log("update Like");
   }, [inLike])
 
   const updateAlbum = useCallback(() => {
