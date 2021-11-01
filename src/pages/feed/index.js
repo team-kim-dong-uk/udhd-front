@@ -16,7 +16,7 @@ export default function FeedPage() {
     <>
       <AppLayout>
         <HomeLayout>
-            <Feed data={feed?.feeds?.data ? feed.feeds.data : []}/>
+            <Feed data={feed?.feeds?.data ? feed.feeds.data : []} showTitle={true}/>
         </HomeLayout>
       </AppLayout>
     </>

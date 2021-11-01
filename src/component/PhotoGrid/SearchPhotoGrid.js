@@ -10,10 +10,10 @@ export default function SearchPhotoGrid({ data }) {
     const dispatch = useDispatch();
     const [ref, inView] = useInView();
     useEffect(() => {
-        if (inView && !loading.data){
+        if (inView){
             dispatch(getRandomPhotos.request())
         }
-    },[inView, loading])
+    },[inView])
   return (
       <S.SearchPhotoGrid>
           {data?.map(photo => (

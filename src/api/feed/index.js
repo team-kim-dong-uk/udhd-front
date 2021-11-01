@@ -4,7 +4,7 @@ export const getFeeds = () => {
     return client.get(`feeds/list`);
 }
 export const getFeedsRelated = ({photoId}) => {
-    return client.get(`feeds/related/${photoId}`);
+    return client.get(`feeds/related?photoId=${photoId}`);
 }
 export const getFeedsByType = ({type, userId, count, page}) => {
     let query = `users/${userId}/${type}?`

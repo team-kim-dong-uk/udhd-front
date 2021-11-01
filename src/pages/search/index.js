@@ -8,13 +8,11 @@ import { getRandomPhotos } from '../../core/redux/photos';
 
 export default function SearchPage() {
   const dispatch = useDispatch();
-  const { photos, loading } = useSelector(state => state);
+  const { photos } = useSelector(state => state);
 
   useEffect(() => {
-    if (!loading.data && photos.data.length === 0 && !photos.error) {
       dispatch(getRandomPhotos.request());
-    }
-  }, [photos, loading])
+  }, []);
 
   return (
     <>

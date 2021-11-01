@@ -1,4 +1,4 @@
-import { handleActions } from 'redux-actions';
+import { createAction, handleActions } from 'redux-actions';
 import { takeEvery } from 'redux-saga/effects';
 import createAsyncSaga, {
   asyncActionCreator,
@@ -16,6 +16,8 @@ const GET_FEEDS_SAVE = asyncActionCreator(`${prefix}GET_FEEDS_SAVE`);
 const GET_NEW_FEEDS_RELATED = asyncActionCreator(`${prefix}GET_NEW_FEEDS_RELATED`);
 const GET_MORE_FEEDS_RELATED = asyncActionCreator(`${prefix}GET_MORE_FEEDS_RELATED`);
 
+const SET_FEEDS = `${prefix}/SET_FEEDS`;
+
 const ADD_FEED_LIKE = asyncActionCreator(`${prefix}ADD_FEED_LIKE`);
 const DEL_FEED_LIKE = asyncActionCreator(`${prefix}DEL_FEED_LIKE`);
 
@@ -32,6 +34,8 @@ export const getFeedsLike = createAsyncAction(GET_FEEDS_LIKE, ({type, userId, co
 export const getFeedsSave = createAsyncAction(GET_FEEDS_SAVE, ({type, userId, count, page}) => ({type, userId, count, page}));
 export const getNewFeedsRelated = createAsyncAction(GET_NEW_FEEDS_RELATED, ({photoId}) => ({photoId}));
 export const getMoreFeedsRelated = createAsyncAction(GET_MORE_FEEDS_RELATED, ({photoId}) => ({photoId}));
+
+export const setFeeds = createAction(SET_FEEDS, ({feeds}) => ({feeds}));
 
 export const addFeedLike = createAsyncAction(ADD_FEED_LIKE, ({feedId, authData}) => ({feedId, authData}));
 export const deleteFeedLike = createAsyncAction(DEL_FEED_LIKE, ({feedId, authData}) => ({feedId, authData}));
@@ -61,7 +65,8 @@ const deleteFeedCommentSaga = createAsyncSaga(deleteFeedComment, feedAPI.deleteC
 const initialState = {
   feeds: {
     data: [],
-    error: null
+    error: null,
+    isEnd: false,
   },
   feedsLike: {
     data: [],
@@ -108,21 +113,23 @@ export default handleActions(
             },
         };
       },
-      [GET_NEW_FEEDS_RELATED]: (state, action) => {
+      [GET_NEW_FEEDS_RELATED.SUCCESS]: (state, action) => {
         return {
           ...state,
-          feedsRelated: {
+          feeds: {
             data: action.payload.data.feeds,
             error: null,
+            isEnd: action.payload.data.feeds.length === 1,
           },
         }
       },
-      [GET_MORE_FEEDS_RELATED]: (state, action) => {
+      [GET_MORE_FEEDS_RELATED.SUCCESS]: (state, action) => {
         return {
           ...state,
-          feedsRelated: {
-            data: [...state.feedsRelated.data, ...action.payload.data.feeds],
+          feeds: {
+            data: [...(state.feeds.data), ...(action.payload.data.feeds.slice(1))],
             error: null,
+            isEnd: action.payload.data.feeds.length === 1,
           },
         }
       },
@@ -156,6 +163,15 @@ export default handleActions(
                   page: state.feedsLike.page,
               },
           };
+      },
+      [SET_FEEDS]: (state, action) => {
+        return {
+            ...state,
+            feeds: {
+                data: action.payload.feeds,
+                error: null,
+            }
+        }
       },
       [GET_FEEDS_SAVE.SUCCESS]: (state, action) => {
           if (!action.payload.config.url.includes("page")){
@@ -334,8 +350,8 @@ export function* feedSaga() {
     yield takeEvery(GET_FEEDS.REQUEST, getFeedsSaga);
     yield takeEvery(GET_FEEDS_LIKE.REQUEST, getFeedsLikeSaga);
     yield takeEvery(GET_FEEDS_SAVE.REQUEST, getFeedsSaveSaga);
-    yield takeEvery(GET_NEW_FEEDS_RELATED.REQUEST, getNewFeedsRelated);
-    yield takeEvery(GET_MORE_FEEDS_RELATED.REQUEST, getMoreFeedsRelated);
+    yield takeEvery(GET_NEW_FEEDS_RELATED.REQUEST, getNewFeedsRelatedSaga);
+    yield takeEvery(GET_MORE_FEEDS_RELATED.REQUEST, getMoreFeedsRelatedSaga);
     yield takeEvery(ADD_FEED_LIKE.REQUEST, addFeedLikeSaga);
     yield takeEvery(DEL_FEED_LIKE.REQUEST, deleteFeedLikeSaga);
     yield takeEvery(SAVE_FEED.REQUEST, saveFeedSaga);
