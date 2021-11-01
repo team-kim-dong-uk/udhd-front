@@ -77,7 +77,6 @@ export default handleActions(
       };
     },
       [UPDATE_USER.SUCCESS]: (state, action) => {
-        console.log(JSON.stringify(action, null, 2))
           return {
               ...state,
               data: action.payload.data,

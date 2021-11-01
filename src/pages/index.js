@@ -21,9 +21,6 @@ const Home = () => {
 export const getServerSideProps = wrapper.getServerSideProps(
   (store) => {
     async (context) => {
-      console.log('getServerSideProps start');
-      console.log(context.req.header);
-      console.log(context);
       const cookie = context.req ? context.req.header.cookie : '';
       axios.defaults.headers.Cookie = '';
 
@@ -38,7 +35,6 @@ export const getServerSideProps = wrapper.getServerSideProps(
       */
 
       store.dispatch(END);
-      console.log('getServerSideProps end');
       await store.sagaTask.toPromise();
     }
   }

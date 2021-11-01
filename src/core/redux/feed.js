@@ -1,9 +1,6 @@
-import { handleActions } from 'redux-actions';
-import { takeEvery } from 'redux-saga/effects';
-import createAsyncSaga, {
-  asyncActionCreator,
-  createAsyncAction,
-} from '../../util/redux/index';
+import {handleActions} from 'redux-actions';
+import {takeEvery} from 'redux-saga/effects';
+import createAsyncSaga, {asyncActionCreator, createAsyncAction,} from '../../util/redux/index';
 import * as feedAPI from '../../api/feed';
 // import ToastUtil from "../../util/ToastUtil";
 
@@ -203,7 +200,6 @@ export default handleActions(
           };
       },
       [ADD_FEED_LIKE.FAILURE]: (state, action) => {
-          console.log(action.payload.error);
           return {
               ...state,
               error: {
@@ -228,7 +224,6 @@ export default handleActions(
       },
       [DEL_FEED_LIKE.FAILURE]: (state, action) => {
           const feedId = action.payload.config.url.split('/')[1]
-          console.log(action.payload)
           return {
               ...state,
               feeds: {
@@ -306,7 +301,6 @@ export default handleActions(
         };
       },
       [ADD_FEED_COMMENT.FAILURE]: (state, action) => {
-        console.log(action.payload);
         return {
             ...state,
             error: {
