@@ -23,5 +23,5 @@ S.Mobile = styled.div`
   flex: 1;
   background-color:#fafafa;
   max-width: 400px;
-  border: solid #ababab;
+  //border: solid #ababab;
 `;

@@ -24,7 +24,7 @@ S.Mypage = styled.div`
   display: flex !important;
   flex-direction: column;
   align-items: center;
-//  border: 1px solid ${colors.orange}
+  background-color: white;
 `;
 
 S.Nickname = styled.div`
