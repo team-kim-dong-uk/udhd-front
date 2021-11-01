@@ -328,8 +328,8 @@ export function* feedSaga() {
     yield takeEvery(GET_FEEDS.REQUEST, getFeedsSaga);
     yield takeEvery(GET_FEEDS_LIKE.REQUEST, getFeedsLikeSaga);
     yield takeEvery(GET_FEEDS_SAVE.REQUEST, getFeedsSaveSaga);
-    yield takeEvery(GET_NEW_FEEDS_RELATED.REQUEST, getNewFeedsRelated);
-    yield takeEvery(GET_MORE_FEEDS_RELATED.REQUEST, getMoreFeedsRelated);
+    yield takeEvery(GET_NEW_FEEDS_RELATED.REQUEST, getNewFeedsRelatedSaga);
+    yield takeEvery(GET_MORE_FEEDS_RELATED.REQUEST, getMoreFeedsRelatedSaga);
     yield takeEvery(ADD_FEED_LIKE.REQUEST, addFeedLikeSaga);
     yield takeEvery(DEL_FEED_LIKE.REQUEST, deleteFeedLikeSaga);
     yield takeEvery(SAVE_FEED.REQUEST, saveFeedSaga);
