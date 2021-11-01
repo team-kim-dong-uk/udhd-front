@@ -3,6 +3,8 @@ import styled from 'styled-components';
 import {useSelector} from "react-redux";
 import Setting from '../../../../assets/setting.svg';
 import Link from 'next/link'
+import logo from '../../../../assets/drawable-xhdpi/symbol_black.webp'
+import Image from "next/image";
 
 
 /*
@@ -16,24 +18,22 @@ import Link from 'next/link'
 * */
 export default function UserInfoBox({item}) {
     const {auth, feed} = useSelector(state => state);
-    const updateProfile = () => {
 
-    }
-    // TODO: 설정 - 모달 만들기
   return (
     <S.UserInfoBox>
       <S.Top>
         <S.Nickname>{auth.data?.nickname}</S.Nickname>
           <Link href="/mypage/edit">
               <S.Icon>
-                  <Setting onClick={updateProfile}/>
+                  <Setting/>
               </S.Icon>
           </Link>
       </S.Top>
       <S.Profile>
-        <S.ImageBox>
-            <S.Image src="https://upload.wikimedia.org/wikipedia/commons/f/f8/190611_%EC%9D%B4%EB%82%98%EA%B2%BD.jpg"/>
+        <S.ImageBox onClick={() => {alert("프로필 사진은 준비 중 입니다.")}}>
+            <S.Image src={logo} width={50} height={50}/>
         </S.ImageBox>
+
         <S.TextContainer>
           <S.CountText>
               {feed.feedsLike.data?.length}<br/>
@@ -87,14 +87,16 @@ S.Profile = styled.div`
 S.ImageBox = styled.div`
   flex-grow: 1;
   display: flex;
-  justify-content: flex-start;
+  justify-content: center;
   overflow: hidden;
   padding-right: 30px;
 `;
-S.Image = styled.img`
+/*S.Image = styled.img`
   width: 80px;
   height: 80px;
   border-radius: 70%;
+`;*/
+S.Image = styled(Image)`
 `;
 S.TextContainer = styled.div`
   flex-grow: 4;
