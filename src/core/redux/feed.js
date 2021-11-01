@@ -61,7 +61,8 @@ const deleteFeedCommentSaga = createAsyncSaga(deleteFeedComment, feedAPI.deleteC
 const initialState = {
   feeds: {
     data: [],
-    error: null
+    error: null,
+    isEnd: false,
   },
   feedsLike: {
     data: [],
@@ -108,21 +109,23 @@ export default handleActions(
             },
         };
       },
-      [GET_NEW_FEEDS_RELATED]: (state, action) => {
+      [GET_NEW_FEEDS_RELATED.SUCCESS]: (state, action) => {
         return {
           ...state,
-          feedsRelated: {
+          feeds: {
             data: action.payload.data.feeds,
             error: null,
+            isEnd: action.payload.data.feeds.length === 1,
           },
         }
       },
-      [GET_MORE_FEEDS_RELATED]: (state, action) => {
+      [GET_MORE_FEEDS_RELATED.SUCCESS]: (state, action) => {
         return {
           ...state,
-          feedsRelated: {
-            data: [...state.feedsRelated.data, ...action.payload.data.feeds],
+          feeds: {
+            data: [...(state.feeds.data), ...(action.payload.data.feeds.slice(1))],
             error: null,
+            isEnd: action.payload.data.feeds.length === 1,
           },
         }
       },
@@ -334,8 +337,8 @@ export function* feedSaga() {
     yield takeEvery(GET_FEEDS.REQUEST, getFeedsSaga);
     yield takeEvery(GET_FEEDS_LIKE.REQUEST, getFeedsLikeSaga);
     yield takeEvery(GET_FEEDS_SAVE.REQUEST, getFeedsSaveSaga);
-    yield takeEvery(GET_NEW_FEEDS_RELATED.REQUEST, getNewFeedsRelated);
-    yield takeEvery(GET_MORE_FEEDS_RELATED.REQUEST, getMoreFeedsRelated);
+    yield takeEvery(GET_NEW_FEEDS_RELATED.REQUEST, getNewFeedsRelatedSaga);
+    yield takeEvery(GET_MORE_FEEDS_RELATED.REQUEST, getMoreFeedsRelatedSaga);
     yield takeEvery(ADD_FEED_LIKE.REQUEST, addFeedLikeSaga);
     yield takeEvery(DEL_FEED_LIKE.REQUEST, deleteFeedLikeSaga);
     yield takeEvery(SAVE_FEED.REQUEST, saveFeedSaga);
