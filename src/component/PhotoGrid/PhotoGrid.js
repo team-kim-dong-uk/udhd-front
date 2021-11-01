@@ -25,12 +25,12 @@ const photos = {
 export default function PhotoGrid({ children, ...props }) {
   return (
       <S.PhotoGrid>
-          {props.feeds?.map(feed => (
+          {props.feeds?.map((feed, index) => (
               <Thumbnail
               key={feed?.id}
               photoId={feed?.id}
               thumbnailLink={feed?.photo?.thumbnailLink}
-              moveTo={props?.moveTo}
+              moveTo={props?.moveTo + `?index=${index}`}
               />
           ))}
           {/* {!photos.isEnd && <div ref={ref}>로딩중...</div>} */}
