@@ -117,7 +117,7 @@ export default handleActions(
         return {
           ...state,
           feeds: {
-            data: [...state.feeds.data, ...action.payload.data.feeds],
+            data: [...(state.feeds.data), ...(action.payload.data.feeds)],
             error: null,
           },
         }

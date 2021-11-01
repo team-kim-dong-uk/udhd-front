@@ -14,14 +14,14 @@ import { useInView } from 'react-intersection-observer';
 *   tags : []
 * }
 * */
-export default function Feed({ data, loadMorePhotos }) {
+export default function Feed({ data, loadMore }) {
   const { loading } = useSelector(state => state);
   const [ref, inView] = useInView();
-  // useEffect(() => {
-  //     if (inView && !loading.data && loadMorePhotos){
-  //         loadMorePhotos();
-  //     }
-  // },[inView, loading, loadMorePhotos]);
+  useEffect(() => {
+      if (inView && !loading.data && loadMore){
+          loadMore();
+      }
+  },[inView, loading, loadMore]);
   return (
     <S.Feed>
       {data.map((feedItem, index) => {
