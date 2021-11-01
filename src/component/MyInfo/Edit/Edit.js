@@ -21,7 +21,7 @@ export default function Edit({data}) {
         dispatch(updateUser.request({
             userId: data?.userId,
             nickname: nickname,
-            group: "테스트"
+            group: data?.group
         }))
     }, [nickname])
 
@@ -33,12 +33,12 @@ export default function Edit({data}) {
 <S.UserEdit>
     <S.ProfileData>
         <S.Line>
-            <S.Text>{data?.nickname}입니당</S.Text>
+            <S.Text>닉네임 변경</S.Text>
             <S.Input value={nickname} onChange={onChangeNickname}/>
         </S.Line>
     </S.ProfileData>
     <S.ButtonContainer>
-        <S.Button onClick={onSubmit}>제출</S.Button>
+        <S.Button onClick={onSubmit}>변경</S.Button>
     </S.ButtonContainer>
 </S.UserEdit>
   );
@@ -53,6 +53,7 @@ S.UserEdit = styled.div`
   display: flex !important;
   flex-direction: column;
   width: 100%;
+  background-color: white;
 `;
 S.ProfileData = styled.div`
   display: flex !important;
