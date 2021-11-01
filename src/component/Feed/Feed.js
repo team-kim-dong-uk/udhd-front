@@ -15,7 +15,7 @@ import feed from '../../core/redux/feed';
 *   tags : []
 * }
 * */
-export default function Feed({ data, loadMore, isEnd }) {
+export default function Feed({ data, loadMore, isEnd, showTitle }) {
   const { loading } = useSelector(state => state);
   const [ref, inView] = useInView();
   useEffect(() => {
@@ -26,7 +26,7 @@ export default function Feed({ data, loadMore, isEnd }) {
   return (
     <S.Feed>
       {data.map((feedItem, index) => {
-          return <FeedItem item={feedItem} rank={index+1} key={feedItem.id}/>
+          return <FeedItem item={feedItem} rank={index+1} key={feedItem.id} showTitle={showTitle}/>
       })}
       <S.CheckForScroll ref={ref}/>
     </S.Feed>

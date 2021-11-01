@@ -5,10 +5,14 @@ import CommentBox from './CommentBox';
 import { colors } from '../../../util/style';
 import Tags from './Tags';
 
-export default function FeedItem({item, rank}) {
+export default function FeedItem({item, rank, showTitle}) {
   return (
     <S.FeedItem>
-      <S.Title>#{rank}. title bar</S.Title>
+      {
+        showTitle
+        ?<S.Title>#{rank}. {item.title}</S.Title>
+        : null
+      }
       <S.ImageBox>
           <S.Image src={item.photo.originalLink}/>
       </S.ImageBox>
