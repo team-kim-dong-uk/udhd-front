@@ -1,11 +1,12 @@
 import React, {useEffect} from 'react';
 import styled from 'styled-components';
-import {useSelector} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import Setting from '../../../../assets/setting.svg';
 import Link from 'next/link'
 import logo from '../../../../assets/drawable-xhdpi/symbol_black.webp'
 import Image from "next/image";
 import {getFeedsLike} from "../../../core/redux/feed";
+import {getUser} from "../../../core/redux/auth";
 
 
 /*
@@ -18,7 +19,11 @@ import {getFeedsLike} from "../../../core/redux/feed";
 * }
 * */
 export default function UserInfoBox({item}) {
+    const dispatch = useDispatch();
     const {auth, feed} = useSelector(state => state);
+    useEffect(() => {
+        dispatch(getUser.request({userId: auth.data?.userId}));
+    }, [])
 
   return (
     <S.UserInfoBox>
@@ -37,11 +42,11 @@ export default function UserInfoBox({item}) {
 
         <S.TextContainer>
           <S.CountText>
-              {feed.feedsLike.data?.length}<br/>
+              {auth.data?.numLikePhotos}<br/>
               like
           </S.CountText>
           <S.CountText>
-              {feed.feedsSave.data?.length}<br/>
+              {auth.data?.numSavePhotos}<br/>
               save
           </S.CountText>
         </S.TextContainer>
