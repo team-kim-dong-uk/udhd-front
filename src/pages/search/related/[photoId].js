@@ -32,6 +32,7 @@ export default function FeedPage() {
             <Feed
               data={feed.feeds.data}
               loadMore={loadMore}
+              isEnd={feed.feeds.isEnd}
             />
         </HomeLayout>
       </AppLayout>

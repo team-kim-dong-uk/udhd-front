@@ -4,6 +4,7 @@ import FeedItem from './FeedItem';
 import { colors } from '../../util/style';
 import { useSelector } from 'react-redux';
 import { useInView } from 'react-intersection-observer';
+import feed from '../../core/redux/feed';
 
 
 /*
@@ -14,14 +15,14 @@ import { useInView } from 'react-intersection-observer';
 *   tags : []
 * }
 * */
-export default function Feed({ data, loadMore }) {
+export default function Feed({ data, loadMore, isEnd }) {
   const { loading } = useSelector(state => state);
   const [ref, inView] = useInView();
   useEffect(() => {
-      if (inView && !loading.data && loadMore){
+      if (inView && !loading.data && loadMore && !isEnd){
           loadMore();
       }
-  },[inView, loading, loadMore]);
+  },[inView, loading, loadMore, isEnd]);
   return (
     <S.Feed>
       {data.map((feedItem, index) => {
