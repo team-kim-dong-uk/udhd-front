@@ -61,7 +61,8 @@ const deleteFeedCommentSaga = createAsyncSaga(deleteFeedComment, feedAPI.deleteC
 const initialState = {
   feeds: {
     data: [],
-    error: null
+    error: null,
+    isEnd: false,
   },
   feedsLike: {
     data: [],
@@ -110,6 +111,7 @@ export default handleActions(
           feeds: {
             data: action.payload.data.feeds,
             error: null,
+            isEnd: action.payload.data.feeds.length === 1,
           },
         }
       },
@@ -117,8 +119,9 @@ export default handleActions(
         return {
           ...state,
           feeds: {
-            data: [...(state.feeds.data), ...(action.payload.data.feeds)],
+            data: [...(state.feeds.data), ...(action.payload.data.feeds.slice(1))],
             error: null,
+            isEnd: action.payload.data.feeds.length === 1,
           },
         }
       },
