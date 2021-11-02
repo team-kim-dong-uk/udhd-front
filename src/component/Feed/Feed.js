@@ -19,10 +19,10 @@ export default function Feed({ data, loadMore, isEnd, showTitle }) {
   const { loading } = useSelector(state => state);
   const [ref, inView] = useInView();
   useEffect(() => {
-      if (inView && !loading.data && loadMore && !isEnd){
+      if (inView && loadMore && !isEnd){
           loadMore();
       }
-  },[inView, loading, loadMore, isEnd]);
+  },[inView, loadMore, isEnd]);
   return (
     <S.Feed>
       {data.map((feedItem, index) => {
