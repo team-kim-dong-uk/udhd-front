@@ -5,6 +5,8 @@ import Feed from "../../../component/Feed";
 import {useDispatch, useSelector} from "react-redux";
 import { useRouter } from 'next/router';
 import { getMoreFeedsRelated, getNewFeedsRelated } from '../../../core/redux/feed';
+import styled from "styled-components";
+import {colors} from "../../../util/style";
 
 export default function FeedPage() {
   const { feed, loading } = useSelector(state => state);
@@ -29,6 +31,7 @@ export default function FeedPage() {
     <>
       <AppLayout>
         <HomeLayout>
+            <S.Title>연관 사진</S.Title>
             <Feed
               data={feed.feeds.data}
               loadMore={loadMore}
@@ -39,3 +42,13 @@ export default function FeedPage() {
     </>
   )
 }
+const S = {};
+S.Title = styled.div`
+  height: 40px;
+  display: flex !important;
+  flex-direction: column;
+  align-items: center;
+  background-color: white;
+  font-size: 20px;
+  font-weight: bold;
+`;

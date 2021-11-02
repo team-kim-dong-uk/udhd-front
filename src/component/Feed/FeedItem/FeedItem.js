@@ -36,7 +36,7 @@ S.FeedItem = styled.div`
   align-items: center;
   //border: 1px solid ${colors.black};
   width: 100%;
-  margin-top: 20px;
+  margin-bottom: 20px;
   background-color: white;
 `;
 S.Title = styled.div`
