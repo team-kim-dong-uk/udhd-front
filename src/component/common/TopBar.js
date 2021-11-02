@@ -3,12 +3,15 @@ import { Navbar, Nav } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
 import Image from 'next/image'
-import logo from '../../../assets/drawable-xhdpi/symbol_black.webp';
+import logo from '../../../assets/drawable-hdpi/symbol_black.webp';
+import backIcon from '../../../assets/drawable-hdpi/5337.webp';
 import { logout } from '../../core/redux/auth';
 import { colors } from '../../util/style';
 import {useCallback} from "react";
+import { useRouter } from 'next/router';
 
 const TopBar = () => {
+  const router = useRouter();
   const dispatch = useDispatch();
   const { auth } = useSelector(state => state);
   const tryLogout = useCallback(() =>{
@@ -18,8 +21,18 @@ const TopBar = () => {
   return (
     <S.Navbar fixed="top" bg="light" expand="lg">
       <Navbar.Brand>
-        <S.Image src={logo} width={30} height={30}/>
-      </Navbar.Brand>
+        {
+          router.pathname.startsWith('/search/related') || router.pathname.startsWith('/mypage/')
+          ? 
+          <S.BackButtonWrap>
+              <S.Image src={backIcon} width={15} height={30} onClick={()=>router.back()}/>
+              </S.BackButtonWrap>
+            : 
+              <S.Image src={logo} width={30} height={30}/>
+            
+        }
+        </Navbar.Brand>
+       
         <S.Text>Beta</S.Text>
         <Nav.Link onClick={() => window.open('https://the-form.io/forms/survey/response/7583c560-6af5-4cf7-a5d3-287bd1cc126a')}>
             <S.Login>문의</S.Login>
@@ -48,6 +61,16 @@ S.Logout = styled.div`
 `;
 S.Login = styled.div`
   color: ${colors.orange};
+`;
+S.BackButtonWrap = styled.div`
+  padding-right: 15px;
+`;
+S.Icon = styled.p`
+  min-width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 `;
 S.Image = styled(Image)`
 `;
