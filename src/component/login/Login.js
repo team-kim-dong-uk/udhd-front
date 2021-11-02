@@ -10,20 +10,20 @@ export default function Login({ children, ...props }) {
       <S.Login>
         <Image src={logo}/>
         <Image src={brandText}/>
-        <Button
+        <S.Button
           variant="warning"
           href={`${process.env.REACT_APP_BACKEND_PREFIX}/oauth2/authorization/kakao`}
           block
         >
           Kakao로 로그인하기
-        </Button>
-        <Button
+        </S.Button>
+        {/* <Button
           variant="primary"
           href={`${process.env.REACT_APP_BACKEND_PREFIX}/oauth2/authorization/google`}
           block
         >
           Google로 로그인하기
-        </Button>
+        </Button> */}
       </S.Login>
   );
 }
@@ -40,4 +40,8 @@ padding: 2rem;
 
 S.Modal = styled(Modal)`
   height: '90%';
+`;
+
+S.Button = styled(Button)`
+  margin-top: 20px;
 `;
