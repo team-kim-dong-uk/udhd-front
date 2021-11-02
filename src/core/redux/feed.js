@@ -217,9 +217,10 @@ export default handleActions(
               ...state,
               feeds: {
                   data: state.feeds.data.map(item => {
-                      if (item.id === feedId)
+                      if (item.id === feedId) {
                           item.liked = true
-                      item.likes.push({})
+                          item.likes.push({})
+                      }
                       return item
                   }),
               },
@@ -241,9 +242,10 @@ export default handleActions(
               ...state,
               feeds: {
                   data: state.feeds.data.map(item => {
-                      if (item.id === feedId)
+                      if (item.id === feedId) {
                           item.liked = false
-                      item.likes.pop();
+                          item.likes.pop();
+                      }
                       return item
                   }),
               },
