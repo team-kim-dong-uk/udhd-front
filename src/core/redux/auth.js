@@ -45,8 +45,8 @@ export default handleActions(
           data: {
             userId: action.payload.userId,
             accessToken: action.payload.accessToken,
-            nickname: action.payload.nickname ? action.payload.nickname : state.data.nickname,
-            email: action.payload.email ? action.payload.email : state.data.email,
+            nickname: action.payload.nickname ? action.payload.nickname : state.data?.nickname,
+            email: action.payload.email ? action.payload.email : state.data?.email,
           }
         };
     },
