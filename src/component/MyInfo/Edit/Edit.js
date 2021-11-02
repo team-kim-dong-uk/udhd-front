@@ -116,7 +116,7 @@ S.Button = styled.button`
   color: #fff;
   background-color: #fbae17;
   border: none;
-  font-size: 1rem;
+  font-size: 16px;
   font-weight: 700;
   
   //padding: 0 16px 3px;
