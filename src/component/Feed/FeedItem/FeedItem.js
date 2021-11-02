@@ -14,7 +14,7 @@ export default function FeedItem({item, rank, showTitle}) {
         : null
       }
       <S.ImageBox>
-          <S.Image src={item.photo.originalLink}/>
+          <S.Image src={item.photo.scaledLink}/>
       </S.ImageBox>
       <S.InfoContainer>
         <Info feedData={item}/>
