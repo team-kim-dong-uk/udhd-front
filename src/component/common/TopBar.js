@@ -21,11 +21,9 @@ const TopBar = () => {
         <S.Image src={logo} width={30} height={30}/>
       </Navbar.Brand>
         <S.Text>Beta</S.Text>
-        <Link href="/opinion" passHref>
-            <Nav.Link>
-                <S.Login>문의</S.Login>
-            </Nav.Link>
-        </Link>
+        <Nav.Link onClick={() => window.open('https://the-form.io/forms/survey/response/7583c560-6af5-4cf7-a5d3-287bd1cc126a')}>
+            <S.Login>문의</S.Login>
+        </Nav.Link>
       <Nav>
         {auth.data ?
         <S.Logout onClick={tryLogout}>로그아웃</S.Logout>
