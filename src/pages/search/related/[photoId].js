@@ -18,8 +18,8 @@ export default function FeedPage() {
 
   const loadMore = useCallback(() => {
     const data = feed.feeds.data;
-    console.log(data);
-    console.log(data.length > 0 ? data[data.length-1].photo.id : 0);
+    //console.log("DATA == " + JSON.stringify(data, null , 2));
+    //console.log("파라미터가  : " + data.length > 0 ? data[data.length-1].photo.id : 0);
     dispatch(getMoreFeedsRelated.request({
       photoId: data.length > 0 ? data[data.length-1].photo.id : photoId
     }));

@@ -25,7 +25,6 @@ export default function SearchPhotoGrid({ data }) {
               />
           ))}
           <S.CheckForScroll ref={ref}/>
-          {/* {!photos.isEnd && <div ref={ref}>로딩중...</div>} */}
       </S.SearchPhotoGrid>
   );
 }

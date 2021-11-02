@@ -49,7 +49,7 @@ export default function createAsyncSaga(asyncAction, asyncFunction) {
           yield put(asyncAction.failure({ error: e }));
         }
       } else {
-        //console.log(error);
+        console.log(error);
         yield put(asyncAction.failure({ error }));
       }
     }

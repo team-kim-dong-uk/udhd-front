@@ -1,5 +1,5 @@
 import { createAction, handleActions } from 'redux-actions';
-import { takeEvery } from 'redux-saga/effects';
+import { takeEvery, takeLeading } from 'redux-saga/effects';
 import createAsyncSaga, {
   asyncActionCreator,
   createAsyncAction,
@@ -127,7 +127,13 @@ export default handleActions(
         return {
           ...state,
           feeds: {
-            data: [...(state.feeds.data), ...(action.payload.data.feeds.slice(1))],
+            data: [...(state.feeds.data),
+                ...(
+                    action.payload.data.feeds.slice(1).filter(data => {
+                        return state.feeds.data.find(feed => feed.id === data.id) === undefined
+                    })
+                )
+            ],
             error: null,
             isEnd: action.payload.data.feeds.length === 1,
           },
@@ -244,7 +250,7 @@ export default handleActions(
       },
       [DEL_FEED_LIKE.FAILURE]: (state, action) => {
           const feedId = action.payload.config.url.split('/')[1]
-          console.log(action.payload)
+          //console.log(action.payload)
           return {
               ...state,
               feeds: {
@@ -340,7 +346,6 @@ export default handleActions(
             },
         };
       },
-
   },
   initialState,
 );
@@ -351,7 +356,7 @@ export function* feedSaga() {
     yield takeEvery(GET_FEEDS_LIKE.REQUEST, getFeedsLikeSaga);
     yield takeEvery(GET_FEEDS_SAVE.REQUEST, getFeedsSaveSaga);
     yield takeEvery(GET_NEW_FEEDS_RELATED.REQUEST, getNewFeedsRelatedSaga);
-    yield takeEvery(GET_MORE_FEEDS_RELATED.REQUEST, getMoreFeedsRelatedSaga);
+    yield takeLeading(GET_MORE_FEEDS_RELATED.REQUEST, getMoreFeedsRelatedSaga);
     yield takeEvery(ADD_FEED_LIKE.REQUEST, addFeedLikeSaga);
     yield takeEvery(DEL_FEED_LIKE.REQUEST, deleteFeedLikeSaga);
     yield takeEvery(SAVE_FEED.REQUEST, saveFeedSaga);

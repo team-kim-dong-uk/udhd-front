@@ -94,7 +94,7 @@ export default handleActions(
           };
       },
       [GET_USER.SUCCESS]: (state, action) => {
-        console.log("USER DATA : "+JSON.stringify(action.payload, null, 2))
+        //console.log("USER DATA : "+JSON.stringify(action.payload, null, 2))
           return {
               ...state,
               data: {
