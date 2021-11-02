@@ -124,18 +124,19 @@ export default handleActions(
         }
       },
       [GET_MORE_FEEDS_RELATED.SUCCESS]: (state, action) => {
+          let newDataForMe = action.payload.data.feeds.slice(1).filter(data => {
+              return state.feeds.data.find(feed => feed.id === data.id) === undefined
+          })
         return {
           ...state,
           feeds: {
             data: [...(state.feeds.data),
                 ...(
-                    action.payload.data.feeds.slice(1).filter(data => {
-                        return state.feeds.data.find(feed => feed.id === data.id) === undefined
-                    })
+                    newDataForMe
                 )
             ],
             error: null,
-            isEnd: action.payload.data.feeds.length === 1,
+            isEnd: newDataForMe.length === 0
           },
         }
       },
