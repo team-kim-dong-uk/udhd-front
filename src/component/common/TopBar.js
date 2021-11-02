@@ -21,6 +21,11 @@ const TopBar = () => {
         <S.Image src={logo} width={30} height={30}/>
       </Navbar.Brand>
         <S.Text>Beta</S.Text>
+        <Link href="/opinion" passHref>
+            <Nav.Link>
+                <S.Login>문의</S.Login>
+            </Nav.Link>
+        </Link>
       <Nav>
         {auth.data ?
         <S.Logout onClick={tryLogout}>로그아웃</S.Logout>
@@ -55,6 +60,12 @@ S.Text = styled.div`
   font-weight: bold;
   font-size: 1.3rem;
   margin-bottom: 7px;
+`;
+S.Opinion = styled.div`
+  flex-grow: 1;
+  text-align: right;
+  padding-right: 1rem;
+  
 `;
 
 export default TopBar;
