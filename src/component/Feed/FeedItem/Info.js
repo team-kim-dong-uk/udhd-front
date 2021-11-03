@@ -6,6 +6,7 @@ import SaveIcon from '../../../../assets/save-icon.svg';
 import SaveIconFilled from '../../../../assets/save-icon-filled.svg';
 import {useDispatch, useSelector} from "react-redux";
 import {addFeedLike, deleteFeedLike, saveFeed, unsaveFeed} from "../../../core/redux/feed";
+import { initAmplitude, sendAmplitudeData, setAmplitudeUserId } from '../../../util/amplitude';
 
 export default function Info({feedData}) {
   const {auth, feed} = useSelector(state => state);
@@ -14,6 +15,9 @@ export default function Info({feedData}) {
   const dispatch = useDispatch();
 
   const updateLike = useCallback(() => {
+      initAmplitude();
+      setAmplitudeUserId(auth.data?.userId);
+      sendAmplitudeData(inLike ? "delete like" : "add like", {"feedId": feedData.id});
       inLike ? dispatch(deleteFeedLike.request({
                             feedId: feedData?.id,
                             authData: auth?.data
@@ -25,6 +29,9 @@ export default function Info({feedData}) {
   }, [inLike])
 
   const updateAlbum = useCallback(() => {
+      initAmplitude();
+      setAmplitudeUserId(auth.data?.userId);
+      sendAmplitudeData(inAlbum ? "delete save" : "add save", {"feedId": feedData.id});
       inAlbum ? dispatch(unsaveFeed.request({feedId: feedData?.id}))
           : dispatch(saveFeed.request({feedId: feedData?.id}));
   }, [inAlbum])

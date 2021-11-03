@@ -9,15 +9,21 @@ import { logout } from '../../core/redux/auth';
 import { colors } from '../../util/style';
 import {useCallback} from "react";
 import { useRouter } from 'next/router';
+import { initAmplitude, sendAmplitudeData, setAmplitudeUserId } from '../../util/amplitude';
 
 const TopBar = () => {
   const router = useRouter();
   const dispatch = useDispatch();
   const { auth } = useSelector(state => state);
+
   const tryLogout = useCallback(() =>{
       if (confirm("로그아웃 하시겠습니까?"))
+        initAmplitude();
+        setAmplitudeUserId(auth.data?.userId);
+        sendAmplitudeData("logout");
         dispatch(logout())
-  }, [])
+  }, []);
+  
   return (
     <S.Navbar fixed="top" bg="light" expand="lg">
       <Navbar.Brand>

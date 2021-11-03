@@ -5,6 +5,7 @@ import Feed from "../../component/Feed";
 import {useDispatch, useSelector} from "react-redux";
 import {useRouter} from 'next/router';
 import { setFeeds } from '../../core/redux/feed';
+import { initAmplitude, sendAmplitudeData, setAmplitudeUserId } from '../../util/amplitude';
 
 export default function FeedPage() {
     const dispatch = useDispatch();
@@ -13,6 +14,9 @@ export default function FeedPage() {
     const {query: {type, index}} = router;
 
     useEffect(() => {
+      initAmplitude();
+      setAmplitudeUserId(auth.data?.userId);
+      sendAmplitudeData("mypage feed", {"type": type});
       dispatch(setFeeds({
         feeds: type === 'like' ? feed.feedsLike.data.slice(index) : feed.feedsSave.data.slice(index)
       }));

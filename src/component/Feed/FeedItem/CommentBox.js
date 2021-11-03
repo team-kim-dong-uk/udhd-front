@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import { addFeedComment, deleteFeedComment } from '../../../core/redux/feed';
 import { colors } from '../../../util/style';
 import useInput from "../../../hooks/useInput";
+import { initAmplitude, sendAmplitudeData, setAmplitudeUserId } from '../../../util/amplitude';
 
 export default function CommentBox({data}) {
   const dispatch = useDispatch();
@@ -19,11 +20,17 @@ export default function CommentBox({data}) {
   }, [comment, commentDisabled])
 
   const onAddComment = (feedId) => {
+    initAmplitude();
+    setAmplitudeUserId(auth.data?.userId);
+    sendAmplitudeData("add comment", {"feedId": feedId});
     dispatch(addFeedComment.request({ feedId: feedId, content: comment}));
     setComment('');
   }
 
   const onDeleteComment = (feedId, commentId) => {
+    initAmplitude();
+    setAmplitudeUserId(auth.data?.userId);
+    sendAmplitudeData("delete comment", {"feedId": feedId});
     dispatch(deleteFeedComment.request({ feedId, commentId }));
   }
 

@@ -4,13 +4,17 @@ import Thumbnail from './Thumbnail.js/index.js';
 import {useInView} from "react-intersection-observer";
 import {useDispatch, useSelector} from "react-redux";
 import {getRandomPhotos} from "../../core/redux/photos";
+import { initAmplitude, sendAmplitudeData, setAmplitudeUserId } from '../../util/amplitude/index.js';
 
 export default function SearchPhotoGrid({ data }) {
-    const {loading} = useSelector(state => state);
+    const { auth } = useSelector(state => state);
     const dispatch = useDispatch();
     const [ref, inView] = useInView();
     useEffect(() => {
         if (inView){
+            initAmplitude();
+            setAmplitudeUserId(auth.data?.userId);
+            sendAmplitudeData("search feed more");
             dispatch(getRandomPhotos.request())
         }
     },[inView])

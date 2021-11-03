@@ -6,12 +6,16 @@ import {useDispatch, useSelector} from "react-redux";
 import { loginSuccess } from '../../core/redux/auth';
 import { getFeeds } from '../../core/redux/feed';
 import styled from 'styled-components';
+import { initAmplitude, sendAmplitudeData, setAmplitudeUserId } from '../../util/amplitude';
 
 export default function FeedPage() {
-    const { feed, loading } = useSelector(state => state);
-    const dispatch = useDispatch();
-    useEffect(() => {
-        dispatch(getFeeds.request());
+  const { feed, auth } = useSelector(state => state);
+  const dispatch = useDispatch();
+  useEffect(() => {
+      initAmplitude();
+      setAmplitudeUserId(auth.data?.userId);
+      sendAmplitudeData("weekly feed");
+      dispatch(getFeeds.request());
     }, [])
   return (
     <>
