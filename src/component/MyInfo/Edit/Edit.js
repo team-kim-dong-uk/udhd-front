@@ -2,7 +2,7 @@ import React, {useCallback, useEffect} from 'react';
 import styled from 'styled-components';
 import {useDispatch} from "react-redux";
 import useInput from "../../../hooks/useInput";
-import {updateUser} from "../../../core/redux/auth";
+import {updateUser, deleteUser} from "../../../core/redux/auth";
 
 
 /*
@@ -18,17 +18,19 @@ export default function Edit({data}) {
     const dispatch = useDispatch();
     const [nickname, onChangeNickname, setNickname] = useInput('');
 
-    const onSubmit = useCallback(() => {
+    const onSubmitUpdateUser = useCallback(() => {
         dispatch(updateUser.request({
             userId: data?.userId,
             nickname: nickname,
             group: data?.group
         }))
     }, [nickname])
-    const deleteUser = useCallback(() => {
+    const onSubmitDeleteUser = useCallback(() => {
         let message = "탈퇴하시면 되돌릴 수 없습니다. 정말 하실건가요?"
         if (confirm(message)){
-            //: TODO dispatch
+            dispatch(deleteUser.request({
+                userId: data?.userId
+            }))
         }
     }, [data])
 
@@ -45,14 +47,14 @@ export default function Edit({data}) {
         </S.Line>
     </S.ProfileData>
     <S.ButtonContainer>
-        <S.Button onClick={onSubmit}>변경</S.Button>
+        <S.Button onClick={onSubmitUpdateUser}>변경</S.Button>
     </S.ButtonContainer>
 
     <S.ProfileData>
         <S.Line>
             <S.Text>회원 탈퇴</S.Text>
             <S.ButtonContainer>
-                <S.Button style={{backgroundColor: 'red'}} onClick={deleteUser}>탈퇴</S.Button>
+                <S.Button style={{backgroundColor: 'red'}} onClick={onSubmitDeleteUser}>탈퇴</S.Button>
             </S.ButtonContainer>
         </S.Line>
     </S.ProfileData>

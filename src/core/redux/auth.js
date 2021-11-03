@@ -14,6 +14,7 @@ const LOGOUT = `${prefix}LOGOUT`;
 const SET_NICKNAME = asyncActionCreator(`${prefix}SET_NICKNAME`);
 const UPDATE_USER = asyncActionCreator(`${prefix}UPDATE_USER`);
 const GET_USER = asyncActionCreator(`${prefix}GET_USER`);
+const DELETE_USER = asyncActionCreator(`${prefix}DELETE_USER`);
 
 export const loginSuccess = createAction(LOGIN_SUCCESS,
   ({userId, accessToken, refreshToken, nickname, isNewUser, email}) => ({userId, accessToken, refreshToken, nickname, isNewUser, email}));
@@ -22,12 +23,12 @@ export const logout = createAction(LOGOUT);
 export const setNickname = createAsyncAction(SET_NICKNAME);
 export const updateUser = createAsyncAction(UPDATE_USER, ({userId, nickname, group}) => ({userId, nickname, group}));
 export const getUser = createAsyncAction(GET_USER, ({userId}) => ({userId}));
-
-
+export const deleteUser = createAsyncAction(DELETE_USER, ({userId}) => ({userId}));
 
 const setNicknameSaga = createAsyncSaga(setNickname, authAPI.setNickname);
 const updateUserSaga = createAsyncSaga(updateUser, authAPI.updateUser);
 const getUserSaga = createAsyncSaga(getUser, authAPI.getUser);
+const deleteUserSaga = createAsyncSaga(deleteUser, authAPI.deleteUser);
 
 const initialState = {
   data: null,
@@ -93,6 +94,18 @@ export default handleActions(
               error: "에러가 발생했습니다."
           };
       },
+      [DELETE_USER.SUCCESS]: (state, action) => {
+          return {
+              ...state,
+              data: null,
+              error: null
+          }
+      },[DELETE_USER.FAILURE]: (state, action) => {
+          return {
+              ...state,
+              error: "에러가 발생했습니다."
+          };
+      },
       [GET_USER.SUCCESS]: (state, action) => {
         //console.log("USER DATA : "+JSON.stringify(action.payload, null, 2))
           return {
@@ -134,6 +147,10 @@ function* redirectAfterNicknameSetting({nickname}) {
 function* redirectAfterUpdateUser({nickname}) {
     yield Router.push('/mypage');
 }
+function* redirectAfterDeleteUser() {
+    alert("회원 탈퇴가 완료되었습니다.")
+    yield Router.push('/feed');
+}
 export function* authSaga() {
   yield takeEvery(LOGIN_SUCCESS, redirectAfterLoginSaga);
   yield takeEvery(LOGOUT, redirectAfterLogoutSaga);
@@ -142,5 +159,7 @@ export function* authSaga() {
   yield takeEvery(UPDATE_USER.REQUEST, updateUserSaga);
   yield takeEvery(UPDATE_USER.SUCCESS, redirectAfterUpdateUser);
   yield takeEvery(GET_USER.REQUEST, getUserSaga);
+  yield takeEvery(DELETE_USER.REQUEST, deleteUserSaga);
+  yield takeEvery(DELETE_USER.SUCCESS, redirectAfterDeleteUser);
 
 }

@@ -27,3 +27,6 @@ export const updateUser = async ({userId, nickname, group}) => {
     }
     return client.patch(`/users/${userId}`, data);
 }
+export const deleteUser = async ({userId}) => {
+    return client.delete(`/users/${userId}`);
+}
