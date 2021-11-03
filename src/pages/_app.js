@@ -15,7 +15,13 @@ const App = ({ Component }) => (
         content="width=device-width, initial-scale=1.0, shrink-to-fit=no" />
       <meta name="naver-site-verification" content="19a4c6afea5b623d575176d1895ee769081aba02" />
       <meta name="google-site-verification" content="zSINZOjndLVYHkjexqqeJpNpiPwvqifXMEpVLhHVT5A" />
-      <title>어덕행덕</title>
+
+    <meta property="og:title" content="어덕행덕" />
+    <meta property="og:type" content="website" />
+{/*    <meta property="og:image" content="/static/favicon" />*/}
+    <meta property="og:description" content="미라클을 위한 사진 플랫폼" />
+
+        <title>어덕행덕</title>
     </Head>
     <Component />
     <GlobalStyle />
