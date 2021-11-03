@@ -50,6 +50,12 @@ export default class MyDocument extends Document {
           <meta name="msapplication-TileColor" content="#ffffff" />
           <meta name="msapplication-TileImage" content="/static/ms-icon-144x144.png" />
           <meta name="theme-color" content="#ffffff" />
+          <meta name="naver-site-verification" content="19a4c6afea5b623d575176d1895ee769081aba02" />
+          <meta name="google-site-verification" content="zSINZOjndLVYHkjexqqeJpNpiPwvqifXMEpVLhHVT5A" />
+          <meta property="og:title" content="어덕행덕" />
+          <meta property="og:type" content="website" />
+          <meta property="og:image" content="/static/favicon-96x96.png" />
+          <meta property="og:description" content="미라클을 위한 사진 플랫폼" />
         </Head>
         <body>
           <Main />
