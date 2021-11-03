@@ -18,7 +18,7 @@ const App = ({ Component }) => (
 
     <meta property="og:title" content="어덕행덕" />
     <meta property="og:type" content="website" />
-{/*    <meta property="og:image" content="/static/favicon" />*/}
+    <meta property="og:image" content="/static/favicon-96x96.png" />
     <meta property="og:description" content="미라클을 위한 사진 플랫폼" />
 
         <title>어덕행덕</title>
