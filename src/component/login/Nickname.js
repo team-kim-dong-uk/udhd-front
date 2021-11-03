@@ -5,7 +5,7 @@ import logo from '../../../assets/drawable-xxxhdpi/symbol_black.webp';
 import brandText from '../../../assets/drawable-xxxhdpi/brand_text.webp';
 import Image from 'next/image';
 import { useDispatch, useSelector } from 'react-redux';
-import { setNickname } from '../../core/redux/auth';
+import { setNickname, updateUser } from '../../core/redux/auth';
 
 export default function Nickname({ children, ...props }) {
   const dispatch = useDispatch();
@@ -13,10 +13,11 @@ export default function Nickname({ children, ...props }) {
   const [nicknameInput, setNicknameInput] = useState('');
 
   const onBtnClick = () => {
-    dispatch(setNickname.request({
-      userId: auth.data.userId,
+    dispatch(updateUser.request({
+      userId: auth.data?.userId,
       nickname: nicknameInput,
-    }));
+      group: auth.data?.group
+  }))
   };
 
   const onChangeText = (e) => {
