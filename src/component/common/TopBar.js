@@ -23,16 +23,16 @@ const TopBar = () => {
       <Navbar.Brand>
         {
           router.pathname.startsWith('/search/related') || router.pathname.startsWith('/mypage/')
-          ? 
+          ?
           <S.BackButtonWrap>
               <S.Image src={backIcon} width={15} height={30} onClick={()=>router.back()}/>
               </S.BackButtonWrap>
-            : 
-              <S.Image src={logo} width={30} height={30}/>
-            
+            :
+              <S.Image onClick={() => router.push('/feed')} src={logo} width={30} height={30}/>
+
         }
         </Navbar.Brand>
-       
+
         <S.Text>Beta</S.Text>
         <Nav.Link onClick={() => window.open('https://the-form.io/forms/survey/response/7583c560-6af5-4cf7-a5d3-287bd1cc126a')}>
             <S.Login>문의</S.Login>
@@ -73,6 +73,7 @@ S.Icon = styled.p`
   justify-content: center;
 `;
 S.Image = styled(Image)`
+    cursor: pointer;
 `;
 S.Text = styled.div`
   flex-grow: 1;
