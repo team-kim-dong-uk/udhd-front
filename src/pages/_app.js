@@ -14,7 +14,7 @@ const App = ({ Component }) => (
         name="viewport"
         content="width=device-width, initial-scale=1.0, shrink-to-fit=no" />
       <meta name="naver-site-verification" content="19a4c6afea5b623d575176d1895ee769081aba02" />
-
+      <meta name="google-site-verification" content="zSINZOjndLVYHkjexqqeJpNpiPwvqifXMEpVLhHVT5A" />
       <title>어덕행덕</title>
     </Head>
     <Component />
