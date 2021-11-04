@@ -6,7 +6,7 @@ import {useDispatch, useSelector} from "react-redux";
 import {getRandomPhotos} from "../../core/redux/photos";
 import { initAmplitude, sendAmplitudeData, setAmplitudeUserId } from '../../util/amplitude/index.js';
 
-export default function SearchPhotoGrid({ data }) {
+export default function SearchPhotoGrid({ data, loadMore }) {
     const { auth } = useSelector(state => state);
     const dispatch = useDispatch();
     const [ref, inView] = useInView();
@@ -15,7 +15,7 @@ export default function SearchPhotoGrid({ data }) {
             initAmplitude();
             setAmplitudeUserId(auth.data?.userId);
             sendAmplitudeData("search feed more");
-            dispatch(getRandomPhotos.request())
+            loadMore();
         }
     },[inView])
   return (

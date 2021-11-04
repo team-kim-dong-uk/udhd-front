@@ -1,5 +1,5 @@
 import { handleActions } from 'redux-actions';
-import { takeEvery } from 'redux-saga/effects';
+import {takeEvery, takeLeading} from 'redux-saga/effects';
 import createAsyncSaga, {
   asyncActionCreator,
   createAsyncAction,
@@ -7,9 +7,16 @@ import createAsyncSaga, {
 import * as photoAPI from '../../api/photo';
 
 const prefix = 'photos/';
+const GET_NEW_PHOTOS_TAGGED = asyncActionCreator(`${prefix}GET_NEW_FEEDS_TAGGED`);
+const GET_MORE_PHOTOS_TAGGED = asyncActionCreator(`${prefix}GET_MORE_FEEDS_TAGGED`);
 
 // 2. 액션타입에 대해서 정의합니다.
 const GET_RANDOM_PHOTOS = asyncActionCreator(`${prefix}GET_RANDOM_PHOTOS`);
+export const getNewPhotosTagged = createAsyncAction(GET_NEW_PHOTOS_TAGGED, ({tags}) => ({tags}));
+export const getMorePhotosTagged = createAsyncAction(GET_MORE_PHOTOS_TAGGED, ({tags, page}) => ({tags, page}));
+
+const getNewPhotosTaggedSaga = createAsyncSaga(getNewPhotosTagged, photoAPI.getFeedsTagged);
+const getMorePhotosTaggedSaga = createAsyncSaga(getMorePhotosTagged, photoAPI.getFeedsTagged);
 
 // 3. 액션함수에 대해서 정의합니다.
 //photoId: optional
@@ -50,12 +57,29 @@ export default handleActions(
             error: action.payload.error,
         };
       },
-
+      [GET_NEW_PHOTOS_TAGGED.SUCCESS]: (state, action) => {
+          return {
+              ...state,
+              data: action.payload.data,
+              error: null,
+              isEnd: action.payload.data.length === 0,
+          }
+      },
+      [GET_MORE_PHOTOS_TAGGED.SUCCESS]: (state, action) => {
+          return {
+              ...state,
+              data: [...state.data, ...action?.payload?.data],
+              error: null,
+              isEnd: action?.payload?.data === undefined || action?.payload?.data?.length === 0
+          }
+      },
   },
-  initialState,
+    initialState,
 );
 
 // 7. `4`번에서 작성한 saga함수들에 대해 구독 요청에 대한 정의를 최하단에 해주도록 합니다.
 export function* photosSaga() {
     yield takeEvery(GET_RANDOM_PHOTOS.REQUEST, getRandomPhotosSaga);
+    yield takeEvery(GET_NEW_PHOTOS_TAGGED.REQUEST, getNewPhotosTaggedSaga);
+    yield takeLeading(GET_MORE_PHOTOS_TAGGED.REQUEST, getMorePhotosTaggedSaga);
 }

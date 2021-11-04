@@ -2,14 +2,17 @@ import React from 'react';
 import styled from 'styled-components';
 import TagIcon from '../../../../../assets/tag-icon-no-border.svg';
 import { colors } from '../../../../util/style';
+import Link from 'next/link';
 
 export default function Tag({ text }) {
 
   return (
+    <Link href={`/search/tags/${text}`}>
       <S.Tag>
-          <S.TagIcon width={15} height={15}/>
-          <span>{text}</span>
+        <S.TagIcon width={15} height={15}/>
+        <span>{text}</span>
       </S.Tag>
+    </Link>
   );
 }
 

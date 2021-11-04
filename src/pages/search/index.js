@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, {useCallback, useEffect} from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import AppLayout from '../../component/layout/AppLayout';
 import HomeLayout from '../../component/layout/HomeLayout';
@@ -8,6 +8,7 @@ import { getRandomPhotos } from '../../core/redux/photos';
 import { initAmplitude, sendAmplitudeData, setAmplitudeUserId } from '../../util/amplitude';
 import Tags from "../../component/Feed/FeedItem/Tags";
 import tags from "../../core/redux/tags";
+import {getMoreFeedsRelated} from "../../core/redux/feed";
 
 export default function SearchPage() {
   const dispatch = useDispatch();
@@ -25,13 +26,16 @@ export default function SearchPage() {
       sendAmplitudeData("search");
       dispatch(getRandomPhotos.request());
   }, []);
+  const loadMore = useCallback(() => {
+      dispatch(getRandomPhotos.request());
+  });
 
   return (
     <>
       <AppLayout>
         <HomeLayout>
             <Tags style={{padding: 10}} data={tagsData}/>
-            <SearchPhotoGrid data={photos.data}/>
+            <SearchPhotoGrid data={photos.data} loadMore={loadMore} />
         </HomeLayout>
       </AppLayout>
     </>
