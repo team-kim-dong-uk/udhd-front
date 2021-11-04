@@ -11,13 +11,22 @@ import Tag from "./Tag";
 *   tags : []
 * }
 * */
-export default function Tags({data, style}) {
+export default function Tags({data, style, activeTags}) {
   let inAlbum = true;
 
+  if (!activeTags)
+      activeTags = []
+  if (!Array.isArray(activeTags)) {
+      activeTags = activeTags.split(',')
+  }
   return (
       <S.Tags style={style}>
         {data?.tags?.map(tag => {
-              return <Tag key={tag} text={tag}></Tag>
+              return <Tag key={tag} text={tag} active={(() => {
+                  const t = activeTags.find(e => e === tag);
+                  return t !== undefined
+              })(tag)
+              }/>
           })}
       </S.Tags>
   );

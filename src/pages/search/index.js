@@ -2,13 +2,10 @@ import React, {useCallback, useEffect} from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import AppLayout from '../../component/layout/AppLayout';
 import HomeLayout from '../../component/layout/HomeLayout';
-import PhotoGrid from '../../component/PhotoGrid';
 import SearchPhotoGrid from '../../component/PhotoGrid/SearchPhotoGrid';
 import { getRandomPhotos } from '../../core/redux/photos';
 import { initAmplitude, sendAmplitudeData, setAmplitudeUserId } from '../../util/amplitude';
 import Tags from "../../component/Feed/FeedItem/Tags";
-import tags from "../../core/redux/tags";
-import {getMoreFeedsRelated} from "../../core/redux/feed";
 
 export default function SearchPage() {
   const dispatch = useDispatch();

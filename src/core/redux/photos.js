@@ -31,6 +31,7 @@ const initialState = {
   isEnd: false,
   loading: false,
   error: null,
+  page: 0,
 };
 
 // 6. 리듀서 정의
@@ -63,6 +64,7 @@ export default handleActions(
               data: action.payload.data,
               error: null,
               isEnd: action.payload.data.length === 0,
+              page: 1
           }
       },
       [GET_MORE_PHOTOS_TAGGED.SUCCESS]: (state, action) => {
@@ -70,7 +72,8 @@ export default handleActions(
               ...state,
               data: [...state.data, ...action?.payload?.data],
               error: null,
-              isEnd: action?.payload?.data === undefined || action?.payload?.data?.length === 0
+              isEnd: action?.payload?.data === undefined || action?.payload?.data?.length === 0,
+              page: state?.page + 1,
           }
       },
   },
