@@ -46,6 +46,7 @@ const S = {};
 
 S.PhotoGrid = styled.div`
   width: 100%;
+  line-height: 0 !important;
 `;
 S.CheckForScroll = styled.div`
   width: 100%;
