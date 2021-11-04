@@ -7,7 +7,7 @@ export default function Tag({ text }) {
 
   return (
       <S.Tag>
-          <S.TagIcon width={10} height={10}/>
+          <S.TagIcon width={15} height={15}/>
           <span>{text}</span>
       </S.Tag>
   );
@@ -29,7 +29,7 @@ S.Tag = styled.div`
   margin-bottom: 10px;
 `;
 S.TagIcon = styled(TagIcon)`
-  border: 1px solid black;
+  //border: 1px solid black;
   margin-right: 5px;
 `;
 
