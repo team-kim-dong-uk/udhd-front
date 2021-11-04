@@ -11,11 +11,11 @@ import Tag from "./Tag";
 *   tags : []
 * }
 * */
-export default function Tags({data}) {
+export default function Tags({data, style}) {
   let inAlbum = true;
 
   return (
-      <S.Tags>
+      <S.Tags style={style}>
         {data?.tags?.map(tag => {
               return <Tag key={tag} text={tag}></Tag>
           })}

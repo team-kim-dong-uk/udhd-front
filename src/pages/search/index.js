@@ -6,10 +6,17 @@ import PhotoGrid from '../../component/PhotoGrid';
 import SearchPhotoGrid from '../../component/PhotoGrid/SearchPhotoGrid';
 import { getRandomPhotos } from '../../core/redux/photos';
 import { initAmplitude, sendAmplitudeData, setAmplitudeUserId } from '../../util/amplitude';
+import Tags from "../../component/Feed/FeedItem/Tags";
 
 export default function SearchPage() {
   const dispatch = useDispatch();
   const { photos, auth } = useSelector(state => state);
+
+  const tagsData = {
+      tags: [
+          "효정", '미미', '유아', '승희', '지호', '비니', '아린'
+      ]
+  }
 
   useEffect(() => {
       initAmplitude();
@@ -22,6 +29,7 @@ export default function SearchPage() {
     <>
       <AppLayout>
         <HomeLayout>
+            <Tags style={{padding: 10}} data={tagsData}/>
             <SearchPhotoGrid data={photos.data}/>
         </HomeLayout>
       </AppLayout>
