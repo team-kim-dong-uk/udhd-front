@@ -130,7 +130,7 @@ S.ButtonContainer = styled.div`
 `;
 S.Button = styled.button`
   margin-bottom: 12px;
-  width: 50px;
+  width:55px;
   height: 33px;
   max-width: 100%;
   color: #fff;
