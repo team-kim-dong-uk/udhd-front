@@ -56,6 +56,10 @@ export default class MyDocument extends Document {
           <meta property="og:type" content="website" />
           <meta property="og:image" content="/static/favicon-96x96.png" />
           <meta property="og:description" content="미라클을 위한 사진 플랫폼" />
+
+          <script async src="https://www.googletagmanager.com/gtag/js?id=UA-212247709-1">
+          </script>
+          <script src="/analytics.js"></script>
         </Head>
         <body>
           <Main />
