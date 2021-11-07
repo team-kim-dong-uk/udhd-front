@@ -2,13 +2,14 @@
     <img src="">
     </img>
 </p>
-<h1 align="center">UDHD</h1>
+<h1 align="center">아이돌 덕질 플랫폼, <a href="https://udhd.pics">어덕행덕</a></h1>
 
 <h3 align="center">어차피 덕질할 거 행복하게 덕질하자</h3>
 
 <h4 align="center">
-    <a href="#공통-부분">공통 부분</a> &nbsp; • &nbsp;   
-    <a href="#key-features">Key Features</a> &nbsp; • &nbsp;   
+    <a href="#공통-부분">공통 부분</a> &nbsp; • &nbsp;
+    <a href="#key-features">Key Features</a> &nbsp; • &nbsp;
+    <a href="#screenshots">Screenshots</a> &nbsp; • &nbsp;
     <a href="#what-we-use">What We Use</a> &nbsp; • &nbsp;
     <a href="#how-to-use">How To Use</a> &nbsp; •&nbsp;  
     <a href="#made-by">Made By</a>
@@ -36,23 +37,31 @@
 - [Tag Server](https://git.swmgit.org/swm-12/12_swm44/img-experiment-lab)
 
 ---
-<br/><br/>
+<br/>
 
 ## Key Features
 
-- 사용자가 저장한 사진들을 보거나 검색할 수 있는 갤러리 역할을 합니다.
-- API Server에 구글 드라이브에 있는 사진을 저장하도록 요청을 보냅니다.
-- API Server에서 받은 url을 사용해 AWS S3에서 사진 데이터를 받아봅니다.
-- 사진 검색, 태그 수정 등의 요청을 API Server에 보냅니다.
+- 매주 인기있는 사진을 볼 수 있습니다.
+- 태그별 사진을 검색할 수 있습니다.
+- 유사한 사진을 검색할 수 있습니다.
+- 나에게 없는 사진만을 볼 수 있습니다.
 
-### 구글 드라이브로 업로드
-프론트엔드에서 API Server로 요청을 보냅니다. 여기서 진행률 체크를 위한 pollingKey를 받아볼 수 있습니다.  
-<br/>
-<img height=400 src="docs/front-api-google-drive.png" />
-
+---
 <br/>
 
+## Screenshots
+### Weekly 인기 사진
+<img height=400 src="docs/weekly-feed.png" />
 
+### 태그 검색
+<img height=400 src="docs/tag-search.png" />
+
+### 유사한 이미지 검색
+<img height=400 src="docs/relate-feed.png" />
+
+### 마이페이지
+<img height=400 src="docs/mypage.png" />
+<br/>
 
 ---
 
